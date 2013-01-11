@@ -3,6 +3,7 @@
 A jQuery plugin to provide an alternate text wrapping algorithm. I hope to get this into the CSS spec, so it's implemented as a polyfill.
 
 The default text rendering algorithm is:
+
 1. Add 1 word at a time to the current line until the next word won't fit.
 2. Break text so that the next word starts on a new line.
 3. Repeat until all text has been rendered.
@@ -12,6 +13,7 @@ That algorithm guarantees that the text is rendered using the least number of li
 ## How it works
 Here is a simple Balance Text setup:
 
+```
   <!-- put this at the end of the <body> element -->
   <script src="jquery-1.8.0.min.js"></script>
   <script src="jquery.balancetext.js"></script>
@@ -25,6 +27,7 @@ Here is a simple Balance Text setup:
 
     $(window).resize(applyBalanceText);
   </script>
+```
 
 See the demo provided for a working sample.
 
