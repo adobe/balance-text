@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>Balance Text Demo</title>
+<style type="text/css">
+
+/* Apply (proposed) CSS style */
+.balance-text p,
+.balance-text h1,
+.balance-text label,
+.balance-text blockquote {
+	text-wrap: balanced;
+}
+
+body {
+	font-size: 16px;
+	font-family: Verdana, Geneva, sans-serif;
+}
+header {
+	width: 100%;
+	margin:0px auto;
+}
+h1 {
+	font-size: 54px;
+	display: block;
+}
+form {
+	background-color: rgba(255, 255, 255, 0.5);
+	margin: 10px 50px;
+}
+table h2, table blockquote, table p {
+	text-align: center;
+}
+.demo-body {
+	background-color: #C2C8DC;
+}
+.picContainer {
+	width: 360px;
+	margin: 0 auto;
+	text-align: center;
+	font-size: 80%;
+}
+.picContainer img {
+	display: block;
+}
+.picContainer p {
+	margin-top: 5px;
+}
+.info {
+	font-size: 80%;
+    color: #555;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Balance Text Demo Page</h2>
+<p>The left and right columns in the table below have identical content and markup, <em>except</em> that the solution is applied to the right side, so compare the rendering between the two sides.</p>
+<p> To test how the algorithm works in different text wrapping cases, open this page in any modern browser, and then do either of the following to see how text rendering differs between the two sides:</p>
+<ul>
+  <li>Change the width of the browser window.</li>
+  <li>Change the font size using Ctrl &quot;+&quot; and Ctrl &quot;-&quot;.</li>
+</ul>
+<p>Note that due to how different browsers send out resize events, you may need to refresh the browser to see the balanced text  solution on the right.</p>
+<p>&nbsp;</p>
+
+<table border="1" cellpadding="5" cellspacing="0" width="100%">
+  <tr>
+    <td>Default text rendering</td>
+    <td>"Balanced" text rendering</td>
+  </tr>
+  <tr>
+    <td class="demo-body" width="50%">
+      <h1>Balance Text Test Page</h1>
+      <div class="info">The following text shows how number of lines always stays the same:</div>
+      <p>A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9
+         A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9</p>
+      <div class="picContainer">
+        <img src="mammoth.jpg" width="360" height="232" />
+        <p>A picture caption is common usage case. Note that the width of this caption is constrained to the width of the picture</p>
+      </div>
+      <blockquote>Blockquotes are another type of text formatting that may benefit from text balancing.</blockquote>
+      <form action="" method="post" name="form1">
+      <div class="info">Example of a form label:</div>
+        <table cellpadding="5" cellspacing="0">
+          <tr>
+            <td width="250" align="right"><label for="text1">Right-aligned text can also look bad</label></td>
+            <td width="250"><input type="text" name="text1"></td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center"><input type="submit" name="submit" value="Submit"></td>
+          </tr>
+        </table>
+      </form>
+    </td>
+    <td class="balance-text demo-body" width="50%">
+      <h1>Balance Text Test Page</h1>
+      <div class="info">The following text shows how number of lines always stays the same:</div>
+      <p>A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9
+         A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9</p>
+      <div class="picContainer">
+        <img src="mammoth.jpg" width="360" height="232" />
+        <p>A picture caption is common usage case. Note that the width of this caption is constrained to the width of the picture</p>
+      </div>
+      <blockquote>Blockquotes are another type of text formatting that may benefit from text balancing.</blockquote>
+      <form action="" method="post" name="form2">
+      <div class="info">Example of a form label:</div>
+        <table cellpadding="5" cellspacing="0">
+          <tr>
+            <td width="250" align="right"><label for="text1">Right-aligned text can also look bad</label></td>
+            <td width="250"><input type="text" name="text1"></td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center"><input type="submit" name="submit" value="Submit"></td>
+          </tr>
+        </table>
+      </form>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+
+<script src="jquery-1.8.0.min.js"></script>
+<script src="jquery.balancetext.js"></script>
+<script>
+/*jslint vars: true, plusplus: true, devel: true, browser: true, nomen: true, indent: 4, maxerr: 50 */
+/*global $ */
+"use strict";
+
+// Call the balanceText plugin on the elements to style. When a browser has native support for
+// the text-wrap property, the text balanceText plugin will let the browser handle it natively,
+// otherwise it will apply its own text balancing code.
+function applyBalanceText() {
+	var container = $(".balance-text");
+	container.find("p").balanceText();
+	container.find("h1").balanceText();
+	container.find("label").balanceText();
+	container.find("blockquote").balanceText();
+}
+
+applyBalanceText();
+
+$(window).resize(applyBalanceText);
+</script>
+
+</body>
+</html>
