@@ -29,7 +29,7 @@ Here is a simple Balance Text setup:
   </script>
 ```
 
-See the [demo](sample/demo-balance-text.htm) provided for a working sample.
+See the [demo](http://github.com/adobe-webplatform/balance-text/sample/demo-balance-text.htm) provided for a working sample.
 
 
 ## Requirements
