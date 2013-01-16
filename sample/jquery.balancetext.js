@@ -26,7 +26,7 @@
     "use strict";
 
     var style = document.documentElement.style,
-        hasTextWrap = (style.textWrap   || style.WebktTextWrap || style.MoxTextWrap || style.MsTextWrap || style.OTextWrap);
+        hasTextWrap = (style.textWrap   || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap || style.OTextWrap);
 
     $.fn.balanceText = function () {
         if (hasTextWrap) {
