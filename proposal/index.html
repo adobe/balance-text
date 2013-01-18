@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Balance Text Proposal</title>
+<link href="proposal.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<h1>Balance Text Proposal</h1>
+<p>Last updated on <!-- #BeginDate format:Am1 -->October 22, 2012<!-- #EndDate --></p>
+<h2>Purpose</h2>
+<p>The basic algorithm for rendering text is simple: put as much text as will fit on  each line, with the remainder on the last line. This results in the fewest possible lines of text being used, but when the text spans more than 1 line, the result can sometimes be visually undesirable.</p>
+<p>When rendering text that spans multiple lines, this feature provides the option to automatically balance text across the necessary number of lines.</p>
+<p>The intended usage for balance text algorithm is for short text  elements such as headings, blockquotes, labels, and captions. When the algorithm is applied to large paragraphs of text, the effort increases and  the benefit diminishes, so there probably should be a way to specify a maximum length of text.</p>
+<h2>Proposed Implementation</h2>
+<h3>CSS</h3>
+<p>A new value of <code>balanced</code> is proposed for  the CSS4 Text module  <code><a href="http://dev.w3.org/csswg/css4-text/#wrapping">text-wrap</a></code> property. For example:</p>
+<pre>
+  text-wrap: balance;</pre>
+<h3>Text Alignment</h3>
+<p>Any <code>text-alignment</code> value can be used with balanced text.</p>
+<p>Note that once implemented in <em>browsers</em>, any <code>text-alignment</code> can be used with <code>text-wrap:balance;</code>, but <code>text-alignment:justify;</code> will not work with the <em><a href="demo-balance-text.htm">polyfill</a></em> because inter-word spacing has already been calculated by the browser before the JavaScript recalculates the line breaks.</p>
+<h3>Text Direction</h3>
+<p>Any <code>direction</code> value can be used with balanced text.</p>
+<h3>Container Size</h3>
+<p>This algorithm does not affect the width or height of the containing element as this may affect rendering of the rest of the document. The resulting text will always wrap to same number of lines as original text so height doesn't change. Line width of resulting text should not exceed container size to width doesn't change. It only affects where line breaks occur.</p>
+<p>One exception to this may be shrink-to-fit containers.</p>
+<h3>Boundaries</h3>
+<p>The algorithm is limited to a single block-level element. It does not balance across multiple paragraphs.</p>
+<h3>Float Intrusions</h3>
+<p>Float intrusions seems like a solvable case, but the  point where there is enough text to wrap around something approaches  the point where this algorithm loses effectiveness, so this may not be a beneficial  enough case to implement.</p>
+<h3>Text Length Limit</h3>
+<p>As the length of text increases, the effort increases and the benefit decreases, so it may be desirable to limit length of text to a configurable value, and algorithm is done if that threshold has been surpassed.</p>
+<h2>Details</h2>
+<p>The following algorithm provides a good balance of text in 2 rendering passes.</p>
+<h3>First Rendering Pass</h3>
+<p>First, determine the minimum number of lines required for the text using the basic text rendering algorithm. The text rendering algorithm is necessary because, due to the actual order and length of elements in the text, the number of lines may be more than by simply dividing the total text width by the container width, and it's important that this algorithm only changes where line breaks occur, and not the resulting height.</p>
+<p>If there's only 1 line of text, then it is rendered on a single line, and the algorithm is done.</p>
+Also, need to determine total width of text (i.e. length of text rendered on 1 infinitely long line). This is determined by a keeping cumulative length as text is rendered.
+<h3>Second Rendering Pass</h3>
+<p> Layout text in final pass:</p>
+<ol>
+  <li>Divide the total text width by the required number of lines to determine the 
+  average line width. </li>
+  <li>Keep track of total width and number of lines and attempt to break at &quot;cumulative average line width&quot; (average line length multiplied by    the current line number). This self-adjusts the amount of text on each line (e.g. for a line shorter than average, the next line will tend to be    longer than average).</li>
+  <li> Use center-point (not end) of word to determine where to break for better balance.</li>
+  <li>Don't allow line length to exceed container line length.</li>
+  <li> Ignore &quot;cumulative average line width&quot; for last line.</li>
+</ol>
+<h3>Example</h3>
+<img class="illustration" src="center-balance-example.png" width="702" height="425">
+<h2>Sample Implementation</h2>
+<p>This proposal has been implemented in JavaScript as a polyfill and shown in this <a href="demo-balance-text.htm">demo page</a>.</p>
+<h2>Revision History</h2>
+<table id="history" border="1" cellpadding="5" cellspacing="0">
+  <tr>
+    <th>Date</th>
+    <th>Name</th>
+    <th>Description of Change</th>
+  </tr>
+  <tr>
+    <td>16Mar2011</td>
+    <td>Randy&nbsp;Edmunds</td>
+    <td>First draft.</td>
+  </tr>
+  <tr>
+    <td>13Aug2012</td>
+    <td>Randy&nbsp;Edmunds</td>
+    <td>Implement feedback from Alan Stearns.</td>
+  </tr>
+  <tr>
+    <td>02Sep2012</td>
+    <td>Randy&nbsp;Edmunds</td>
+    <td>Feedback from Divya Manian, Alan Stearns.</td>
+  </tr>
+  <tr>
+    <td>13Sep2012</td>
+    <td>Randy&nbsp;Edmunds</td>
+    <td>Reduce algorithm to 2 rendering passes based on suggestion from Alan Stearns. Add link to JavaScript implementation demo.</td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+</body>
+</html>

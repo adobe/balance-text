@@ -1,0 +1,18 @@
+@charset "utf-8";
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+.illustration {
+	display: block;
+	margin: 0 auto;
+	border: 1px #ccc solid;
+     -moz-box-shadow: 2px 2px 10px #666;
+  -webkit-box-shadow: 2px 2px 10px #666;
+          box-shadow: 2px 2px 10px #666;
+}
+#history {
+	font-size: 80%;
+     -moz-box-shadow: 2px 2px 10px #666;
+  -webkit-box-shadow: 2px 2px 10px #666;
+          box-shadow: 2px 2px 10px #666;
+}
