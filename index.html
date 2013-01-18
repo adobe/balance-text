@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Balance-text : A jQuery plugin for implementing balancing of wrapping text in a web page" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Balance-text</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/adobe-webplatform/balance-text">View on GitHub</a>
+
+          <h1 id="project_title">Balance-text</h1>
+          <h2 id="project_tagline">A jQuery plugin for implementing balancing of wrapping text in a web page</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/adobe-webplatform/balance-text/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/adobe-webplatform/balance-text/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>BalanceText</h1>
+
+<p>A jQuery plugin to provide an alternate text wrapping algorithm. I hope to get this into the CSS spec, so it's implemented as a polyfill.</p>
+
+<p>The default text rendering algorithm is:</p>
+
+<ol>
+<li>Add 1 word at a time to the current line until the next word won't fit.</li>
+<li>Break text so that the next word starts on a new line.</li>
+<li>Repeat until all text has been rendered.</li>
+</ol><p>That algorithm guarantees that the text is rendered using the least number of lines, but when text is centered and wraps to more than 1 line, it can produce visually undesirable results such as a long line of centered text followed by a short line of centered text. What I want is for the text to be balanced across lines. By "balanced across lines", I mean that the text is rendered so that the amount of text on each line is about the same. This plugin implements a line-breaking algorithm to do that automatically.</p>
+
+<h2>How it works</h2>
+
+<p>Here is a simple Balance Text setup:</p>
+
+<pre><code>  &lt;!-- put this at the end of the &lt;body&gt; element --&gt;
+  &lt;script src="jquery-1.8.0.min.js"&gt;&lt;/script&gt;
+  &lt;script src="jquery.balancetext.js"&gt;&lt;/script&gt;
+  &lt;script&gt;
+    // Call the balanceText plugin on all the elements with the "balance-text" class applied.
+    function applyBalanceText() {
+      $(".balance-text").balanceText();
+    }
+
+    applyBalanceText();
+
+    $(window).resize(applyBalanceText);
+  &lt;/script&gt;
+</code></pre>
+
+<p>See the demo provided for a working sample.</p>
+
+<h2>Requirements</h2>
+
+<p>BalanceText is designed to run in most common browsers and implemented as a jQuery plugin. This means that the standard jQuery library is required for to work.</p>
+
+<p>jQuery was used so that the code would be easier to write to work in most common browsers. None of the novel ideas introduced by this code require jQuery.</p>
+
+<h2>Changelog</h2>
+
+<ul>
+<li>v 1.0 - Initial Release</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Balance-text maintained by <a href="https://github.com/adobe-webplatform">adobe-webplatform</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
