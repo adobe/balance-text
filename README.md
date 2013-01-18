@@ -33,7 +33,7 @@ See the demo provided for a working sample.
 
 
 ## Requirements
-BalanceText is designed to run in most common browsers and implemented as a jQuery plugin. This means that the standard jQuery library is required for to work.
+BalanceText is designed to run in most common browsers and implemented as a jQuery plugin. This means that the standard jQuery library is required for it to work.
 
 jQuery was used so that the code would be easier to write to work in most common browsers. None of the novel ideas introduced by this code require jQuery.
 
