@@ -14,19 +14,31 @@ That algorithm guarantees that the text is rendered using the least number of li
 Here is a simple Balance Text setup:
 
 ```
-  <!-- put this at the end of the <body> element -->
-  <script src="jquery-1.8.0.min.js"></script>
-  <script src="jquery.balancetext.js"></script>
-  <script>
-    // Call the balanceText plugin on all the elements with the "balance-text" class applied.
+    <!-- put this in the <head> element -->
+    <style type="text/css">
+    /* Apply (proposed) CSS style */
+    .balance-text {
+        text-wrap: balanced;
+    }
+    </style>
+
+    <!-- put this at the end of the <body> element -->
+    <script src="jquery-1.8.0.min.js"></script>
+    <script src="jquery.balancetext.js"></script>
+    <script>
+    // Call the balanceText function on all the elements with
+    // the "balance-text" class applied. When a browser has
+    // native support for the text-wrap property, the plugin
+    // will let the browser handle it natively, otherwise it
+    // will apply its own text balancing code.
     function applyBalanceText() {
       $(".balance-text").balanceText();
     }
-	
+
     applyBalanceText();
 
     $(window).resize(applyBalanceText);
-  </script>
+    </script>
 ```
 
 See the demo provided for a working sample.
