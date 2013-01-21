@@ -23,7 +23,7 @@
 
 <div id="content">
   <section id="balanced">
-    <header><h2>Default text rendering</h2></header>
+    <header><h2>Default text</h2></header>
     <div class="demo-body">
       <p>A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9
          A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9</p>
@@ -47,7 +47,7 @@
     </div>
   </section>
   <section id="default">
-    <header><h2>"Balanced" text rendering</h2></header>
+    <header><h2>Balanced text</h2></header>
     <div class="balance-text demo-body">
       <p>A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9
          A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z 0 1 2 3 4 5 6 7 8 9</p>
@@ -89,6 +89,7 @@ function applyBalanceText() {
 	container.find("h1").balanceText();
 	container.find("label").balanceText();
 	container.find("blockquote").balanceText();
+  container.find("figcaption").balanceText();
 }
 
 applyBalanceText();
