@@ -1,0 +1,142 @@
+
+/* Apply (proposed) CSS style */
+.balance-text p,
+.balance-text h1,
+.balance-text label,
+.balance-text blockquote,
+.balance-text figcaption {
+	text-wrap: balanced;
+}
+a {
+	color: #007edf;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+body {
+	font-size: 16px;
+	font-family: source-sans-pro, sans-serif;
+	background: #F2F2F2;
+}
+body > header {
+	width: 100%;
+	max-width: 600px;
+	margin: 40px auto 80px;
+	background: #FFF;
+	box-shadow: 0 0 10px rgba(0,0,0,.1);
+	padding: 10px 20px;
+	box-sizing: border-box;
+	font-weight: 300;
+}
+body > header h2 {
+	margin: 0 0 5px;
+	font-size: 24px;
+	font-weight: 600;
+}
+body > header p {
+	margin: 0 0 5px;
+}
+header {
+	width: 100%;
+	margin:0px auto;
+}
+h1 {
+	font-weight: 600;
+}
+h2 {
+	font-size: 54px;
+	display: block;
+	font-weight: 600;
+}
+form {
+	background-color: rgba(255, 255, 255, 0.5);
+	margin: 10px 50px;
+}
+#content h2, #content blockquote, #content p {
+	text-align: center;
+}
+.picContainer {
+	width: 360px;
+	margin: 0 auto;
+	text-align: center;
+	font-size: 80%;
+}
+.picContainer img {
+	display: block;
+}
+.picContainer figcaption {
+	margin-top: 5px;
+	font-size: 12px;
+}
+.info {
+	font-size: 80%;
+    color: #555;
+}
+#content > section {
+	width: 49%;
+	display: block;
+	float: left;
+	min-width: 400px;
+	background: #FFF;
+	box-shadow: 0 0 10px rgba(0,0,0,.1);
+}
+#content > section header {
+	background: #212121;
+	background: -moz-linear-gradient(top, #373737, #212121);
+	background: -webkit-linear-gradient(top, #373737, #212121);
+	background: -ms-linear-gradient(top, #373737, #212121);
+	background: -o-linear-gradient(top, #373737, #212121);
+	background: linear-gradient(top, #373737, #212121);
+	padding: 20px 0;
+}
+#content > section header h2 {
+	color: #FFF;
+	font-size: 21px;
+	margin: 0 0 0 20px;
+	text-align: left;
+}
+#content > section:first-child {
+	margin-right: 8px;
+}
+#content .demo-body {
+	padding: 20px;
+}
+figure {
+	box-shadow: 0 0 10px rgba(0,0,0,.1);
+	background: #E6E6E6;
+	padding: 10px;
+}
+body > footer {
+	padding: 20px;
+	text-align: center;
+	clear: both;
+	display: block
+}
+fieldset {
+	background: #E6E6E6;
+	border-radius: 2px;
+	border: none;
+	box-shadow: 0 0 10px rgba(0,0,0,.1);
+}
+legend {
+	background: #fff;
+	padding: 0 5px;
+	background: #F2F2F2;
+	border-radius: 2px;
+	box-shadow: 0 0 10px rgba(0,0,0,.1);
+}
+fieldset label {
+	display: block;
+	width: 200px;
+	float: left;
+	text-align: right;
+	margin-right: 10px;
+}
+fieldset div input {
+	height: 40px;
+}
+input[type="submit"] {
+	clear: both;
+	margin: 5px 0 0 211px;
+}
