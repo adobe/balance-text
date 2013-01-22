@@ -7,7 +7,13 @@
 .balance-text figcaption {
 	text-wrap: balanced;
 }
-
+a {
+	color: #007edf;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
 body {
 	font-size: 16px;
 	font-family: source-sans-pro, sans-serif;
@@ -100,4 +106,24 @@ figure {
 	box-shadow: 0 0 10px rgba(0,0,0,.1);
 	background: #E6E6E6;
 	padding: 10px;
+}
+body > footer {
+	padding: 20px;
+	text-align: center;
+	clear: both;
+	display: block
+}
+fieldset {
+}
+fieldset div label {
+	display: block;
+	width: 200px;
+	float: left;
+	text-align: right;
+}
+fieldset div input {
+	height: 40px;
+}
+input[type="submit"] {
+	clear: both;
 }

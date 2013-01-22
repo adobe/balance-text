@@ -33,16 +33,14 @@
       </figure>
       <blockquote>Blockquotes are another type of text formatting that may benefit from text balancing.</blockquote>
       <form action="" method="post" name="form1">
-      <div class="info">Example of a form label:</div>
-        <table cellpadding="5" cellspacing="0">
-          <tr>
-            <td width="250" align="right"><label for="text1">Right-aligned text can also look bad</label></td>
-            <td width="250"><input type="text" name="text1"></td>
-          </tr>
-          <tr>
-            <td colspan="2" align="center"><input type="submit" name="submit" value="Submit"></td>
-          </tr>
-        </table>
+        <fieldset>
+          <legend>Example of a form label:</legend>
+          <div>
+            <label for="text1">Right-aligned text can also look bad</label>
+            <input type="text" name="text1" id="text1"/>
+          </div>
+          <input type="submit" name="submit" value="Submit">
+        </fieldset>
       </form>
     </div>
   </section>
@@ -57,21 +55,21 @@
       </figure>
       <blockquote>Blockquotes are another type of text formatting that may benefit from text balancing.</blockquote>
       <form action="" method="post" name="form2">
-      <div class="info">Example of a form label:</div>
-        <table cellpadding="5" cellspacing="0">
-          <tr>
-            <td width="250" align="right"><label for="text1">Right-aligned text can also look bad</label></td>
-            <td width="250"><input type="text" name="text1"></td>
-          </tr>
-          <tr>
-            <td colspan="2" align="center"><input type="submit" name="submit" value="Submit"></td>
-          </tr>
-        </table>
+        <fieldset>
+          <legend>Example of a form label:</legend>
+          <div>
+            <label for="text2">Right-aligned text can also look bad</label>
+            <input type="text" name="text2" id="text2"/>
+          </div>
+          <input type="submit" name="submit" value="Submit">
+        </fieldset>
       </form>
     </div>
   </section>
 </div>
-<p>&nbsp;</p>
+<footer>
+  Return <a href="../">BalanceText</a> main page.
+</footer>
 
 <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
 <script src="jquery.balancetext-1.0.0.js"></script>
@@ -90,6 +88,7 @@ function applyBalanceText() {
 	container.find("label").balanceText();
 	container.find("blockquote").balanceText();
   container.find("figcaption").balanceText();
+  console.log(container.find("label").balanceText());
 }
 
 applyBalanceText();
