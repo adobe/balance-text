@@ -114,16 +114,29 @@ body > footer {
 	display: block
 }
 fieldset {
+	background: #E6E6E6;
+	border-radius: 2px;
+	border: none;
+	box-shadow: 0 0 10px rgba(0,0,0,.1);
 }
-fieldset div label {
+legend {
+	background: #fff;
+	padding: 0 5px;
+	background: #F2F2F2;
+	border-radius: 2px;
+	box-shadow: 0 0 10px rgba(0,0,0,.1);
+}
+fieldset label {
 	display: block;
 	width: 200px;
 	float: left;
 	text-align: right;
+	margin-right: 10px;
 }
 fieldset div input {
 	height: 40px;
 }
 input[type="submit"] {
 	clear: both;
+	margin: 5px 0 0 211px;
 }
