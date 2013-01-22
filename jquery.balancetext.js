@@ -84,10 +84,12 @@
                     
                     // save settings
                     var oldWS = $this.css('white-space');
+                    var oldFloat = $this.css('float');
                     var oldDisplay = $this.css('display');
-        
+
                     // temporary settings
                     $this.css('white-space', 'nowrap');
+                    $this.css('float', 'none');
                     $this.css('display', 'inline');
         
                     var nowrapWidth = $this.width();
@@ -154,6 +156,7 @@
         
                     // restore settings
                     $this.css('display', oldDisplay);
+                    $this.css('float', oldFloat);
                     $this.css('white-space', oldWS);
                 };
                 
