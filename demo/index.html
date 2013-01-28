@@ -6,6 +6,9 @@
 <title>Balance Text Demo</title>
 <script src="http://use.edgefonts.net/source-sans-pro:n3,n4,i3,i4,n6.js"></script>
 <link rel="stylesheet" type="text/css" href="main.css">
+<!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
 </style>
 </head>
 
@@ -35,7 +38,7 @@
       <form action="" method="post" name="form1">
         <fieldset>
           <legend>Example of a form label:</legend>
-          <div>
+          <div class="input">
             <label for="text1">Right-aligned text can also look bad</label>
             <input type="text" name="text1" id="text1"/>
           </div>
@@ -57,7 +60,7 @@
       <form action="" method="post" name="form2">
         <fieldset>
           <legend>Example of a form label:</legend>
-          <div>
+          <div class="input">
             <label for="text2">Right-aligned text can also look bad</label>
             <input type="text" name="text2" id="text2"/>
           </div>
