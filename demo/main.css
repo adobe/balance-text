@@ -118,25 +118,36 @@ fieldset {
 	border-radius: 2px;
 	border: none;
 	box-shadow: 0 0 10px rgba(0,0,0,.1);
+	position: relative;
+	padding-top: 10px;
+	margin-top: 30px;
 }
 legend {
 	background: #fff;
 	padding: 0 5px;
 	background: #F2F2F2;
 	border-radius: 2px;
-	box-shadow: 0 0 10px rgba(0,0,0,.1);
+	box-shadow: 0 0 10px rgba(0,0,0,.3);
+	position: absolute;
+	top: -14px;
 }
-fieldset label {
+.input label {
+	position: absolute;
+	left: 0;
 	display: block;
 	width: 200px;
-	float: left;
 	text-align: right;
-	margin-right: 10px;
 }
-fieldset div input {
+.input input {
 	height: 40px;
+	width: 100%;
+}
+.input {
+	padding: 0 20px 0 210px;
 }
 input[type="submit"] {
 	clear: both;
 	margin: 5px 0 0 211px;
 }
+
+
