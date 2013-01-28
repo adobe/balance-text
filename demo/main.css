@@ -131,17 +131,23 @@ legend {
 	position: absolute;
 	top: -14px;
 }
-fieldset label {
+.input label {
+	position: absolute;
+	left: 0;
 	display: block;
 	width: 200px;
-	float: left;
 	text-align: right;
-	margin-right: 10px;
 }
-fieldset div input {
+.input input {
 	height: 40px;
+	width: 100%;
+}
+.input {
+	padding: 0 20px 0 210px;
 }
 input[type="submit"] {
 	clear: both;
 	margin: 5px 0 0 211px;
 }
+
+
