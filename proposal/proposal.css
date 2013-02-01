@@ -16,3 +16,7 @@ body {
   -webkit-box-shadow: 2px 2px 10px #666;
           box-shadow: 2px 2px 10px #666;
 }
+.cell-name, .cell-date {
+    white-space: nowrap;
+    vertical-align: text-top;
+}
