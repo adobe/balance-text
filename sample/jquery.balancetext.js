@@ -44,7 +44,7 @@
                     this.width = 0;
                 };
                 var isWS = function (c) {
-                    return (" \t\n\r\v".indexOf(c) !== -1);
+                    return (" \t\n\r\f".indexOf(c) !== -1);
                 };
                 var removeBR = function (s) {
                     return s.replace(/<br\s*\/?>/g, " ");
