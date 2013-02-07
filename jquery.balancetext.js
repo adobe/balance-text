@@ -40,44 +40,83 @@
                     this.reset();
                 }
                 NextWS_params.prototype.reset = function () {
-                    this.char = 0;
+                    this.index = 0;
                     this.width = 0;
                 };
+
+                /**
+                 * Returns true iff c is an HTML space character.
+                 */
                 var isWS = function (c) {
                     return (" \t\n\r\f".indexOf(c) !== -1);
                 };
+
                 var removeBR = function (s) {
                     return s.replace(/<br\s*\/?>/g, " ");
                 };
-                var nextWS = function (el, remText, conWidth, desWidth, dir, c, f) {
-                    var w = (dir < 0) ? conWidth : 0;
-                    var tmpText = "";
+
+                /**
+                 * In the current simple implementation, an index i is a break
+                 * opportunity in txt iff it is 0, txt.length, or the
+                 * index of a non-whitespace char immediately preceded by a
+                 * whitespace char.  (Thus, it doesn't honour 'white-space' or
+                 * any Unicode line-breaking classes.)
+                 *
+                 * @precondition 0 <= index && index <= txt.length
+                 */
+                var isBreakOpportunity = function (txt, index) {
+                    return ((index === 0) || (index === txt.length) ||
+                            (isWS(txt.charAt(index - 1)) && !isWS(txt.charAt(index))));
+                };
+
+                /**
+                 * Finds the first break opportunity (@see isBreakOpportunity)
+                 * in txt that's both after-or-equal-to index c in the direction dir
+                 * and resulting in line width equal to or past clamp(desWidth,
+                 * 0, conWidth) in direction dir.  Sets ret.index and ret.width
+                 * to the corresponding index and line width (from the start of
+                 * txt to ret.index).
+                 *
+                 * @param $el      - $(element)
+                 * @param txt      - text string
+                 * @param conWidth - container width
+                 * @param desWidth - desired width
+                 * @param dir      - direction (-1 or +1)
+                 * @param c        - char index (0 <= c && c <= txt.length)
+                 * @param ret      - return object; index and width of previous/next break
+                 *
+                 */
+                var findBreakOpportunity = function ($el, txt, conWidth, desWidth, dir, c, ret) {
+                    var w;
                     
-                    while ((dir < 0 && w > 0) || (dir > 0 && w < conWidth)) {
-                        
-                        if (((dir < 0) && (w <= desWidth)) || ((dir > 0) && (w >= desWidth))) {
-                            f.char = c;
-                            f.width = w;
+                    for(;;) {
+                        while (!isBreakOpportunity(txt, c)) {
+                            c += dir;
+                        }
+
+                        $el.text(txt.substr(0, c));
+                        w = $el.width();
+
+                        if ((dir < 0)
+                                ? ((w <= desWidth) || (w <= 0) || (c === 0))
+                                : ((desWidth <= w) || (conWidth <= w) || (c === txt.length))) {
                             break;
                         }
-                        
-                        while (isWS(remText.charAt(c)) && (c >= 0)) {
-                            c += dir;
-                        }
-                        while (!isWS(remText.charAt(c)) && (c >= 0)) {
-                            c += dir;
-                        }
-                    
-                        tmpText = remText.substr(0, c);
-                        el.text(tmpText);
-                        w = el.width();
+                        c += dir;
                     }
+                    ret.index = c;
+                    ret.width = w;
                 };
         
                 // reflow() inserts breaks into text to balance text acros multiple lines
                 var reflow = function () {
                     
+                    // In a lower level language, this algorithm takes time
+                    // comparable to normal text layout other than the fact
+                    // that we do two passes instead of one, so we should
+                    // be able to do without this limit.
                     var maxTextWidth = 5000;
+
                     $this.html(removeBR($this.html()));        // strip <br> tags
                     var containerWidth = $this.width();
                     var containerHeight = $this.height();
@@ -96,6 +135,11 @@
         
                     var nowrapWidth = $this.width();
                     var nowrapHeight = $this.height();
+
+                    // An estimate of the average line width reduction due
+                    // to trimming trailing space that we expect over all
+                    // lines other than the last.
+                    var guessSpaceWidth = ((oldWS === 'pre-wrap') ? 0 : nowrapHeight / 4);
         
                     if (containerWidth > 0 &&                  // prevent divide by zero
                             nowrapWidth > containerWidth &&    // text is more than 1 line
@@ -109,43 +153,45 @@
                         // Determine where to break:
                         while (remLines > 1) {
     
-                            var desiredWidth = Math.round(nowrapWidth / remLines);
-                            var tmpChar = Math.round(remainingText.length / remLines);
-                            var finalGT = new NextWS_params();
+                            var desiredWidth = Math.round((nowrapWidth + guessSpaceWidth)
+                                                          / remLines
+                                                          - guessSpaceWidth);
+
+                            // Guessed char index
+                            var guessIndex = Math.round((remainingText.length + 1) / remLines) - 1;
+
+                            var le = new NextWS_params();
         
-                            // Find any breaking space before desired length
-                            nextWS($this, remainingText, containerWidth, desiredWidth, -1, tmpChar, finalGT);
-                            tmpChar = finalGT.char;
+                            // Find a breaking space somewhere before (or equal to) desired width,
+                            // not necessarily the closest to the desired width.
+                            findBreakOpportunity($this, remainingText, containerWidth, desiredWidth, -1, guessIndex, le);
                             
-                            // Find first breaking char after desired length
-                            finalGT.reset();
-                            nextWS($this, remainingText, containerWidth, desiredWidth, +1, tmpChar, finalGT);
+                            // Find first breaking char after (or equal to) desired width.
+                            var ge = new NextWS_params();
+                            guessIndex = le.index;
+                            findBreakOpportunity($this, remainingText, containerWidth, desiredWidth, +1, guessIndex, ge);
         
-                            // Find first breaking char before desired length
-                            var finalLT = new NextWS_params();
-                            tmpChar = finalGT.char;
-                            nextWS($this, remainingText, containerWidth, desiredWidth, -1, tmpChar, finalLT);
-        
-                            // Bail if no breaking points found
-                            if (finalLT.char === 0 && finalGT.char === 0) {
-                                break;
-                            }
+                            // Find first breaking char before (or equal to) desired width.
+                            le.reset();
+                            guessIndex = ge.index;
+                            findBreakOpportunity($this, remainingText, containerWidth, desiredWidth, -1, guessIndex, le);
         
                             // Find closest string to desired length
-                            var splitChar = 0;
-                            if (finalLT.char === 0) {
-                                splitChar = finalGT.char;
-                            } else if (finalGT.char === 0 || finalLT.char === finalGT.char) {
-                                splitChar = finalLT.char;
+                            var splitIndex;
+                            if (le.index === 0) {
+                                splitIndex = ge.index;
+                            } else if ((containerWidth < ge.width) || (le.index === ge.index)) {
+                                splitIndex = le.index;
                             } else {
-                                splitChar = (Math.abs(desiredWidth - finalLT.width) < Math.abs(finalGT.width - desiredWidth))
-                                                ? finalLT.char : finalGT.char;
+                                splitIndex = ((Math.abs(desiredWidth - le.width) < Math.abs(ge.width - desiredWidth))
+                                                   ? le.index
+                                                   : ge.index);
                             }
         
                             // Break string
-                            newText += remainingText.substr(0, splitChar);
+                            newText += remainingText.substr(0, splitIndex);
                             newText += "<br/>";
-                            remainingText = remainingText.substr(splitChar + 1);
+                            remainingText = remainingText.substr(splitIndex);
         
                             // update counters
                             remLines--;
