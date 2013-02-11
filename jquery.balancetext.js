@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2012 Adobe Systems Incorporated. All rights reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *    http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. * 
+ * limitations under the License. *
  */
-/**    
+/**
  * jquery.balancetext.js
  *
  * Author: Randy Edmunds
@@ -35,7 +35,7 @@
         } else {
             return this.each(function () {
                 var $this = $(this);
-        
+
                 function NextWS_params() {
                     this.reset();
                 }
@@ -88,7 +88,7 @@
                  */
                 var findBreakOpportunity = function ($el, txt, conWidth, desWidth, dir, c, ret) {
                     var w;
-                    
+
                     for(;;) {
                         while (!isBreakOpportunity(txt, c)) {
                             c += dir;
@@ -107,10 +107,10 @@
                     ret.index = c;
                     ret.width = w;
                 };
-        
+
                 // reflow() inserts breaks into text to balance text acros multiple lines
                 var reflow = function () {
-                    
+
                     // In a lower level language, this algorithm takes time
                     // comparable to normal text layout other than the fact
                     // that we do two passes instead of one, so we should
@@ -120,7 +120,7 @@
                     $this.html(removeBR($this.html()));        // strip <br> tags
                     var containerWidth = $this.width();
                     var containerHeight = $this.height();
-                    
+
                     // save settings
                     var oldWS = $this.css('white-space');
                     var oldFloat = $this.css('float');
@@ -128,11 +128,13 @@
                     var oldPosition = $this.css('position');
 
                     // temporary settings
-                    $this.css('white-space', 'nowrap');
-                    $this.css('float', 'none');
-                    $this.css('display', 'inline');
-                    $this.css('position', 'static');
-        
+                    $this.css({
+                        'white-space': 'nowrap',
+                        'float': 'none',
+                        'display': 'inline',
+                        'position': 'static'
+                    });
+
                     var nowrapWidth = $this.width();
                     var nowrapHeight = $this.height();
 
@@ -140,19 +142,19 @@
                     // to trimming trailing space that we expect over all
                     // lines other than the last.
                     var guessSpaceWidth = ((oldWS === 'pre-wrap') ? 0 : nowrapHeight / 4);
-        
+
                     if (containerWidth > 0 &&                  // prevent divide by zero
                             nowrapWidth > containerWidth &&    // text is more than 1 line
                             nowrapWidth < maxTextWidth) {      // text is less than arbitrary limit (make this a param?)
-    
+
                         var remainingText = $this.text();
                         var newText = "";
                         var totLines = Math.round(containerHeight / nowrapHeight);
                         var remLines = totLines;
-        
+
                         // Determine where to break:
                         while (remLines > 1) {
-    
+
                             var desiredWidth = Math.round((nowrapWidth + guessSpaceWidth)
                                                           / remLines
                                                           - guessSpaceWidth);
@@ -161,21 +163,21 @@
                             var guessIndex = Math.round((remainingText.length + 1) / remLines) - 1;
 
                             var le = new NextWS_params();
-        
+
                             // Find a breaking space somewhere before (or equal to) desired width,
                             // not necessarily the closest to the desired width.
                             findBreakOpportunity($this, remainingText, containerWidth, desiredWidth, -1, guessIndex, le);
-                            
+
                             // Find first breaking char after (or equal to) desired width.
                             var ge = new NextWS_params();
                             guessIndex = le.index;
                             findBreakOpportunity($this, remainingText, containerWidth, desiredWidth, +1, guessIndex, ge);
-        
+
                             // Find first breaking char before (or equal to) desired width.
                             le.reset();
                             guessIndex = ge.index;
                             findBreakOpportunity($this, remainingText, containerWidth, desiredWidth, -1, guessIndex, le);
-        
+
                             // Find closest string to desired length
                             var splitIndex;
                             if (le.index === 0) {
@@ -187,28 +189,30 @@
                                                    ? le.index
                                                    : ge.index);
                             }
-        
+
                             // Break string
                             newText += remainingText.substr(0, splitIndex);
                             newText += "<br/>";
                             remainingText = remainingText.substr(splitIndex);
-        
+
                             // update counters
                             remLines--;
                             $this.text(remainingText);
                             nowrapWidth = $this.width();
                         }
-        
+
                         $this.html(newText + remainingText);
                     }
-        
+
                     // restore settings
-                    $this.css('position', oldPosition);
-                    $this.css('display', oldDisplay);
-                    $this.css('float', oldFloat);
-                    $this.css('white-space', oldWS);
+                    $this.css({
+                        'position': oldPosition,
+                        'display': oldDisplay,
+                        'float': oldFloat,
+                        'white-space': oldWS
+                    });
                 };
-                
+
                 // Call once to set.
                 reflow();
             });
