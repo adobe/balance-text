@@ -12,7 +12,7 @@
 <h2>Purpose</h2>
 <p>The basic algorithm for rendering text is simple: put as much text as will fit on  each line, with the remainder on the last line. This results in the fewest possible lines of text being used, but when the text spans more than 1 line, the result can sometimes be visually undesirable.</p>
 <p>When rendering text that spans multiple lines, this feature provides the option to automatically balance text across the necessary number of lines.</p>
-<p>The intended usage for balance text algorithm is for short text  elements such as headings, blockquotes, labels, and captions. When the algorithm is applied to large paragraphs of text, the effort increases and  the benefit diminishes, so there probably should be a way to specify a maximum length of text.</p>
+<p>The intended usage for balance text is for short text  elements such as headings, blockquotes, labels, and captions. When balance text is applied to large paragraphs of text, the effort increases and  the benefit diminishes, so there probably should be a way to specify a maximum length of text.</p>
 <h2>Proposed Implementation</h2>
 <h3>CSS</h3>
 <p>A new value of <code>balanced</code> is proposed for  the CSS4 Text module  <code><a href="http://dev.w3.org/csswg/css4-text/#wrapping">text-wrap</a></code> property. For example:</p>
@@ -24,20 +24,20 @@
 <h3>Text Direction</h3>
 <p>Any <code>direction</code> value can be used with balanced text.</p>
 <h3>Container Size</h3>
-<p>This algorithm does not affect the width of the containing element. The resulting text will always wrap to same number of lines as original text. There may be cases where height changes.</p>
+<p>Balance text does not affect the width of the containing element. The resulting text will always wrap to same number of lines as original text. There may be cases where height changes.</p>
 <p>One exception to this may be shrink-to-fit containers.</p>
 <h3>Boundaries</h3>
-<p>The algorithm is limited to a single block-level element. It does not balance across multiple paragraphs.</p>
+<p>Balance text is limited to a single block-level element. It does not balance across multiple paragraphs.</p>
 <h3>Float Intrusions</h3>
-<p>Float intrusions seems like a solvable case, but the  point where there is enough text to wrap around something approaches  the point where this algorithm loses effectiveness, so this may not be a beneficial  enough case to implement.</p>
+<p>Float intrusions seems like a solvable case, but the  point where there is enough text to wrap around something approaches  the point where balance text loses effectiveness, so this may not be a beneficial  enough case to implement.</p>
 <h3>Break tag handling</h3>
 <p>How text that contains &lt;br&gt; tag needs to be defined.</p>
 <h3>Text Length Limit</h3>
-<p>As the length of text increases, the effort increases and the benefit decreases, so it may be desirable to limit length of text to a configurable value, and algorithm is done if that threshold has been surpassed.</p>
+<p>As the length of text increases, the effort increases and the benefit decreases, so it may be desirable to limit length of text to a configurable value, and balance text does nothing if that threshold has been surpassed.</p>
 <h2>Details</h2>
-<p>The following algorithm provides a good balance of text in 2 rendering passes.</p>
+<p>The following proposed algorithm provides a good balance of text in 2 rendering passes.</p>
 <h3>First Rendering Pass</h3>
-<p>First, determine the minimum number of lines required for the text using the basic text rendering algorithm. The text rendering algorithm is necessary because, due to the actual order and length of elements in the text, the number of lines may be more than by simply dividing the total text width by the container width, and it's important that this algorithm only changes where line breaks occur, and not the resulting height.</p>
+<p>First, determine the minimum number of lines required for the text using the basic text rendering algorithm. The text rendering algorithm is necessary because, due to the actual order and length of elements in the text, the number of lines may be more than by simply dividing the total text width by the container width.</p>
 <p>If there's only 1 line of text, then it is rendered on a single line, and the algorithm is done.</p>
 <p>Also, need to determine total width of text (i.e. length of text rendered on 1 infinitely long line). This is determined by a keeping cumulative length as text is rendered.</p>
 <h3>Second Rendering Pass</h3>
