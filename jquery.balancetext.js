@@ -51,8 +51,8 @@
                     return (" \t\n\r\f".indexOf(c) !== -1);
                 };
 
-                var removeBR = function (s) {
-                    return s.replace(/<br\s*\/?>/g, " ");
+                var removeBR = function ($el) {
+                    $el.find('br[data-owner="balance-text"]').replaceWith(document.createTextNode(" "));
                 };
 
                 /**
@@ -117,7 +117,7 @@
                     // be able to do without this limit.
                     var maxTextWidth = 5000;
 
-                    $this.html(removeBR($this.html()));        // strip <br> tags
+                    removeBR($this);                        // strip <br> tags
                     var containerWidth = $this.width();
                     var containerHeight = $this.height();
 
@@ -192,7 +192,7 @@
 
                             // Break string
                             newText += remainingText.substr(0, splitIndex);
-                            newText += "<br/>";
+                            newText += '<br data-owner="balance-text" />';
                             remainingText = remainingText.substr(splitIndex);
 
                             // update counters
