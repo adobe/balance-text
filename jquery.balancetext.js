@@ -28,6 +28,78 @@
     var style = document.documentElement.style,
         hasTextWrap = (style.textWrap   || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap || style.OTextWrap);
 
+    function NextWS_params() {
+        this.reset();
+    }
+    NextWS_params.prototype.reset = function () {
+        this.index = 0;
+        this.width = 0;
+    };
+
+    /**
+     * Returns true iff c is an HTML space character.
+     */
+    var isWS = function (c) {
+        return (" \t\n\r\f".indexOf(c) !== -1);
+    };
+
+    var removeBR = function ($el) {
+        $el.find('br[data-owner="balance-text"]').replaceWith(document.createTextNode(" "));
+    };
+
+    /**
+     * In the current simple implementation, an index i is a break
+     * opportunity in txt iff it is 0, txt.length, or the
+     * index of a non-whitespace char immediately preceded by a
+     * whitespace char.  (Thus, it doesn't honour 'white-space' or
+     * any Unicode line-breaking classes.)
+     *
+     * @precondition 0 <= index && index <= txt.length
+     */
+    var isBreakOpportunity = function (txt, index) {
+        return ((index === 0) || (index === txt.length) ||
+                (isWS(txt.charAt(index - 1)) && !isWS(txt.charAt(index))));
+    };
+
+    /**
+     * Finds the first break opportunity (@see isBreakOpportunity)
+     * in txt that's both after-or-equal-to index c in the direction dir
+     * and resulting in line width equal to or past clamp(desWidth,
+     * 0, conWidth) in direction dir.  Sets ret.index and ret.width
+     * to the corresponding index and line width (from the start of
+     * txt to ret.index).
+     *
+     * @param $el      - $(element)
+     * @param txt      - text string
+     * @param conWidth - container width
+     * @param desWidth - desired width
+     * @param dir      - direction (-1 or +1)
+     * @param c        - char index (0 <= c && c <= txt.length)
+     * @param ret      - return object; index and width of previous/next break
+     *
+     */
+    var findBreakOpportunity = function ($el, txt, conWidth, desWidth, dir, c, ret) {
+        var w;
+
+        for(;;) {
+            while (!isBreakOpportunity(txt, c)) {
+                c += dir;
+            }
+
+            $el.text(txt.substr(0, c));
+            w = $el.width();
+
+            if ((dir < 0)
+                    ? ((w <= desWidth) || (w <= 0) || (c === 0))
+                    : ((desWidth <= w) || (conWidth <= w) || (c === txt.length))) {
+                break;
+            }
+            c += dir;
+        }
+        ret.index = c;
+        ret.width = w;
+    };
+
     $.fn.balanceText = function () {
         if (hasTextWrap) {
             // browser supports text-wrap, so do nothing
@@ -35,78 +107,6 @@
         } else {
             return this.each(function () {
                 var $this = $(this);
-
-                function NextWS_params() {
-                    this.reset();
-                }
-                NextWS_params.prototype.reset = function () {
-                    this.index = 0;
-                    this.width = 0;
-                };
-
-                /**
-                 * Returns true iff c is an HTML space character.
-                 */
-                var isWS = function (c) {
-                    return (" \t\n\r\f".indexOf(c) !== -1);
-                };
-
-                var removeBR = function ($el) {
-                    $el.find('br[data-owner="balance-text"]').replaceWith(document.createTextNode(" "));
-                };
-
-                /**
-                 * In the current simple implementation, an index i is a break
-                 * opportunity in txt iff it is 0, txt.length, or the
-                 * index of a non-whitespace char immediately preceded by a
-                 * whitespace char.  (Thus, it doesn't honour 'white-space' or
-                 * any Unicode line-breaking classes.)
-                 *
-                 * @precondition 0 <= index && index <= txt.length
-                 */
-                var isBreakOpportunity = function (txt, index) {
-                    return ((index === 0) || (index === txt.length) ||
-                            (isWS(txt.charAt(index - 1)) && !isWS(txt.charAt(index))));
-                };
-
-                /**
-                 * Finds the first break opportunity (@see isBreakOpportunity)
-                 * in txt that's both after-or-equal-to index c in the direction dir
-                 * and resulting in line width equal to or past clamp(desWidth,
-                 * 0, conWidth) in direction dir.  Sets ret.index and ret.width
-                 * to the corresponding index and line width (from the start of
-                 * txt to ret.index).
-                 *
-                 * @param $el      - $(element)
-                 * @param txt      - text string
-                 * @param conWidth - container width
-                 * @param desWidth - desired width
-                 * @param dir      - direction (-1 or +1)
-                 * @param c        - char index (0 <= c && c <= txt.length)
-                 * @param ret      - return object; index and width of previous/next break
-                 *
-                 */
-                var findBreakOpportunity = function ($el, txt, conWidth, desWidth, dir, c, ret) {
-                    var w;
-
-                    for(;;) {
-                        while (!isBreakOpportunity(txt, c)) {
-                            c += dir;
-                        }
-
-                        $el.text(txt.substr(0, c));
-                        w = $el.width();
-
-                        if ((dir < 0)
-                                ? ((w <= desWidth) || (w <= 0) || (c === 0))
-                                : ((desWidth <= w) || (conWidth <= w) || (c === txt.length))) {
-                            break;
-                        }
-                        c += dir;
-                    }
-                    ret.index = c;
-                    ret.width = w;
-                };
 
                 // reflow() inserts breaks into text to balance text acros multiple lines
                 var reflow = function () {
