@@ -16,7 +16,7 @@ Here is a simple Balance Text setup:
 ```
     <!-- put this in the <head> element -->
     <style type="text/css">
-    /* Apply (proposed) CSS style */
+    /* Apply (proposed) CSS style. Plugin looks for elements with class named "balance-text" */
     .balance-text {
         text-wrap: balanced;
     }
@@ -25,20 +25,6 @@ Here is a simple Balance Text setup:
     <!-- put this at the end of the <body> element -->
     <script src="jquery-1.8.0.min.js"></script>
     <script src="jquery.balancetext.js"></script>
-    <script>
-    // Call the balanceText function on all the elements with
-    // the "balance-text" class applied. When a browser has
-    // native support for the text-wrap property, the plugin
-    // will let the browser handle it natively, otherwise it
-    // will apply its own text balancing code.
-    function applyBalanceText() {
-      $(".balance-text").balanceText();
-    }
-
-    applyBalanceText();
-
-    $(window).resize(applyBalanceText);
-    </script>
 ```
 
 See the demo provided for a working sample.
