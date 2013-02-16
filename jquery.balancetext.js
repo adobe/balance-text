@@ -20,7 +20,7 @@
  */
 
 /*jslint vars: true, plusplus: true, devel: true, browser: true, nomen: true, indent: 4, maxerr: 50 */
-/*global jQuery: false */
+/*global jQuery, $ */
 
 (function ($) {
     "use strict";
@@ -213,3 +213,17 @@
     };
 
 }(jQuery));
+
+
+// Call the balanceText plugin on the elements with "balance-text" class. When a browser
+// has native support for the text-wrap property, the text balanceText plugin will let
+// the browser handle it natively, otherwise it will apply its own text balancing code.
+function applyBalanceText() {
+    "use strict";
+    $(".balance-text").balanceText();
+}
+
+applyBalanceText();
+
+// Reapply on resize
+$(window).resize(applyBalanceText);
