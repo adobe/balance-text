@@ -1,12 +1,4 @@
-
-/* Apply (proposed) CSS style */
-.balance-text p,
-.balance-text h1,
-.balance-text label,
-.balance-text blockquote,
-.balance-text figcaption {
-	text-wrap: balanced;
-}
+/* main.css */
 a {
 	color: #007edf;
 	text-decoration: none;
