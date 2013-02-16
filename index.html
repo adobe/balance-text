@@ -46,7 +46,9 @@
         
         <pre>    &lt;!-- put this in the &lt;head&gt; element --&gt;
     &lt;style type="text/css"&gt;
-    /* Apply (proposed) CSS style */
+    /* Apply (proposed) CSS style.
+     * Plugin looks for elements with class named "balance-text".
+     */
     .balance-text {
         text-wrap: balanced;
     }
@@ -55,19 +57,6 @@
     &lt;!-- put this at the end of the &lt;body&gt; element --&gt;
     &lt;script src="jquery-1.8.0.min.js"&gt;&lt;/script&gt;
     &lt;script src="jquery.balancetext.js"&gt;&lt;/script&gt;
-    &lt;script&gt;
-    // Call the balanceText function on all the elements with
-    // the "balance-text" class applied. When a browser has
-    // native support for the text-wrap property, the plugin
-    // will let the browser handle it natively, otherwise it
-    // will apply its own text balancing code.
-    function applyBalanceText() {
-      $(".balance-text").balanceText();
-    }
-
-    applyBalanceText();
-
-    $(window).resize(applyBalanceText);
     &lt;/script&gt;</pre>
         
         <p>See the <a href="demo/index.html">demo</a> provided for a working sample.</p>
@@ -79,6 +68,7 @@
         <h2>Changelog</h2>
         <ul>
           <li>v 1.0 - Initial Release</li>
+          <li>v 1.1 - Simplified applying polyfill</li>
         </ul>
       </section>
     </div>
