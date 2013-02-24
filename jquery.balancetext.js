@@ -43,8 +43,50 @@
         return Boolean(c.match(/^\s$/));
     };
 
-    var removeBR = function ($el) {
+    var removeTags = function ($el) {
         $el.find('br[data-owner="balance-text"]').replaceWith(document.createTextNode(" "));
+        $el.find('div[data-owner="balance-text"]').each(function() {
+            $(this).parent().append($(this).html());
+            $(this).remove();
+        });
+    };
+
+    /**
+     * Checks to see if we should justify the balanced text with the 
+     * element based on the textAlign property in the computed CSS
+     * 
+     * @param $el        - $(element)
+     */
+    var isJustified = function ($el) {
+        style = $el.get(0).currentStyle || window.getComputedStyle($el.get(0), null);
+        return (style.textAlign == 'justify');
+    };
+
+    /**
+     * Add whitespace after words in text to justify the string to
+     * the specifed size.
+     * 
+     * @param txt      - text string
+     * @param conWidth - container width
+     */
+    var justify = function ($el, txt, conWidth) {
+        txt = $.trim(txt);
+        var words = txt.split(' ').length;
+        
+        // Find width of text in the DOM
+        var tmp = $('<span></span>').html(txt);
+        $el.append(tmp);
+        var size = tmp.width();
+        tmp.remove();
+        
+        // Figure out our word spacing and return the element
+        var wordSpacing = Math.round((conWidth - size) / words);
+        var row = $('<div></div>')
+                    .css('word-spacing', wordSpacing + 'px')
+                    .attr('data-owner', 'balance-text')
+                    .html(txt + ' ');
+        
+        return $('<div></div>').append(row).html();
     };
 
     /**
@@ -115,7 +157,7 @@
             // be able to do without this limit.
             var maxTextWidth = 5000;
 
-            removeBR($this);                        // strip <br> tags
+            removeTags($this);                        // strip balance-text tags
             var containerWidth = $this.width();
             var containerHeight = $this.height();
 
@@ -147,11 +189,13 @@
 
                 var remainingText = $this.text();
                 var newText = "";
+                var lineText = "";
+                var shouldJustify = isJustified($this);
                 var totLines = Math.round(containerHeight / nowrapHeight);
                 var remLines = totLines;
 
                 // Determine where to break:
-                while (remLines > 1) {
+                while (remLines > 0) {
 
                     var desiredWidth = Math.round((nowrapWidth + guessSpaceWidth)
                                                   / remLines
@@ -189,8 +233,13 @@
                     }
 
                     // Break string
-                    newText += remainingText.substr(0, splitIndex);
-                    newText += '<br data-owner="balance-text" />';
+                    lineText = remainingText.substr(0, splitIndex);
+                    if(shouldJustify) {
+                        newText += justify($this, lineText, containerWidth);
+                    } else {
+                        newText += lineText;
+                        newText += '<br data-owner="balance-text" />';
+                    }
                     remainingText = remainingText.substr(splitIndex);
 
                     // update counters
@@ -199,7 +248,7 @@
                     nowrapWidth = $this.width();
                 }
 
-                $this.html(newText + remainingText);
+                $this.html(newText);
             }
 
             // restore settings
