@@ -78,21 +78,23 @@
         txt = $.trim(txt);
         var words = txt.split(' ').length;
         txt = txt + ' ';
-        
+
         // if we don't have at least 2 words, no need to justify.
-        if (words < 2) return txt;
-        
+        if (words < 2) {
+            return txt;
+        }
+
         // Find width of text in the DOM
         var tmp = $('<span></span>').html(txt);
         $el.append(tmp);
         var size = tmp.width();
         tmp.remove();
-        
+
         // Figure out our word spacing and return the element
         var wordSpacing = Math.floor((conWidth - size) / (words - 1));
         tmp.css('word-spacing', wordSpacing + 'px')
             .attr('data-owner', 'balance-text');
-        
+
         return $('<div></div>').append(tmp).html();
     };
 
