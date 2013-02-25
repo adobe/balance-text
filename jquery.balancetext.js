@@ -45,8 +45,17 @@
 
     var removeTags = function ($el) {
         $el.find('br[data-owner="balance-text"]').replaceWith(document.createTextNode(" "));
+        var $span = $el.find('span[data-owner="balance-text"]');
+        if ($span.length > 0) {
+            var txt = "";
+            $span.each(function () {
+                txt += $(this).text();
+                $(this).remove();
+            });
+            $el.html(txt);
+        }
         $el.find('span[data-owner="balance-text"]').each(function () {
-            $(this).parent().append($(this).html());
+            $(this).parent().append($.trim($(this).html()) + ' ');
             $(this).remove();
         });
     };
@@ -197,7 +206,7 @@
                 var remLines = totLines;
 
                 // Determine where to break:
-                while (remLines > 0) {
+                while (remLines > 1) {
 
                     var desiredWidth = Math.round((nowrapWidth + guessSpaceWidth)
                                                   / remLines
@@ -239,7 +248,8 @@
                     if (shouldJustify) {
                         newText += justify($this, lineText, containerWidth);
                     } else {
-                        newText += lineText + (remLines > 1 ? '<br data-owner="balance-text" />' : '');
+                        newText += lineText;
+                        newText += '<br data-owner="balance-text" />';
                     }
                     remainingText = remainingText.substr(splitIndex);
 
@@ -249,7 +259,11 @@
                     nowrapWidth = $this.width();
                 }
 
-                $this.html(newText);
+                if (shouldJustify) {
+                    $this.html(newText + justify($this, remainingText, containerWidth));
+                } else {
+                    $this.html(newText + remainingText);
+                }
             }
 
             // restore settings
