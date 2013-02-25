@@ -84,7 +84,7 @@
         tmp.remove();
         
         // Figure out our word spacing and return the element
-        var wordSpacing = Math.round((conWidth - size) / words);
+        var wordSpacing = Math.floor((conWidth - size) / (words - 1));
         tmp.css('word-spacing', wordSpacing + 'px')
             .attr('data-owner', 'balance-text');
         
