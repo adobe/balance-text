@@ -45,7 +45,7 @@
 
     var removeTags = function ($el) {
         $el.find('br[data-owner="balance-text"]').replaceWith(document.createTextNode(" "));
-        $el.find('div[data-owner="balance-text"]').each(function() {
+        $el.find('div[data-owner="balance-text"]').each(function () {
             $(this).parent().append($(this).html());
             $(this).remove();
         });
@@ -59,12 +59,12 @@
      */
     var isJustified = function ($el) {
         style = $el.get(0).currentStyle || window.getComputedStyle($el.get(0), null);
-        return (style.textAlign == 'justify');
+        return (style.textAlign === 'justify');
     };
 
     /**
      * Add whitespace after words in text to justify the string to
-     * the specifed size.
+     * the specified size.
      * 
      * @param txt      - text string
      * @param conWidth - container width
@@ -72,6 +72,10 @@
     var justify = function ($el, txt, conWidth) {
         txt = $.trim(txt);
         var words = txt.split(' ').length;
+        txt = txt + ' ';
+        
+        // if we don't have at least 2 words, no need to justify.
+        if (words < 2) return txt;
         
         // Find width of text in the DOM
         var tmp = $('<span></span>').html(txt);
@@ -81,12 +85,10 @@
         
         // Figure out our word spacing and return the element
         var wordSpacing = Math.round((conWidth - size) / words);
-        var row = $('<div></div>')
-                    .css('word-spacing', wordSpacing + 'px')
-                    .attr('data-owner', 'balance-text')
-                    .html(txt + ' ');
+        tmp.css('word-spacing', wordSpacing + 'px')
+            .attr('data-owner', 'balance-text');
         
-        return $('<div></div>').append(row).html();
+        return $('<div></div>').append(tmp).html();
     };
 
     /**
@@ -234,11 +236,10 @@
 
                     // Break string
                     lineText = remainingText.substr(0, splitIndex);
-                    if(shouldJustify) {
+                    if (shouldJustify) {
                         newText += justify($this, lineText, containerWidth);
                     } else {
-                        newText += lineText;
-                        newText += '<br data-owner="balance-text" />';
+                        newText += lineText + (remLines > 1 ? '<br data-owner="balance-text" />' : '');
                     }
                     remainingText = remainingText.substr(splitIndex);
 
