@@ -54,10 +54,6 @@
             });
             $el.html(txt);
         }
-        $el.find('span[data-owner="balance-text"]').each(function () {
-            $(this).parent().append($.trim($(this).html()) + ' ');
-            $(this).remove();
-        });
     };
 
     /**
