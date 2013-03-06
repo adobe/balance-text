@@ -43,8 +43,59 @@
         return Boolean(c.match(/^\s$/));
     };
 
-    var removeBR = function ($el) {
+    var removeTags = function ($el) {
         $el.find('br[data-owner="balance-text"]').replaceWith(document.createTextNode(" "));
+        var $span = $el.find('span[data-owner="balance-text"]');
+        if ($span.length > 0) {
+            var txt = "";
+            $span.each(function () {
+                txt += $(this).text();
+                $(this).remove();
+            });
+            $el.html(txt);
+        }
+    };
+
+    /**
+     * Checks to see if we should justify the balanced text with the 
+     * element based on the textAlign property in the computed CSS
+     * 
+     * @param $el        - $(element)
+     */
+    var isJustified = function ($el) {
+        style = $el.get(0).currentStyle || window.getComputedStyle($el.get(0), null);
+        return (style.textAlign === 'justify');
+    };
+
+    /**
+     * Add whitespace after words in text to justify the string to
+     * the specified size.
+     * 
+     * @param txt      - text string
+     * @param conWidth - container width
+     */
+    var justify = function ($el, txt, conWidth) {
+        txt = $.trim(txt);
+        var words = txt.split(' ').length;
+        txt = txt + ' ';
+
+        // if we don't have at least 2 words, no need to justify.
+        if (words < 2) {
+            return txt;
+        }
+
+        // Find width of text in the DOM
+        var tmp = $('<span></span>').html(txt);
+        $el.append(tmp);
+        var size = tmp.width();
+        tmp.remove();
+
+        // Figure out our word spacing and return the element
+        var wordSpacing = Math.floor((conWidth - size) / (words - 1));
+        tmp.css('word-spacing', wordSpacing + 'px')
+            .attr('data-owner', 'balance-text');
+
+        return $('<div></div>').append(tmp).html();
     };
 
     /**
@@ -115,7 +166,7 @@
             // be able to do without this limit.
             var maxTextWidth = 5000;
 
-            removeBR($this);                        // strip <br> tags
+            removeTags($this);                        // strip balance-text tags
             var containerWidth = $this.width();
             var containerHeight = $this.height();
 
@@ -147,6 +198,8 @@
 
                 var remainingText = $this.text();
                 var newText = "";
+                var lineText = "";
+                var shouldJustify = isJustified($this);
                 var totLines = Math.round(containerHeight / nowrapHeight);
                 var remLines = totLines;
 
@@ -189,8 +242,13 @@
                     }
 
                     // Break string
-                    newText += remainingText.substr(0, splitIndex);
-                    newText += '<br data-owner="balance-text" />';
+                    lineText = remainingText.substr(0, splitIndex);
+                    if (shouldJustify) {
+                        newText += justify($this, lineText, containerWidth);
+                    } else {
+                        newText += lineText;
+                        newText += '<br data-owner="balance-text" />';
+                    }
                     remainingText = remainingText.substr(splitIndex);
 
                     // update counters
@@ -199,7 +257,11 @@
                     nowrapWidth = $this.width();
                 }
 
-                $this.html(newText + remainingText);
+                if (shouldJustify) {
+                    $this.html(newText + justify($this, remainingText, containerWidth));
+                } else {
+                    $this.html(newText + remainingText);
+                }
             }
 
             // restore settings
