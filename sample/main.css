@@ -45,13 +45,16 @@ form {
 	background-color: rgba(255, 255, 255, 0.5);
 	margin: 10px 50px;
 }
-#content h2, #content blockquote, #content p {
+#content h2, #content blockquote {
 	text-align: center;
+}
+#content p {
+	text-align: justify;
 }
 .picContainer {
 	width: 360px;
 	margin: 0 auto;
-	text-align: justify;
+	text-align: center;
 	font-size: 80%;
 }
 .picContainer img {
