@@ -27,8 +27,7 @@ Here is a simple Balance Text setup:
     <script src="jquery.balancetext.js"></script>
 ```
 
-See the demo provided for a working sample.
-
+See the demo provided or [this online version for a working sample](http://adobe-webplatform.github.io/balance-text/demo/index.html).
 
 ## Requirements
 BalanceText is designed to run in most common browsers and implemented as a jQuery plugin. This means that the standard jQuery library is required for it to work.
