@@ -27,7 +27,7 @@ Here is a simple Balance Text setup:
     <script src="jquery.balancetext.js"></script>
 ```
 
-See the demo provided for a working sample.
+See the [demo](http://adobe-webplatform.github.io/balance-text/demo/index.html) provided for a working sample.
 
 
 ## Requirements
