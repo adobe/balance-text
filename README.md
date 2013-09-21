@@ -24,7 +24,7 @@ Here is a simple Balance Text setup:
 
     <!-- put this at the end of the <body> element -->
     <script src="jquery-1.8.0.min.js"></script>
-    <script src="jquery.balancetext.js"></script>
+    <script src="jquery.balancetext.min.js"></script>
 ```
 
 See the demo provided or [this online version for a working sample](http://adobe-webplatform.github.io/balance-text/demo/index.html).
@@ -43,3 +43,4 @@ This code currently only works on text in block-level tags with no inline elemen
 * v 1.0.2 - Better break point detection mmcgahan, bug fixes
 * v 1.1.0 - Fix bugs submitted by rodneyrehm, colmjude
 * v 1.2.0 - Text-align:justify support by hunterjm
+* v 1.2.1 - Added minified version (using http://marijnhaverbeke.nl/uglifyjs)
