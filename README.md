@@ -34,6 +34,9 @@ BalanceText is designed to run in most common browsers and implemented as a jQue
 
 jQuery was used so that the code would be easier to write to work in most common browsers. None of the novel ideas introduced by this code require jQuery.
 
+## Limitations
+This code currently only works on text in block-level tags with no inline elements.
+
 ## Changelog
 * v 1.0.0 - Initial Release
 * v 1.0.1 - Bug fix by chrisbank
