@@ -282,7 +282,8 @@
         $(".balance-text").balanceText();
     }
 
-    applyBalanceText();
+    // Apply on DOM ready
+    $(window).ready(applyBalanceText);
 
     // Reapply on resize
     $(window).resize(applyBalanceText);
