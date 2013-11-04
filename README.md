@@ -14,7 +14,6 @@ That algorithm guarantees that the text is rendered using the least number of li
 Here is a simple Balance Text setup:
 
 ```
-    <!-- put this in the <head> element -->
     <style type="text/css">
     /* Apply (proposed) CSS style. Plugin looks for elements with class named "balance-text" */
     .balance-text {
@@ -22,7 +21,6 @@ Here is a simple Balance Text setup:
     }
     </style>
 
-    <!-- put this at the end of the <body> element -->
     <script src="jquery-1.8.0.min.js"></script>
     <script src="jquery.balancetext.min.js"></script>
 ```
