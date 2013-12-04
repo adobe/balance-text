@@ -116,5 +116,10 @@ input[type="submit"] {
     clear: both;
     margin: 5px 0 0 211px;
 }
-
+.test-align-justify {
+    text-align: justify;
+}
+.test-line-height {
+    line-height: 3em;
+}
 
