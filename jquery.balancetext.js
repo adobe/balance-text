@@ -167,6 +167,17 @@
             var maxTextWidth = 5000;
 
             removeTags($this);                        // strip balance-text tags
+
+            // save line-height if set via inline style
+            var oldLH = '';
+            if ($this.attr('style') &&
+                    $this.attr('style').indexOf('line-height') >= 0) {
+                oldLH = $this.css('line-height');
+            }
+
+            // remove line height before measuring container size
+            $this.css('line-height', 'normal');
+
             var containerWidth = $this.width();
             var containerHeight = $this.height();
 
@@ -269,7 +280,8 @@
                 'position': oldPosition,
                 'display': oldDisplay,
                 'float': oldFloat,
-                'white-space': oldWS
+                'white-space': oldWS,
+                'line-height': oldLH
             });
         });
     };
