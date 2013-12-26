@@ -42,3 +42,5 @@ This code currently only works on text in block-level tags with no inline elemen
 * v 1.1.0 - Fix bugs submitted by rodneyrehm, colmjude
 * v 1.2.0 - Text-align:justify support by hunterjm
 * v 1.2.1 - Added minified version (using http://marijnhaverbeke.nl/uglifyjs)
+* v 1.2.2 - Support for line-height added by jonathanpatt
+* v 1.2.3 - Fix right aligned text

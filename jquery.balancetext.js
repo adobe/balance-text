@@ -257,7 +257,7 @@
                     if (shouldJustify) {
                         newText += justify($this, lineText, containerWidth);
                     } else {
-                        newText += lineText;
+                        newText += lineText.trimRight();
                         newText += '<br data-owner="balance-text" />';
                     }
                     remainingText = remainingText.substr(splitIndex);
