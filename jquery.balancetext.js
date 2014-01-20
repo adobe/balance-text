@@ -44,7 +44,7 @@
     };
 
     var removeTags = function ($el) {
-        $el.find('br[data-owner="balance-text"]').replaceWith(document.createTextNode(" "));
+        $el.find('br[data-owner="balance-text"]').replaceWith(" ");
         var $span = $el.find('span[data-owner="balance-text"]');
         if ($span.length > 0) {
             var txt = "";
@@ -257,7 +257,7 @@
                     if (shouldJustify) {
                         newText += justify($this, lineText, containerWidth);
                     } else {
-                        newText += lineText.trimRight();
+                        newText += lineText.replace(/\s+$/, "");
                         newText += '<br data-owner="balance-text" />';
                     }
                     remainingText = remainingText.substr(splitIndex);
