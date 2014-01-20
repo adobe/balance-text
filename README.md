@@ -44,3 +44,4 @@ This code currently only works on text in block-level tags with no inline elemen
 * v 1.2.1 - Added minified version (using http://marijnhaverbeke.nl/uglifyjs)
 * v 1.2.2 - Support for line-height added by jonathanpatt
 * v 1.2.3 - Fix right aligned text
+* v 1.2.4 - Fix previous change for Internet Explorer
