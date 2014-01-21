@@ -32,16 +32,13 @@ BalanceText is designed to run in most common browsers and implemented as a jQue
 
 jQuery was used so that the code would be easier to write to work in most common browsers. None of the novel ideas introduced by this code require jQuery.
 
+Code is minified using: http://marijnhaverbeke.nl/uglifyjs
+
 ## Limitations
 This code currently only works on text in block-level tags with no inline elements.
 
 ## Changelog
-* v 1.0.0 - Initial Release
-* v 1.0.1 - Bug fix by chrisbank
-* v 1.0.2 - Better break point detection mmcgahan, bug fixes
+* v 1.0.x - Initial Release, bug fix by chrisbank, better break point detection mmcgahan
 * v 1.1.0 - Fix bugs submitted by rodneyrehm, colmjude
-* v 1.2.0 - Text-align:justify support by hunterjm
-* v 1.2.1 - Added minified version (using http://marijnhaverbeke.nl/uglifyjs)
-* v 1.2.2 - Support for line-height added by jonathanpatt
-* v 1.2.3 - Fix right aligned text
-* v 1.2.4 - Fix previous change for Internet Explorer
+* v 1.2.x - text-align:justify (hunterjm) line-height (jonathanpatt), right aligned text fix
+* v 1.3.0 - Debounce resizing events
