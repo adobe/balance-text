@@ -28,6 +28,7 @@ Here is a simple Balance Text setup:
 See the demo provided or [this online version for a working sample](http://adobe-webplatform.github.io/balance-text/demo/index.html).
 
 The balance-text library is available on CDN:
+
 [//cdnjs.cloudflare.com/ajax/libs/balance-text/1.3.0/jquery.balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/1.3.0/jquery.balancetext.min.js)
 
 ## Requirements
