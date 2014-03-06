@@ -31,6 +31,8 @@ The balance-text library is available on CDN:
 
 [//cdnjs.cloudflare.com/ajax/libs/balance-text/1.3.0/jquery.balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/1.3.0/jquery.balancetext.min.js)
 
+[//cdn.jsdelivr.net/jquery.balancetext/1.3.0/jquery.balancetext.min.js](//cdn.jsdelivr.net/jquery.balancetext/1.3.0/jquery.balancetext.min.js)
+
 ## Requirements
 BalanceText is designed to run in most common browsers and implemented as a jQuery plugin. This means that the standard jQuery library is required for it to work.
 
