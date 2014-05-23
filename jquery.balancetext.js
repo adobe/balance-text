@@ -108,20 +108,16 @@
     var removeTags = function ($el) {
         $el.find('br[data-owner="balance-text"]').replaceWith(" ");
         var $span = $el.find('span[data-owner="balance-text"]');
-        if ($span.length > 0) {
-            var txt = "";
-            $span.each(function () {
-                txt += $(this).text();
-                $(this).remove();
-            });
-            $el.html(txt);
-        }
+        $span.each(function () {
+            var $this = $(this);
+            $this.replaceWith($this.html());
+        });
     };
 
     /**
-     * Checks to see if we should justify the balanced text with the 
+     * Checks to see if we should justify the balanced text with the
      * element based on the textAlign property in the computed CSS
-     * 
+     *
      * @param $el        - $(element)
      */
     var isJustified = function ($el) {
@@ -132,7 +128,7 @@
     /**
      * Add whitespace after words in text to justify the string to
      * the specified size.
-     * 
+     *
      * @param txt      - text string
      * @param conWidth - container width
      */
