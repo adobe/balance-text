@@ -99,10 +99,18 @@
     };
 
     /**
-     * Returns true iff c is an HTML space character.
+     * Returns true iff c is a space character outside of HTML < > tags.
      */
-    var isWS = function (c) {
-        return Boolean(c.match(/^\s$/));
+    var isWS = function (txt, index) {
+        var re = /\s(?![^<]*>)/g,
+            matches = [],
+            match;
+
+        while ((match = re.exec(txt)) !== null) {
+            matches.push(match.index);
+        }
+
+        return matches.indexOf(index) !== -1;
     };
 
     var removeTags = function ($el) {
@@ -119,9 +127,9 @@
     };
 
     /**
-     * Checks to see if we should justify the balanced text with the 
+     * Checks to see if we should justify the balanced text with the
      * element based on the textAlign property in the computed CSS
-     * 
+     *
      * @param $el        - $(element)
      */
     var isJustified = function ($el) {
@@ -132,7 +140,7 @@
     /**
      * Add whitespace after words in text to justify the string to
      * the specified size.
-     * 
+     *
      * @param txt      - text string
      * @param conWidth - container width
      */
@@ -171,7 +179,7 @@
      */
     var isBreakOpportunity = function (txt, index) {
         return ((index === 0) || (index === txt.length) ||
-                (isWS(txt.charAt(index - 1)) && !isWS(txt.charAt(index))));
+                (isWS(txt, index - 1) && !isWS(txt, index)));
     };
 
     /**
@@ -199,7 +207,7 @@
                 c += dir;
             }
 
-            $el.text(txt.substr(0, c));
+            $el.html(txt.substr(0, c));
             w = $el.width();
 
             if ((dir < 0)
@@ -269,7 +277,7 @@
                     nowrapWidth > containerWidth &&    // text is more than 1 line
                     nowrapWidth < maxTextWidth) {      // text is less than arbitrary limit (make this a param?)
 
-                var remainingText = $this.text();
+                var remainingText = $this.html();
                 var newText = "";
                 var lineText = "";
                 var shouldJustify = isJustified($this);
@@ -319,14 +327,14 @@
                     if (shouldJustify) {
                         newText += justify($this, lineText, containerWidth);
                     } else {
-                        newText += lineText.replace(/\s+$/, "");
+                        newText += lineText.replace(/\s$/, "");
                         newText += '<br data-owner="balance-text" />';
                     }
                     remainingText = remainingText.substr(splitIndex);
 
                     // update counters
                     remLines--;
-                    $this.text(remainingText);
+                    $this.html(remainingText);
                     nowrapWidth = $this.width();
                 }
 
