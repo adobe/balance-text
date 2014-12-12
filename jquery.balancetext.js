@@ -263,7 +263,48 @@
             // An estimate of the average line width reduction due
             // to trimming trailing space that we expect over all
             // lines other than the last.
-            var guessSpaceWidth = ((oldWS === 'pre-wrap') ? 0 : nowrapHeight / 4);
+            
+                        // BEGIN CHANGE
+            // Quit all that guessing!  Exact ratio for the space saved :)
+
+                var container = document.createElement('div');
+                container.setAttribute("id","balanceTextSpaceJam");
+                container.style.display = "block";
+                container.style.position = "absolute";
+                container.style.bottom = "0";
+                container.style.right = "0";
+                container.style.width = "0px";
+                container.style.height = "0px";
+                container.style.margin = "0";
+                container.style.padding = "0";
+                container.style.visibility = "hidden";
+                container.style.overflow = "hidden";
+
+                var space = document.createElement('span');
+
+                // Large numbers help improve accuracy.
+                
+                space.style.fontSize = "2000px";
+
+                space.innerHTML = "&nbsp;";
+
+                container.appendChild(space);
+
+                // Put the element in the DOM for a split second.
+                $this.append(container);
+                var dims = space.getBoundingClientRect();
+               //child = document.getElementById("balanceTextSpaceJam");
+                container.parentNode.removeChild(container);
+
+                var spaceRatio = dims.height / dims.width;
+
+
+           
+
+           
+            var guessSpaceWidth = ((oldWS === 'pre-wrap') ? 0 : nowrapHeight / spaceRatio);
+            
+            // END CHANGE
 
             if (containerWidth > 0 &&                  // prevent divide by zero
                     nowrapWidth > containerWidth &&    // text is more than 1 line
