@@ -213,6 +213,45 @@
         ret.width = w;
     };
 
+    /**
+     * Detects the width of a non-breaking space character, given the height of
+     * the element with no-wrap applied.
+     *
+     * @param $el      - $(element)
+     * @param h         - height
+     *
+     */
+    var getSpaceWidth = function ($el, h){
+        var container = document.createElement('div');
+
+        container.style.display = "block";
+        container.style.position = "absolute";
+        container.style.bottom = "0";
+        container.style.right = "0";
+        container.style.width = "0px";
+        container.style.height = "0px";
+        container.style.margin = "0";
+        container.style.padding = "0";
+        container.style.visibility = "hidden";
+        container.style.overflow = "hidden";
+        
+        var space = document.createElement('span');
+
+        space.style.fontSize = "2000px";
+        space.innerHTML = "&nbsp;";
+        
+        container.appendChild(space);
+        
+        $el.append(container);
+        
+        var dims = space.getBoundingClientRect();
+        container.parentNode.removeChild(container);
+        
+        var spaceRatio = dims.height / dims.width;
+        
+        return (h / spaceRatio);
+    };
+
     $.fn.balanceText = function () {
         if (hasTextWrap) {
             // browser supports text-wrap, so do nothing
@@ -264,47 +303,7 @@
             // to trimming trailing space that we expect over all
             // lines other than the last.
             
-                        // BEGIN CHANGE
-            // Quit all that guessing!  Exact ratio for the space saved :)
-
-                var container = document.createElement('div');
-                container.setAttribute("id","balanceTextSpaceJam");
-                container.style.display = "block";
-                container.style.position = "absolute";
-                container.style.bottom = "0";
-                container.style.right = "0";
-                container.style.width = "0px";
-                container.style.height = "0px";
-                container.style.margin = "0";
-                container.style.padding = "0";
-                container.style.visibility = "hidden";
-                container.style.overflow = "hidden";
-
-                var space = document.createElement('span');
-
-                // Large numbers help improve accuracy.
-                
-                space.style.fontSize = "2000px";
-
-                space.innerHTML = "&nbsp;";
-
-                container.appendChild(space);
-
-                // Put the element in the DOM for a split second.
-                $this.append(container);
-                var dims = space.getBoundingClientRect();
-               //child = document.getElementById("balanceTextSpaceJam");
-                container.parentNode.removeChild(container);
-
-                var spaceRatio = dims.height / dims.width;
-
-
-           
-
-           
-            var guessSpaceWidth = ((oldWS === 'pre-wrap') ? 0 : nowrapHeight / spaceRatio);
-            
-            // END CHANGE
+            var spaceWidth = ((oldWS === 'pre-wrap') ? 0 : getSpaceWidth($this,nowrapHeight));
 
             if (containerWidth > 0 &&                  // prevent divide by zero
                     nowrapWidth > containerWidth &&    // text is more than 1 line
@@ -320,9 +319,9 @@
                 // Determine where to break:
                 while (remLines > 1) {
 
-                    var desiredWidth = Math.round((nowrapWidth + guessSpaceWidth)
+                    var desiredWidth = Math.round((nowrapWidth + spaceWidth)
                                                   / remLines
-                                                  - guessSpaceWidth);
+                                                  - spaceWidth);
 
                     // Guessed char index
                     var guessIndex = Math.round((remainingText.length + 1) / remLines) - 1;
