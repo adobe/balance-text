@@ -122,4 +122,9 @@ input[type="submit"] {
 .test-line-height {
     line-height: 3em;
 }
-
+.color-mark {
+    color: #f80;
+}
+strong {
+    font-size: 1.6em;
+}
