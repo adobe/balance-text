@@ -60,4 +60,4 @@ This code currently only works on text in block-level tags with no inline elemen
 * v 1.0.x - Initial Release, bug fix by chrisbank, better break point detection mmcgahan
 * v 1.1.0 - Fix bugs submitted by rodneyrehm, colmjude
 * v 1.2.x - text-align:justify (hunterjm) line-height (jonathanpatt), right aligned text fix
-* v 1.3.0 - Debounce resizing events
+* v 1.3.x - Debounce resizing events, more accurate space width estimate
