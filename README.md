@@ -14,15 +14,15 @@ That algorithm guarantees that the text is rendered using the least number of li
 Here is a simple Balance Text setup:
 
 ```
-    <style type="text/css">
-    /* Apply (proposed) CSS style. Plugin looks for elements with class named "balance-text" */
-    .balance-text {
-        text-wrap: balanced;
-    }
-    </style>
+  <style type="text/css">
+  /* Plugin looks for elements with class named "balance-text" */
+  .balance-text {
+      text-wrap: balanced;  /* Apply (proposed) CSS style */
+  }
+  </style>
 
-    <script src="jquery-1.8.0.min.js"></script>
-    <script src="jquery.balancetext.min.js"></script>
+  <script src="jquery-1.8.0.min.js"></script>
+  <script src="jquery.balancetext.min.js"></script>
 ```
 
 See the demo provided or [this online version for a working sample](http://adobe-webplatform.github.io/balance-text/demo/index.html).
@@ -35,7 +35,7 @@ Balance Text will *automatically* run on any elements with <code>.balance-text</
 You may also *manually* trigger it, e.g. if you're dynamically adding text to the DOM:
 
 ```
-    $('.balance-text').balanceText();
+    $('.my-class').balanceText();
 ```
 
 You can use any selector of your choice (you may wish to use an ID or restrict the scope for performance).
@@ -47,7 +47,7 @@ You can use any selector of your choice (you may wish to use an ID or restrict t
 [//cdn.jsdelivr.net/jquery.balancetext/1.3.0/jquery.balancetext.min.js](//cdn.jsdelivr.net/jquery.balancetext/1.3.0/jquery.balancetext.min.js)
 
 ## Requirements
-BalanceText is designed to run in most common browsers and implemented as a jQuery plugin. This means that the standard jQuery library is required for it to work.
+BalanceText is designed to run in most common browsers and implemented as a jQuery plugin. This means that the standard jQuery library is required for it to work. This plugin was last updated using jQuery 1.8, but it should work with all newer (and some older) versions of jQuery.
 
 jQuery was used so that the code would be easier to write to work in most common browsers. None of the novel ideas introduced by this code require jQuery.
 
@@ -61,3 +61,4 @@ This code currently only works on text in block-level tags with no inline elemen
 * v 1.1.0 - Fix bugs submitted by rodneyrehm, colmjude
 * v 1.2.x - text-align:justify (hunterjm) line-height (jonathanpatt), right aligned text fix
 * v 1.3.x - Debounce resizing events, more accurate space width estimate
+* v 1.4.0 - Add support for nested tags (rileyjshaw)
