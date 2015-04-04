@@ -89,7 +89,8 @@
     "use strict";
 
     var style = document.documentElement.style,
-        hasTextWrap = (style.textWrap || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap || style.OTextWrap);
+        hasTextWrap = (style.textWrap || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap || style.OTextWrap),
+        wsMatches;
 
     function NextWS_params() {
         this.reset();
@@ -100,18 +101,21 @@
     };
 
     /**
-     * Returns true iff c is a space character outside of HTML < > tags.
+     * Returns true iff char at index is a space character outside of HTML < > tags.
      */
     var isWS = function (txt, index) {
         var re = /\s(?![^<]*>)/g,
-            matches = [],
             match;
 
-        while ((match = re.exec(txt)) !== null) {
-            matches.push(match.index);
+        if (!wsMatches) {
+            // Only calc ws matches once per line
+            wsMatches = [];
+            while ((match = re.exec(txt)) !== null) {
+                wsMatches.push(match.index);
+            }
         }
 
-        return matches.indexOf(index) !== -1;
+        return wsMatches.indexOf(index) !== -1;
     };
 
     var removeTags = function ($el) {
@@ -327,6 +331,9 @@
 
                 // Determine where to break:
                 while (remLines > 1) {
+
+                    // clear whitespace match cache for each line
+                    wsMatches = null;
 
                     var desiredWidth = Math.round((nowrapWidth + spaceWidth)
                                                   / remLines
