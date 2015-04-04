@@ -19,7 +19,8 @@
  * Author: Randy Edmunds
  */
 
-/*jslint vars: true, plusplus: true, devel: true, browser: true, nomen: true, indent: 4, maxerr: 50 */
+/*jslint vars: true, plusplus: true, devel: true, browser: true, nomen: true, indent: 4, maxerr: 50, regexp: true */
+/*jshint laxbreak: true */
 /*global jQuery, $ */
 
 /*
@@ -229,7 +230,7 @@
      * @param h         - height
      *
      */
-    var getSpaceWidth = function ($el, h){
+    var getSpaceWidth = function ($el, h) {
         var container = document.createElement('div');
 
         container.style.display = "block";
@@ -311,7 +312,7 @@
             // to trimming trailing space that we expect over all
             // lines other than the last.
             
-            var spaceWidth = ((oldWS === 'pre-wrap') ? 0 : getSpaceWidth($this,nowrapHeight));
+            var spaceWidth = ((oldWS === 'pre-wrap') ? 0 : getSpaceWidth($this, nowrapHeight));
 
             if (containerWidth > 0 &&                  // prevent divide by zero
                     nowrapWidth > containerWidth &&    // text is more than 1 line
