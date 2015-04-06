@@ -53,9 +53,6 @@ jQuery was used so that the code would be easier to write to work in most common
 
 Code is minified using: http://marijnhaverbeke.nl/uglifyjs
 
-## Limitations
-This code currently only works on text in block-level tags with no inline elements.
-
 ## Changelog
 * v 1.0.x - Initial Release, bug fix by chrisbank, better break point detection mmcgahan
 * v 1.1.0 - Fix bugs submitted by rodneyrehm, colmjude
