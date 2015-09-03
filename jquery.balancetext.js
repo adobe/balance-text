@@ -247,25 +247,32 @@
         container.style.padding = "0";
         container.style.visibility = "hidden";
         container.style.overflow = "hidden";
-        
+
         var space = document.createElement('span');
 
         space.style.fontSize = "2000px";
         space.innerHTML = "&nbsp;";
-        
+
         container.appendChild(space);
-        
+
         $el.append(container);
-        
+
         var dims = space.getBoundingClientRect();
         container.parentNode.removeChild(container);
-        
+
         var spaceRatio = dims.height / dims.width;
-        
+
         return (h / spaceRatio);
     };
 
-    $.fn.balanceText = function () {
+    $.fn.balanceText = function (skipResize) {
+        var selector = this.selector;
+
+        if (!skipResize && balancedElements.indexOf(selector) === -1) {
+            // record the selector so we can re-balance it on resize
+            balancedElements.push(selector);
+        }
+
         if (hasTextWrap) {
             // browser supports text-wrap, so do nothing
             return this;
@@ -404,12 +411,15 @@
         });
     };
 
+    // Selectors to watch; calling balanceText() on a new selector adds it to this list.
+    var balancedElements = ['.balance-text'];
 
     // Call the balanceText plugin on the elements with "balance-text" class. When a browser
     // has native support for the text-wrap property, the text balanceText plugin will let
     // the browser handle it natively, otherwise it will apply its own text balancing code.
     function applyBalanceText() {
-        $(".balance-text").balanceText();
+        var selector = balancedElements.join(',');
+        $(selector).balanceText(true);
     }
 
     // Apply on DOM ready

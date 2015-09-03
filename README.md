@@ -59,3 +59,4 @@ Code is minified using: http://marijnhaverbeke.nl/uglifyjs
 * v 1.2.x - text-align:justify (hunterjm) line-height (jonathanpatt), right aligned text fix
 * v 1.3.x - Debounce resizing events, more accurate space width estimate
 * v 1.4.0 - Add support for nested tags (rileyjshaw)
+* v 1.5.0 - Re-balance text on resize for manually triggered selectors (rileyjshaw)
