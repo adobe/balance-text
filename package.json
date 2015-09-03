@@ -24,5 +24,14 @@
     ],
     "dependencies": {
         "jquery": "~1.8.0"
+    },
+    "autoupdate": {
+        "source": "git",
+        "target": "git://github.com/adobe-webplatform/balance-text.git",
+        "basePath": "",
+        "files": [
+            "jquery.balancetext.js",
+            "jquery.balancetext.min.js"
+        ]
     }
 }
