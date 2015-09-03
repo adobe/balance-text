@@ -38,7 +38,13 @@ You may also *manually* trigger it, e.g. if you're dynamically adding text to th
     $('.my-class').balanceText();
 ```
 
-You can use any selector of your choice (you may wish to use an ID or restrict the scope for performance).
+You can use any selector of your choice (you may wish to use an ID or restrict the scope for performance). These will re-balance on resize.
+
+If you need to manually re-balance all triggered elements, use:
+
+```
+    $.balanceTextUpdate();
+```
 
 ## Use from a CDN
 
@@ -60,3 +66,4 @@ Code is minified using: http://marijnhaverbeke.nl/uglifyjs
 * v 1.3.x - Debounce resizing events, more accurate space width estimate
 * v 1.4.0 - Add support for nested tags (rileyjshaw)
 * v 1.5.0 - Re-balance text on resize for manually triggered selectors (rileyjshaw)
+* v 1.6.0 - Add balanceTextUpdate() method (rileyjshaw)
