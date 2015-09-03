@@ -1,0 +1,19 @@
+{
+  "name": "balance-text",
+  "version": "1.5.0",
+  "authors": [
+    "Adobe Systems, Inc. <https://github.com/adobe-webplatform>"
+  ],
+  "description": "A jQuery plugin for implementing balancing of text across lines in a web page",
+  "main": "jquery.balancetext.min.js",
+  "keywords": [
+    "jquery",
+    "balance",
+    "text-wrap"
+  ],
+  "license": "Apache License, Version 2.0",
+  "homepage": "https://github.com/adobe-webplatform/balance-text",
+  "dependencies": {
+    "jquery": "~1.8.0"
+  }
+}
