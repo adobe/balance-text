@@ -265,6 +265,19 @@
         return (h / spaceRatio);
     };
 
+    // Selectors to watch; calling balanceText() on a new selector adds it to this list.
+    var balancedElements = ['.balance-text'];
+
+    // Call the balanceText plugin on the elements with "balance-text" class. When a browser
+    // has native support for the text-wrap property, the text balanceText plugin will let
+    // the browser handle it natively, otherwise it will apply its own text balancing code.
+    var applyBalanceText = function () {
+        var selector = balancedElements.join(',');
+        $(selector).balanceText(true);
+    };
+
+    $.fn.balanceTextUpdate = applyBalanceText;
+
     $.fn.balanceText = function (skipResize) {
         var selector = this.selector;
 
@@ -322,7 +335,7 @@
             // An estimate of the average line width reduction due
             // to trimming trailing space that we expect over all
             // lines other than the last.
-            
+
             var spaceWidth = ((oldWS === 'pre-wrap') ? 0 : getSpaceWidth($this, nowrapHeight));
 
             if (containerWidth > 0 &&                  // prevent divide by zero
@@ -411,16 +424,7 @@
         });
     };
 
-    // Selectors to watch; calling balanceText() on a new selector adds it to this list.
-    var balancedElements = ['.balance-text'];
 
-    // Call the balanceText plugin on the elements with "balance-text" class. When a browser
-    // has native support for the text-wrap property, the text balanceText plugin will let
-    // the browser handle it natively, otherwise it will apply its own text balancing code.
-    function applyBalanceText() {
-        var selector = balancedElements.join(',');
-        $(selector).balanceText(true);
-    }
 
     // Apply on DOM ready
     $(window).ready(applyBalanceText);
