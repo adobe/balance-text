@@ -48,9 +48,9 @@ If you need to manually re-balance all triggered elements, use:
 
 ## Use from a CDN
 
-[//cdnjs.cloudflare.com/ajax/libs/balance-text/1.3.0/jquery.balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/1.3.0/jquery.balancetext.min.js)
+[//cdnjs.cloudflare.com/ajax/libs/balance-text/1.6.0/jquery.balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/1.6.0/jquery.balancetext.min.js)
 
-[//cdn.jsdelivr.net/jquery.balancetext/1.3.0/jquery.balancetext.min.js](//cdn.jsdelivr.net/jquery.balancetext/1.3.0/jquery.balancetext.min.js)
+[//cdn.jsdelivr.net/jquery.balancetext/1.6.0/jquery.balancetext.min.js](//cdn.jsdelivr.net/jquery.balancetext/1.6.0/jquery.balancetext.min.js)
 
 ## Requirements
 BalanceText is designed to run in most common browsers and implemented as a jQuery plugin. This means that the standard jQuery library is required for it to work. This plugin was last updated using jQuery 1.8, but it should work with all newer (and some older) versions of jQuery.
