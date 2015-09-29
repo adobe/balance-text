@@ -302,24 +302,18 @@
 
             removeTags($this);                        // strip balance-text tags
 
-            // save line-height if set via inline style
-            var oldLH = '';
-            if ($this.attr('style') &&
-                    $this.attr('style').indexOf('line-height') >= 0) {
-                oldLH = $this.css('line-height');
-            }
+            // save settings
+            var oldWS = this.style.whiteSpace;
+            var oldFloat = this.style.float;
+            var oldDisplay = this.style.display;
+            var oldPosition = this.style.position;
+            var oldLH = this.style.lineHeight;
 
             // remove line height before measuring container size
             $this.css('line-height', 'normal');
 
             var containerWidth = $this.width();
             var containerHeight = $this.height();
-
-            // save settings
-            var oldWS = $this.css('white-space');
-            var oldFloat = $this.css('float');
-            var oldDisplay = $this.css('display');
-            var oldPosition = $this.css('position');
 
             // temporary settings
             $this.css({
@@ -414,13 +408,11 @@
             }
 
             // restore settings
-            $this.css({
-                'position': oldPosition,
-                'display': oldDisplay,
-                'float': oldFloat,
-                'white-space': oldWS,
-                'line-height': oldLH
-            });
+            this.style.whiteSpace = oldWS;
+            this.style.float = oldFloat;
+            this.style.display = oldDisplay;
+            this.style.position = oldPosition;
+            this.style.lineHeight = oldLH;
         });
     };
 
