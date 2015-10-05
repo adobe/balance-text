@@ -239,12 +239,12 @@
 
         container.style.display = "block";
         container.style.position = "absolute";
-        container.style.bottom = "0";
-        container.style.right = "0";
-        container.style.width = "0px";
-        container.style.height = "0px";
-        container.style.margin = "0";
-        container.style.padding = "0";
+        container.style.bottom = 0;
+        container.style.right = 0;
+        container.style.width = 0;
+        container.style.height = 0;
+        container.style.margin = 0;
+        container.style.padding = 0;
         container.style.visibility = "hidden";
         container.style.overflow = "hidden";
 
