@@ -173,6 +173,61 @@
         return $('<div></div>').append(tmp).html();
     };
 
+    var getOpeningTagLength = function (element) {
+        return element.outerHTML.match(/[^>]+>/)[0].length;
+    };
+
+    var walkDomUntil = function (el, index) {
+        var found = false;
+        var contextualIndex = index - getOpeningTagLength(el);
+        if (contextualIndex < 0) {
+            throw new Error('walkDomUntil should get an index verified to be in a text node');
+        }
+        Array.prototype.some.call(el.childNodes, function (node) {
+            if (node.nodeType === 3) { // if it's a text node
+                if (contextualIndex <= node.nodeValue.length) {
+                    // the index is in this node
+                    found = {
+                        node: node,
+                        index: contextualIndex
+                    };
+                    return true;
+                }
+                contextualIndex -= node.nodeValue.length;
+                return;
+            }
+            found = walkDomUntil(node, contextualIndex);
+            if (found) {
+                return true;
+            }
+            contextualIndex -= node.outerHTML.length;
+        });
+
+        return found;
+    };
+    var insertBreakAt = function (element, index) {
+        var found = walkDomUntil(element, index);
+        if (!found) {
+            throw new Error('Couldn’t find a text node at index ' + index);
+        }
+        var text = found.node.nodeValue;
+        var parent = found.node.parentNode;
+        found.node.nodeValue = text.substr(0, found.index).replace(/\s$/, '');
+
+        // create and add line break
+        var br = document.createElement('br');
+        br.setAttribute('data-owner', 'balance-text');
+        parent.insertBefore(br, found.node);
+
+        // create node containing the rest of the text
+        var remainingText = document.createTextNode(text.substr(found.index));
+        parent.insertBefore(remainingText, found.node);
+
+        // move first part of text before <br>, since there's no insertAfter
+        parent.insertBefore(found.node, br);
+
+    };
+
     /**
      * In the current simple implementation, an index i is a break
      * opportunity in txt iff it is 0, txt.length, or the
@@ -302,12 +357,14 @@
 
             removeTags($this);                        // strip balance-text tags
 
+            // replace content with a clone to avoid losing event listeners
+            var originalElement = this;
+            var clonedElement = this.cloneNode(true);
+            $this = $(clonedElement);
+            originalElement.parentNode.replaceChild(clonedElement, originalElement);
+
             // save settings
             var oldWS = this.style.whiteSpace;
-            var oldFloat = this.style.float;
-            var oldDisplay = this.style.display;
-            var oldPosition = this.style.position;
-            var oldLH = this.style.lineHeight;
 
             // remove line height before measuring container size
             $this.css('line-height', 'normal');
@@ -337,6 +394,8 @@
                     nowrapWidth < maxTextWidth) {      // text is less than arbitrary limit (make this a param?)
 
                 var remainingText = $this.html();
+                var usedTextIndex = 0;
+                var breakIndexes = [];
                 var newText = "";
                 var lineText = "";
                 var shouldJustify = isJustified($this);
@@ -349,9 +408,7 @@
                     // clear whitespace match cache for each line
                     wsMatches = null;
 
-                    var desiredWidth = Math.round((nowrapWidth + spaceWidth)
-                                                  / remLines
-                                                  - spaceWidth);
+                    var desiredWidth = Math.round((nowrapWidth + spaceWidth) / remLines - spaceWidth);
 
                     // Guessed char index
                     var guessIndex = Math.round((remainingText.length + 1) / remLines) - 1;
@@ -384,13 +441,12 @@
                                            : ge.index);
                     }
 
-                    // Break string
-                    lineText = remainingText.substr(0, splitIndex);
                     if (shouldJustify) {
+                        // TODO, UPDATE. CURRENTLY BROKEN
                         newText += justify($this, lineText, containerWidth);
                     } else {
-                        newText += lineText.replace(/\s$/, "");
-                        newText += '<br data-owner="balance-text" />';
+                        usedTextIndex += splitIndex;
+                        breakIndexes.push(usedTextIndex)
                     }
                     remainingText = remainingText.substr(splitIndex);
 
@@ -401,18 +457,18 @@
                 }
 
                 if (shouldJustify) {
+                    // TODO, UPDATE. CURRENTLY BROKEN
                     $this.html(newText + justify($this, remainingText, containerWidth));
                 } else {
-                    $this.html(newText + remainingText);
+                    var tagLength = getOpeningTagLength(originalElement);
+                    for (var i = breakIndexes.length - 1; i >= 0; i--) {
+                        insertBreakAt(originalElement, breakIndexes[i] + tagLength);
+                    }
                 }
-            }
 
-            // restore settings
-            this.style.whiteSpace = oldWS;
-            this.style.float = oldFloat;
-            this.style.display = oldDisplay;
-            this.style.position = oldPosition;
-            this.style.lineHeight = oldLH;
+            }
+            // place back the new content, which now has line breaks
+            clonedElement.parentNode.replaceChild(originalElement, clonedElement);
         });
     };
 
