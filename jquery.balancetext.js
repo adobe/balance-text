@@ -206,7 +206,7 @@
      */
     var findBreakOpportunity = function ($el, txt, conWidth, desWidth, dir, c, ret) {
         var w;
-        if (txt !== '') {
+        if (txt && typeof txt === 'string') {
           for(;;) {
               while (!isBreakOpportunity(txt, c)) {
                   c += dir;
