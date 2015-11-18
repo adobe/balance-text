@@ -206,21 +206,22 @@
      */
     var findBreakOpportunity = function ($el, txt, conWidth, desWidth, dir, c, ret) {
         var w;
+        if (txt !== '') {
+          for(;;) {
+              while (!isBreakOpportunity(txt, c)) {
+                  c += dir;
+              }
 
-        for(;;) {
-            while (!isBreakOpportunity(txt, c)) {
-                c += dir;
-            }
+              $el.html(txt.substr(0, c));
+              w = $el.width();
 
-            $el.html(txt.substr(0, c));
-            w = $el.width();
-
-            if ((dir < 0)
-                    ? ((w <= desWidth) || (w <= 0) || (c === 0))
-                    : ((desWidth <= w) || (conWidth <= w) || (c === txt.length))) {
-                break;
-            }
-            c += dir;
+              if ((dir < 0)
+                      ? ((w <= desWidth) || (w <= 0) || (c === 0))
+                      : ((desWidth <= w) || (conWidth <= w) || (c === txt.length))) {
+                  break;
+              }
+              c += dir;
+          }
         }
         ret.index = c;
         ret.width = w;
