@@ -1,6 +1,6 @@
 # BalanceText
 
-A jQuery plugin to provide an alternate text wrapping algorithm. I hope to get this into the CSS spec, so it's implemented as a polyfill.
+A jQuery plugin to provide an alternate text wrapping algorithm. I hope to get this into the CSS spec, so it's implemented as a polyfill. It already appears in the [CSS Text Module Level 4 Editor's Draft.](https://drafts.csswg.org/css-text-4/#text-wrap)
 
 The default text rendering algorithm is:
 
