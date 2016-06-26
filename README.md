@@ -48,9 +48,9 @@ If you need to manually re-balance all triggered elements, use:
 
 ## Use from a CDN
 
-[//cdnjs.cloudflare.com/ajax/libs/balance-text/1.6.0/jquery.balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/1.6.0/jquery.balancetext.min.js)
+[//cdnjs.cloudflare.com/ajax/libs/balance-text/1.7.0/jquery.balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/1.7.0/jquery.balancetext.min.js)
 
-[//cdn.jsdelivr.net/jquery.balancetext/1.6.0/jquery.balancetext.min.js](//cdn.jsdelivr.net/jquery.balancetext/1.6.0/jquery.balancetext.min.js)
+[//cdn.jsdelivr.net/jquery.balancetext/1.7.0/jquery.balancetext.min.js](//cdn.jsdelivr.net/jquery.balancetext/1.7.0/jquery.balancetext.min.js)
 
 ## Requirements
 BalanceText is designed to run in most common browsers and implemented as a jQuery plugin. This means that the standard jQuery library is required for it to work. This plugin was last updated using jQuery 1.8, but it should work with all newer (and some older) versions of jQuery.
@@ -66,4 +66,5 @@ Code is minified using: http://marijnhaverbeke.nl/uglifyjs
 * v 1.3.x - Debounce resizing events, more accurate space width estimate
 * v 1.4.0 - Add support for nested tags (rileyjshaw)
 * v 1.5.0 - Re-balance text on resize for manually triggered selectors (rileyjshaw)
-* v 1.6.0 - Add balanceTextUpdate() method (rileyjshaw)
+* v 1.6.0 - Add balanceTextUpdate() method (rileyjshaw), fixes (bfred-it)
+* v 1.7.0 - Fixes for jQuery 3.0
