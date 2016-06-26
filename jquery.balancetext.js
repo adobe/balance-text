@@ -282,7 +282,11 @@
     $.fn.balanceText = function (skipResize) {
         var selector = this.selector;
 
-        if (!skipResize && balancedElements.indexOf(selector) === -1) {
+        if (!selector && this[0].className) {
+            selector = "." + this[0].className;
+        }
+
+        if (!skipResize && !!selector && balancedElements.indexOf(selector) === -1) {
             // record the selector so we can re-balance it on resize
             balancedElements.push(selector);
         }
