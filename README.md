@@ -21,7 +21,7 @@ Here is a simple Balance Text setup:
   }
   </style>
 
-  <script src="jquery-1.8.0.min.js"></script>
+  <script src="jquery-1.9.1.min.js"></script>
   <script src="jquery.balancetext.min.js"></script>
 ```
 
@@ -53,7 +53,7 @@ If you need to manually re-balance all triggered elements, use:
 [//cdn.jsdelivr.net/jquery.balancetext/1.6.0/jquery.balancetext.min.js](//cdn.jsdelivr.net/jquery.balancetext/1.6.0/jquery.balancetext.min.js)
 
 ## Requirements
-BalanceText is designed to run in most common browsers and implemented as a jQuery plugin. This means that the standard jQuery library is required for it to work. This plugin was last updated using jQuery 1.8, but it should work with all newer (and some older) versions of jQuery.
+BalanceText is designed to run in most common browsers and implemented as a jQuery plugin. This means that the standard jQuery library is required for it to work. This plugin was last updated using jQuery 1.9.1, but it should work with all newer (and some older) versions of jQuery.
 
 jQuery was used so that the code would be easier to write to work in most common browsers. None of the novel ideas introduced by this code require jQuery.
 
