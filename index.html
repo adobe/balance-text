@@ -55,7 +55,7 @@
     &lt;script src="jquery.balancetext.min.js"&gt;&lt;/script&gt;</pre>
         
         <p>See the <a href="demo/index.html">demo</a> provided for a working sample.</p>
-        <p>Balance Text will automatically run on any elements with <code>.balance-text</code> class:</p>
+        <p>Balance Text will automatically run on any elements with <code>balance-text</code> class:</p>
         <ul>
           <li>when the page loads (DOM Ready event)</li>
           <li>when it is resized</li>
@@ -69,10 +69,14 @@
 
         <pre>    $.balanceTextUpdate();</pre>
 
+        <p>To Balance Text and have it automatically update on resize, use:</p>
+
+        <pre>    $.balanceText('.my-class');</pre>
+
         <h2>Use from a CDN</h2>
         <ul class="simple-list">
-          <li><a href="//cdnjs.cloudflare.com/ajax/libs/balance-text/1.6.0/jquery.balancetext.min.js">//cdnjs.cloudflare.com/ajax/libs/balance-text/1.6.0/jquery.balancetext.min.js</a></li>
-          <li><a href="//cdn.jsdelivr.net/jquery.balancetext/1.6.0/jquery.balancetext.min.js">//cdn.jsdelivr.net/jquery.balancetext/1.6.0/jquery.balancetext.min.js</a></li>
+          <li><a href="//cdnjs.cloudflare.com/ajax/libs/balance-text/2.0.0/jquery.balancetext.min.js">//cdnjs.cloudflare.com/ajax/libs/balance-text/2.0.0/jquery.balancetext.min.js</a></li>
+          <li><a href="//cdn.jsdelivr.net/jquery.balancetext/2.0.0/jquery.balancetext.min.js">//cdn.jsdelivr.net/jquery.balancetext/2.0.0/jquery.balancetext.min.js</a></li>
         </ul>
 
         <h2>Requirements</h2>
@@ -90,6 +94,7 @@
           <li>v 1.5.0 - Re-balance text on resize for manually triggered selectors (rileyjshaw)</li>
           <li>v 1.6.x - Add balanceTextUpdate() method (rileyjshaw), bug fixes (bfred-it)</li>
           <li>v 1.7.0 - Hack for partially working with jQuery 3, remove deprecation warning</li>
+          <li>v 2.0.0 - Fix automatic updating of custom selectors for jQuery 3 (bfred-it)</li>
         </ul>
       </section>
     </div>
