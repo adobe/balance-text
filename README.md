@@ -66,4 +66,5 @@ Code is minified using: http://marijnhaverbeke.nl/uglifyjs
 * v 1.3.x - Debounce resizing events, more accurate space width estimate
 * v 1.4.0 - Add support for nested tags (rileyjshaw)
 * v 1.5.0 - Re-balance text on resize for manually triggered selectors (rileyjshaw)
-* v 1.6.0 - Add balanceTextUpdate() method (rileyjshaw)
+* v 1.6.x - Add balanceTextUpdate() method (rileyjshaw), bug fixes (bfred-it)
+* v 1.7.0 - Hack for partially working with jQuery 3, remove deprecation warning
