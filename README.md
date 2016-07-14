@@ -38,7 +38,7 @@ You may also *manually* trigger it, e.g. if you're dynamically adding text to th
     $('.my-class').balanceText();
 ```
 
-You can use any selector of your choice (you may wish to use an ID or restrict the scope for performance). These will re-balance on resize.
+You can use any selector of your choice (you may wish to use an ID or restrict the scope for performance). These will _not_  re-balance on resize.
 
 If you need to manually re-balance all triggered elements, use:
 
