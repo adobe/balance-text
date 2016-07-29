@@ -27,7 +27,7 @@ Here is a simple Balance Text setup:
 
 See the demo provided or [this online version for a working sample](http://adobe-webplatform.github.io/balance-text/demo/index.html).
 
-Balance Text will *automatically* run on any elements with <code>.balance-text</code> class:
+Balance Text will *automatically* run on any elements with <code>balance-text</code> class:
 
 - when the page loads (DOM Ready event)
 - when it is resized
@@ -38,7 +38,7 @@ You may also *manually* trigger it, e.g. if you're dynamically adding text to th
     $('.my-class').balanceText();
 ```
 
-You can use any selector of your choice (you may wish to use an ID or restrict the scope for performance). These will re-balance on resize.
+You can use any selector of your choice (you may wish to use an ID or restrict the scope for performance). These will _not_  re-balance on resize.
 
 If you need to manually re-balance all triggered elements, use:
 
@@ -46,11 +46,18 @@ If you need to manually re-balance all triggered elements, use:
     $.fn.balanceTextUpdate();
 ```
 
+To Balance Text and have it automatically update on resize, use:
+
+```
+    $.balanceText('.my-class');
+```
+
+
 ## Use from a CDN
 
-[//cdnjs.cloudflare.com/ajax/libs/balance-text/1.6.0/jquery.balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/1.6.0/jquery.balancetext.min.js)
+[//cdnjs.cloudflare.com/ajax/libs/balance-text/2.0.0/jquery.balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/2.0.0/jquery.balancetext.min.js)
 
-[//cdn.jsdelivr.net/jquery.balancetext/1.6.0/jquery.balancetext.min.js](//cdn.jsdelivr.net/jquery.balancetext/1.6.0/jquery.balancetext.min.js)
+[//cdn.jsdelivr.net/jquery.balancetext/2.0.0/jquery.balancetext.min.js](//cdn.jsdelivr.net/jquery.balancetext/2.0.0/jquery.balancetext.min.js)
 
 ## Requirements
 BalanceText is designed to run in most common browsers and implemented as a jQuery plugin. This means that the standard jQuery library is required for it to work. This plugin was last updated using jQuery 1.9.1, but it should work with all newer (and some older) versions of jQuery.
@@ -68,3 +75,4 @@ Code is minified using: http://marijnhaverbeke.nl/uglifyjs
 * v 1.5.0 - Re-balance text on resize for manually triggered selectors (rileyjshaw)
 * v 1.6.x - Add balanceTextUpdate() method (rileyjshaw), bug fixes (bfred-it)
 * v 1.7.0 - Hack for partially working with jQuery 3, remove deprecation warning
+* v 2.0.0 - Fix automatic updating of custom selectors for jQuery 3 (bfred-it)
