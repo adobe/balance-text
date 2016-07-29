@@ -43,7 +43,7 @@ You can use any selector of your choice (you may wish to use an ID or restrict t
 If you need to manually re-balance all triggered elements, use:
 
 ```
-    $.balanceTextUpdate();
+    $.fn.balanceTextUpdate();
 ```
 
 ## Use from a CDN
