@@ -327,10 +327,10 @@
 
             // temporary settings
             $this.css({
-                'white-space': 'nowrap',
-                'float': 'none',
-                'display': 'inline',
-                'position': 'static'
+                'white-space': 'nowrap!important',
+                'float': 'none!important',
+                'display': 'inline!important',
+                'position': 'static!important'
             });
 
             var nowrapWidth = $this.width();
