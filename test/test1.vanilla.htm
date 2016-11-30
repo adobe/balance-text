@@ -5,9 +5,10 @@
 <meta charset="utf-8">
 <title>Balance Text - Test 1</title>
 <script src="http://use.edgefonts.net/source-sans-pro:n3,n4,i3,i4,n6.js"></script>
-<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="../balancetext.js"></script>
-<script src="../jquery.balancetext.js"></script>
+<script>
+  balanceText.initHandlers();
+</script>
 <link rel="stylesheet" type="text/css" href="test1.css">
 <!--[if lt IE 9]>
 <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -52,8 +53,8 @@
          A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g <span class="color-mark">h i j k l m n o p q r s t u v w x y z</span> 0 1 2 3 4 5 6 7 8 9</p>
       <p class="balance-text"><strong>FONT-SIZE TEST:</strong> Lorem ipsum dolor sit amet, <strong>consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore</strong> et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. <strong>Excepteur sint occaecat cupidatat non proident,</strong> sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
       <p class="balance-text">INLINE CONTENT TEST: Lorem ipsum dolor sit amet, consectetur adipisicing <img src="mammoth.jpg" width="28" height="18" /> elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex <img src="mammoth.jpg" width="28" height="18" /> ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      <p class="continuous-custom-selector">CUSTOM SELECTOR TEST, CONTINUOUS: <code>$.balanceText('.selector');</code> This will keep track of new and old elements with the <code>selector</code> class exactly like the default <code>balance-text</code> class. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      <p class="once-custom-selector">CUSTOM SELECTOR TEST, ONE-TIME: <code>$('.selector').balanceText();</code> This will be "balanced" only when the developer calls <code>.balanceText()</code>, so they have to track resizing manually.. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <p class="continuous-custom-selector">CUSTOM SELECTOR TEST, CONTINUOUS: <code>balanceText.balanceTextAndWatch(".continuous-custom-selector");</code> This will keep track of new and old elements with the <code>selector</code> class exactly like the default <code>balance-text</code> class. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <p class="once-custom-selector">CUSTOM SELECTOR TEST, ONE-TIME: <code>balanceText.balanceText(".once-custom-selector");</code> This will be "balanced" only when the developer calls <code>.balanceText()</code>, so they have to track resizing manually.. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
       <p class="balance-text">ESCAPED MARKUP TEST&lt;u&gt; Escaped HTML Test Here! &lt;/u&gt;</p>
       <p>&nbsp;</p>
       <p>&nbsp;</p>
@@ -69,8 +70,8 @@
   </section>
 </div>
 
-<script>$(".once-custom-selector").balanceText();</script>
-<script>$.balanceText(".continuous-custom-selector");</script>
+<script>balanceText.balanceText(".once-custom-selector");</script>
+<script>balanceText.balanceTextAndWatch(".continuous-custom-selector");</script>
 
 </body>
 </html>
