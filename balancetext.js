@@ -14,14 +14,13 @@
  * limitations under the License. *
  */
 /**
- * jquery.balancetext.js
+ * balancetext.js
  *
  * Author: Randy Edmunds
  */
 
 /*jslint vars: true, plusplus: true, devel: true, browser: true, nomen: true, indent: 4, maxerr: 50, regexp: true */
 /*jshint laxbreak: true */
-/*global jQuery, $ */
 
 /*
  * Copyright (c) 2007-2009 unscriptable.com and John M. Hann
@@ -62,7 +61,15 @@
  * - Edge 13
  */
 
-window.balanceText = (function () {
+(function (root, factory) {
+  if(typeof define === "function" && define.amd) {
+    define([], factory);
+  } else if(typeof module === "object" && module.exports) {
+    module.exports = factory();
+  } else {
+    root.balanceText = factory();
+  }
+}(this, function() {
     "use strict";
 
     function isArray(arg) {
@@ -503,4 +510,4 @@ window.balanceText = (function () {
         balanceTextAndWatch: balanceTextAndWatch,
         initHandlers: initHandlers
     };
-}());
+}));
