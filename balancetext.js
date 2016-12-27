@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright (c) 2012 Adobe Systems Incorporated. All rights reserved.
  *
@@ -21,6 +22,7 @@
 
 /*jslint vars: true, plusplus: true, devel: true, browser: true, nomen: true, indent: 4, maxerr: 50, regexp: true */
 /*jshint laxbreak: true */
+/*global define, module, CustomEvent, NodeList */
 
 /*
  * Copyright (c) 2007-2009 unscriptable.com and John M. Hann
@@ -62,16 +64,14 @@
  */
 
 (function (root, factory) {
-  if(typeof define === "function" && define.amd) {
-    define([], factory);
-  } else if(typeof module === "object" && module.exports) {
-    module.exports = factory();
-  } else {
-    root.balanceText = factory();
-  }
-}(this, function() {
-    "use strict";
-
+    if (typeof define === "function" && define.amd) {
+        define([], factory);
+    } else if (typeof module === "object" && module.exports) {
+        module.exports = factory();
+    } else {
+        root.balanceText = factory();
+    }
+}(this, function () {
     function isArray(arg) {
         if (Array.isArray) {
             return Array.isArray(arg);
@@ -81,30 +81,32 @@
     }
 
     function ready(fn) {
-        if (document.readyState != 'loading'){
+        if (document.readyState !== 'loading') {
             fn();
         } else if (document.addEventListener) {
             document.addEventListener('DOMContentLoaded', fn);
         } else {
-            document.attachEvent('onreadystatechange', function() {
-            if (document.readyState != 'loading')
-                fn();
+            document.attachEvent('onreadystatechange', function () {
+                if (document.readyState !== 'loading') {
+                    fn();
+                }
             });
         }
     }
 
-    function trigger(el, event, data) {
+    function trigger(el, eventName, data) {
+        var event;
         if (window.CustomEvent) {
-            var event = new CustomEvent(event, {detail: data});
+            event = new CustomEvent(eventName, {detail: data});
         } else {
-            var event = document.createEvent('CustomEvent');
-            event.initCustomEvent(event, true, true, data);
+            event = document.createEvent('CustomEvent');
+            event.initCustomEvent(eventName, true, true, data);
         }
 
         el.dispatchEvent(event);
     }
 
-    var debounce = function (func, threshold, execAsap) {
+    function debounce(func, threshold, execAsap) {
         var timeout;
 
         return function debounced() {
@@ -123,13 +125,19 @@
             }
             timeout = setTimeout(delayed, threshold || 100);
         };
-    };
+    }
 
     // smartresize
     function smartresize(fn) {
-        return fn ?
-            window.addEventListener('resize', debounce(fn)) :
-            trigger(window, "smartresize"); 
+        if (fn) {
+            window.addEventListener('resize', debounce(fn));
+        } else {
+            trigger(window, "smartresize");
+        }
+    }
+
+    function nodeListAsArray(nodeList) {
+        return nodeList ? Array.prototype.slice.call(nodeList) : [];
     }
 
     var style = document.documentElement.style,
@@ -155,8 +163,10 @@
         if (!wsMatches) {
             // Only calc ws matches once per line
             wsMatches = [];
-            while ((match = re.exec(txt)) !== null) {
+            match = re.exec(txt);
+            while (match !== null) {
                 wsMatches.push(match.index);
+                match = re.exec(txt);
             }
         }
 
@@ -165,17 +175,16 @@
 
     var removeTags = function (el) {
         var brs = nodeListAsArray(el.querySelectorAll('br[data-owner="balance-text"]'));
-        brs.forEach(function(br) { return br.outerHTML = " "; });
+        brs.forEach(function (br) { br.outerHTML = " "; });
 
         var spans = nodeListAsArray(el.querySelectorAll('span[data-owner="balance-text"]'));
         if (spans.length > 0) {
             var txt = "";
-            spans.forEach(function(span) {
+            spans.forEach(function (span) {
                 txt += span.textContent;
-                span.parentNode.removeChild(span)
+                span.parentNode.removeChild(span);
             });
             el.innerHTML = txt;
-            console.log(txt);
         }
     };
 
@@ -266,11 +275,16 @@
                 el.innerHTML = txt.substr(0, c);
                 w = el.offsetWidth;
 
-                if ((dir < 0)
-                        ? ((w <= desWidth) || (w <= 0) || (c === 0))
-                        : ((desWidth <= w) || (conWidth <= w) || (c === txt.length))) {
-                    break;
+                if (dir < 0) {
+                    if ((w <= desWidth) || (w <= 0) || (c === 0)) {
+                        break;
+                    }
+                } else {
+                    if ((desWidth <= w) || (conWidth <= w) || (c === txt.length)) {
+                        break;
+                    }
                 }
+
                 c += dir;
             }
         }
@@ -307,8 +321,8 @@
 
         container.appendChild(space);
 
-        el.appendChild(container)
-        
+        el.appendChild(container);
+
         var dims = space.getBoundingClientRect();
         container.parentNode.removeChild(container);
 
@@ -324,17 +338,6 @@
         el: []
     };
 
-    function nodeListAsArray(nodeList) {
-        return nodeList ? Array.prototype.slice.call(nodeList) : [];
-    }
-
-    // Call the balanceText plugin on elements that it's watching.
-    var applyBalanceText = function () {
-        var selectedElements = document.querySelectorAll(watching.sel.join(','));
-        var elements = watching.el.concat(nodeListAsArray(selectedElements));
-        balanceText(elements);
-    };
-
     function ensureElementArray(elements) {
         if (NodeList.prototype.isPrototypeOf(elements)) {
             elements = nodeListAsArray(elements);
@@ -347,34 +350,20 @@
         return elements;
     }
 
-    function balanceTextAndWatch(elements) {
-        if (typeof elements === 'string') {
-            watching.sel.push(elements);
-        } else {
-            elements = ensureElementArray(elements);
-
-            elements.forEach(function(el) {
-                watching.el.push(el);
-            });
-        }
-
-        applyBalanceText();
-    }
-
     // When a browser has native support for the text-wrap property,
     // the text balanceText plugin will let the browser handle it natively,
     // otherwise it will apply its own text balancing code.
     function balanceText(elements) {
+        if (hasTextWrap) {
+            // browser supports text-wrap, so do nothing
+            return this;
+        }
+
         if (typeof elements === 'string') {
             elements = document.querySelectorAll(elements);
         }
 
         elements = ensureElementArray(elements);
-
-        if (hasTextWrap) {
-            // browser supports text-wrap, so do nothing
-            return this;
-        }
 
         return elements.forEach(function (el) {
             // In a lower level language, this algorithm takes time
@@ -424,25 +413,28 @@
                 var totLines = Math.round(containerHeight / nowrapHeight);
                 var remLines = totLines;
 
+                // loop vars
+                var desiredWidth, guessIndex, le, ge, splitIndex;
+
                 // Determine where to break:
                 while (remLines > 1) {
 
                     // clear whitespace match cache for each line
                     wsMatches = null;
 
-                    var desiredWidth = Math.round((nowrapWidth + spaceWidth) / remLines - spaceWidth);
+                    desiredWidth = Math.round((nowrapWidth + spaceWidth) / remLines - spaceWidth);
 
                     // Guessed char index
-                    var guessIndex = Math.round((remainingText.length + 1) / remLines) - 1;
+                    guessIndex = Math.round((remainingText.length + 1) / remLines) - 1;
 
-                    var le = new NextWS_params();
+                    le = new NextWS_params();
 
                     // Find a breaking space somewhere before (or equal to) desired width,
                     // not necessarily the closest to the desired width.
                     findBreakOpportunity(el, remainingText, containerWidth, desiredWidth, -1, guessIndex, le);
 
                     // Find first breaking char after (or equal to) desired width.
-                    var ge = new NextWS_params();
+                    ge = new NextWS_params();
                     guessIndex = le.index;
                     findBreakOpportunity(el, remainingText, containerWidth, desiredWidth, +1, guessIndex, ge);
 
@@ -452,7 +444,6 @@
                     findBreakOpportunity(el, remainingText, containerWidth, desiredWidth, -1, guessIndex, le);
 
                     // Find closest string to desired length
-                    var splitIndex;
                     if (le.index === 0) {
                         splitIndex = ge.index;
                     } else if ((containerWidth < ge.width) || (le.index === ge.index)) {
@@ -493,6 +484,27 @@
             el.style.position = oldPosition;
             el.style.lineHeight = oldLH;
         });
+    }
+
+    // Call the balanceText plugin on elements that it's watching.
+    function applyBalanceText() {
+        var selectedElements = document.querySelectorAll(watching.sel.join(','));
+        var elements = watching.el.concat(nodeListAsArray(selectedElements));
+        balanceText(elements);
+    }
+
+    function balanceTextAndWatch(elements) {
+        if (typeof elements === 'string') {
+            watching.sel.push(elements);
+        } else {
+            elements = ensureElementArray(elements);
+
+            elements.forEach(function (el) {
+                watching.el.push(el);
+            });
+        }
+
+        applyBalanceText();
     }
 
     function initHandlers() {
