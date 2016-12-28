@@ -72,6 +72,12 @@
         root.balanceText = factory();
     }
 }(this, function () {
+
+    /**
+     * Polyfill for Array.isArray
+     *
+     * @param arg   - The thing to check if it is an array or not
+     */
     function isArray(arg) {
         if (Array.isArray) {
             return Array.isArray(arg);
@@ -80,6 +86,11 @@
         return Object.prototype.toString.call(arg) === '[object Array]';
     }
 
+    /**
+     * Polyfill for $(document).ready()
+     *
+     * @param fn   - The function to execute when the document is ready
+     */
     function ready(fn) {
         if (document.readyState !== 'loading') {
             fn();
@@ -94,6 +105,13 @@
         }
     }
 
+    /**
+     * Polyfill for $(el).trigger('my-event', {some: 'data'});
+     *
+     * @param el        - the element to trigger an event on
+     * @param eventName - the event to trigger
+     * @param data      - the data to send in the event
+     */
     function trigger(el, eventName, data) {
         var event;
         if (window.CustomEvent) {
@@ -106,6 +124,13 @@
         el.dispatchEvent(event);
     }
 
+    /**
+     * Debounces a function over a threshold
+     *
+     * @param func      - The function to debounce
+     * @param threshold - time in ms
+     * @param execAsap  - when true, execute immediately
+     */
     function debounce(func, threshold, execAsap) {
         var timeout;
 
@@ -127,7 +152,11 @@
         };
     }
 
-    // smartresize
+    /**
+     * Handle resize events and execute a debounced function
+     *
+     * @param fn   - the function to execute on window resize
+     */
     function smartresize(fn) {
         if (fn) {
             window.addEventListener('resize', debounce(fn));
@@ -136,6 +165,12 @@
         }
     }
 
+    /**
+     * Convert a NodeList to an Array.  NodeLists look like Arrays
+     * but they don't behave like Arrays.  Convert the NodeList to an Array.
+     *
+     * @param nodeList   - the NodeList to convert to a Array
+     */
     function nodeListAsArray(nodeList) {
         return nodeList ? Array.prototype.slice.call(nodeList) : [];
     }
@@ -155,6 +190,9 @@
 
     /**
      * Returns true iff char at index is a space character outside of HTML < > tags.
+     *
+     * @param txt   - the text to check
+     * @param index - the index of the character to check
      */
     var isWS = function (txt, index) {
         var re = /\s(?![^<]*>)/g,
@@ -173,6 +211,11 @@
         return wsMatches.indexOf(index) !== -1;
     };
 
+    /**
+     * Strip the tags from an element
+     *
+     * @param el   - the element to act on
+     */
     var removeTags = function (el) {
         var brs = nodeListAsArray(el.querySelectorAll('br[data-owner="balance-text"]'));
         brs.forEach(function (br) { br.outerHTML = " "; });
@@ -192,7 +235,7 @@
      * Checks to see if we should justify the balanced text with the
      * element based on the textAlign property in the computed CSS
      *
-     * @param el        - element
+     * @param el        - element to check
      */
     var isJustified = function (el) {
         style = el.currentStyle || window.getComputedStyle(el, null);
@@ -202,7 +245,7 @@
     /**
      * Add whitespace after words in text to justify the string to
      * the specified size.
-     *
+     * @param el       - the element to justify
      * @param txt      - text string
      * @param conWidth - container width
      */
@@ -241,6 +284,9 @@
      * any Unicode line-breaking classes.)
      *
      * @precondition 0 <= index && index <= txt.length
+     *
+     * @param txt   - the text to check
+     * @param index - the index to check
      */
     var isBreakOpportunity = function (txt, index) {
         return ((index === 0) || (index === txt.length) ||
@@ -255,7 +301,7 @@
      * to the corresponding index and line width (from the start of
      * txt to ret.index).
      *
-     * @param el      - element
+     * @param el       - element
      * @param txt      - text string
      * @param conWidth - container width
      * @param desWidth - desired width
@@ -338,6 +384,13 @@
         el: []
     };
 
+    /**
+     * Ensure that a list of elements is an array of elements.
+     * NodeLists aren't really arrays, and single items need to
+     * be formed into an array
+     *
+     * @param elements   - the list of elements
+     */
     function ensureElementArray(elements) {
         if (NodeList.prototype.isPrototypeOf(elements)) {
             elements = nodeListAsArray(elements);
@@ -350,9 +403,13 @@
         return elements;
     }
 
-    // When a browser has native support for the text-wrap property,
-    // the text balanceText plugin will let the browser handle it natively,
-    // otherwise it will apply its own text balancing code.
+    /**
+     *  When a browser has native support for the text-wrap property,
+     * the text balanceText plugin will let the browser handle it natively,
+     * otherwise it will apply its own text balancing code.
+     *
+     * @param elements   - the list of elements to balance
+     */
     function balanceText(elements) {
         if (hasTextWrap) {
             // browser supports text-wrap, so do nothing
@@ -493,6 +550,12 @@
         balanceText(elements);
     }
 
+    /**
+     * Apply the BalanceText routine on the document and watch the list
+     * of elements.  On window resize, re-apply BalanceText to the given elements
+     * 
+     * @param elements - the elements to watch after applying BalanceText
+     */
     function balanceTextAndWatch(elements) {
         if (typeof elements === 'string') {
             watching.sel.push(elements);
@@ -507,6 +570,11 @@
         applyBalanceText();
     }
 
+    /**
+     * Initialize the events for which to re-apply BalanceText.  They are:
+     * - Document ready
+     * - Window resize
+     */
     function initHandlers() {
         // Apply on DOM ready
         ready(applyBalanceText);

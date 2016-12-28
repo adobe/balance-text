@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright (c) 2012 Adobe Systems Incorporated. All rights reserved.
  *
@@ -56,7 +57,7 @@
  *
  */
 
-(function($, balanceText) {
+(function ($, balanceText) {
     $.fn.balanceTextUpdate = balanceText.applyBalanceText;
 
     // Watch elements or a selector for the next updates
