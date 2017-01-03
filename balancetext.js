@@ -559,7 +559,7 @@
     /**
      * Apply the BalanceText routine on the document and watch the list
      * of elements.  On window resize, re-apply BalanceText to the given elements
-     * 
+     *
      * @param elements - the elements to watch after applying BalanceText
      */
     function balanceTextAndWatch(elements) {
@@ -589,7 +589,7 @@
         smartresize(applyBalanceText);
     }
 
-    if (window && window.jQuery) {
+    if (typeof window !== 'undefined' && window.jQuery) {
         window.jQuery.fn.balanceTextUpdate = applyBalanceText;
 
         // Watch elements or a selector for the next updates
