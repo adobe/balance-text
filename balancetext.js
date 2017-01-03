@@ -583,6 +583,24 @@
         smartresize(applyBalanceText);
     }
 
+    if (window && window.jQuery) {
+        window.jQuery.fn.balanceTextUpdate = applyBalanceText;
+
+        // Watch elements or a selector for the next updates
+        window.jQuery.balanceText = function (elements) {
+            if (!elements) {
+                initHandlers();
+                return;
+            }
+
+            balanceTextAndWatch(elements);
+        };
+
+        window.jQuery.fn.balanceText = function () {
+            balanceText(this.toArray());
+        };
+    }
+
     return {
         ready: ready,
         applyBalanceText: applyBalanceText,
