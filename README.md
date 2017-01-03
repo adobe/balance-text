@@ -21,13 +21,15 @@ Here is a simple Balance Text setup:
   }
   </style>
 
-  <script src="jquery-1.9.1.min.js"></script>
-  <script src="jquery.balancetext.min.js"></script>
+  <script src="balancetext.min.js"></script>
+  <script>
+    balanceText.initHandlers();
+  </script>
 ```
 
 See the demo provided or [this online version for a working sample](http://adobe-webplatform.github.io/balance-text/demo/index.html).
 
-Balance Text will *automatically* run on any elements with <code>balance-text</code> class:
+If you call `initHandlers()`, Balance Text will *automatically* run on any elements with <code>balance-text</code> class:
 
 - when the page loads (DOM Ready event)
 - when it is resized
@@ -35,10 +37,55 @@ Balance Text will *automatically* run on any elements with <code>balance-text</c
 You may also *manually* trigger it, e.g. if you're dynamically adding text to the DOM:
 
 ```
+    balanceText.balanceText(elements);    // Balance an array of DOM elements
+    balanceText.balanceText(element);     // Balance a single DOM element
+    balanceText.balanceText('.my-class'); // Balance based on a query selector
+```
+
+This will apply the balance-text formatting once.  If you'd like to re-apply automatically during window resize, you can use `balanceTextAndWatch` instead:
+
+```
+    balanceText.balanceTextAndWatch(elements);    // Balance/watch an array of DOM elements
+    balanceText.balanceTextAndWatch(element);     // Balance/watch a single DOM element
+    balanceText.balanceTextAndWatch('.my-class'); // Balance/watch based on a query selector
+```
+
+If you need to manually re-balance all triggered elements, use:
+
+```
+    balanceText.applyBalanceText();
+```
+
+## jQuery Functionality
+If you are used to using this library via jQuery, you can still do this, though the entire library is free of the jQuery dependency.  The legacy jQuery interface is a wrapper around the VanillaJS module:
+
+```
+  <style type="text/css">
+  /* Plugin looks for elements with class named "balance-text" */
+  .balance-text {
+      text-wrap: balanced;  /* Apply (proposed) CSS style */
+  }
+  </style>
+
+  <script src="jquery.balancetext.min.js"></script>
+  <script src="balancetext.min.js"></script>
+  <script>
+    $.balanceText();
+  </script>
+```
+
+Balance Text will automatically run on any elements with balance-text class:
+
+- when the page loads (DOM Ready event)
+- when it is resized
+
+You may also manually trigger it, e.g. if you're dynamically adding text to the DOM:
+
+```
     $('.my-class').balanceText();
 ```
 
-You can use any selector of your choice (you may wish to use an ID or restrict the scope for performance). These will _not_  re-balance on resize.
+You can use any selector of your choice (you may wish to use an ID or restrict the scope for performance). These will not re-balance on resize.
 
 If you need to manually re-balance all triggered elements, use:
 
@@ -52,19 +99,36 @@ To Balance Text and have it automatically update on resize, use:
     $.balanceText('.my-class');
 ```
 
-
 ## Use from a CDN
+[//cdnjs.cloudflare.com/ajax/libs/balance-text/3.0.0/balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/3.0.0/balancetext.min.js)
 
+[//cdn.jsdelivr.net/jquery.balancetext/3.0.0/jquery.balancetext.min.js](//cdn.jsdelivr.net/jquery.balancetext/3.0.0/balancetext.min.js)
+
+
+### Legacy (2.0.0)
+(does not require the initial hook to `$.balanceText()` and has a hard requirement on jQuery)
 [//cdnjs.cloudflare.com/ajax/libs/balance-text/2.0.0/jquery.balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/2.0.0/jquery.balancetext.min.js)
 
 [//cdn.jsdelivr.net/jquery.balancetext/2.0.0/jquery.balancetext.min.js](//cdn.jsdelivr.net/jquery.balancetext/2.0.0/jquery.balancetext.min.js)
 
 ## Requirements
-BalanceText is designed to run in most common browsers and implemented as a jQuery plugin. This means that the standard jQuery library is required for it to work. This plugin was last updated using jQuery 1.9.1, but it should work with all newer (and some older) versions of jQuery.
+BalanceText does not have any dependencies.
+BalanceText is designed to run in most common browsers. The jQuery wrapper is optional and is only included for lagacy compatibility.
 
-jQuery was used so that the code would be easier to write to work in most common browsers. None of the novel ideas introduced by this code require jQuery.
+## Development
+### Linting
+Make sure the code passes JSLint
 
-Code is minified using: http://marijnhaverbeke.nl/uglifyjs
+```
+npm run lint
+```
+
+### Minification
+We minify using Uglify-JS
+
+```
+npm run build
+```
 
 ## Changelog
 * v 1.0.x - Initial Release, bug fix by chrisbank, better break point detection mmcgahan
@@ -76,3 +140,4 @@ Code is minified using: http://marijnhaverbeke.nl/uglifyjs
 * v 1.6.x - Add balanceTextUpdate() method (rileyjshaw), bug fixes (bfred-it)
 * v 1.7.0 - Hack for partially working with jQuery 3, remove deprecation warning
 * v 2.0.0 - Fix automatic updating of custom selectors for jQuery 3 (bfred-it)
+* v 3.0.0 - Remove the jQuery dependency but maintain jQuery compatibility
