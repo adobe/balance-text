@@ -175,9 +175,15 @@
         return nodeList ? Array.prototype.slice.call(nodeList) : [];
     }
 
-    var style = document.documentElement.style,
-        hasTextWrap = (style.textWrap || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap || style.OTextWrap),
-        wsMatches;
+    /**
+     * Determine whether the document supports TextWrap
+     */
+    function hasTextWrap() {
+        var style = document.documentElement.style;
+        return (style.textWrap || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap || style.OTextWrap);
+    }
+
+    var wsMatches;
 
     function NextWS_params() {
         this.reset();
@@ -238,7 +244,7 @@
      * @param el        - element to check
      */
     var isJustified = function (el) {
-        style = el.currentStyle || window.getComputedStyle(el, null);
+        var style = el.currentStyle || window.getComputedStyle(el, null);
         return (style.textAlign === 'justify');
     };
 
@@ -411,7 +417,7 @@
      * @param elements   - the list of elements to balance
      */
     function balanceText(elements) {
-        if (hasTextWrap) {
+        if (hasTextWrap()) {
             // browser supports text-wrap, so do nothing
             return this;
         }
