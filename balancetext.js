@@ -386,7 +386,7 @@
     // Selectors and elements to watch;
     // calling $.balanceText(elements) adds "elements" to this list.
     var watching = {
-        sel: ['.balance-text'], // default class to watch
+        sel: [], // default class to watch
         el: []
     };
 
@@ -551,9 +551,30 @@
 
     // Call the balanceText plugin on elements that it's watching.
     function applyBalanceText() {
-        var selectedElements = document.querySelectorAll(watching.sel.join(','));
+        var selectors = watching.sel.join(',');
+        var selectedElements = selectors ? document.querySelectorAll(selectors) : [];
         var elements = watching.el.concat(nodeListAsArray(selectedElements));
         balanceText(elements);
+    }
+
+    /**
+     * Initialize the events for which to re-apply BalanceText.  They are:
+     * - Document ready
+     * - Window resize
+     */
+    var handlersInitialized = false;
+    function initHandlers() {
+        if (handlersInitialized) {
+            return;
+        }
+
+        // Apply on DOM ready
+        ready(applyBalanceText);
+
+        // Reapply on resize
+        smartresize(applyBalanceText);
+
+        handlersInitialized = true;
     }
 
     /**
@@ -573,33 +594,56 @@
             });
         }
 
+        initHandlers();
         applyBalanceText();
     }
 
     /**
-     * Initialize the events for which to re-apply BalanceText.  They are:
-     * - Document ready
-     * - Window resize
+     * Treat this app as a polyfill.  Watch for changes to the .balance-text selector
      */
-    function initHandlers() {
-        // Apply on DOM ready
-        ready(applyBalanceText);
+    var polyfilled = false;
+    function polyfill() {
+        if (polyfilled) {
+            return;
+        }
 
-        // Reapply on resize
-        smartresize(applyBalanceText);
+        watching.sel.push('.balance-text');
+        initHandlers();
+        polyfilled = true;
     }
 
-    if (typeof window !== 'undefined' && window.jQuery) {
-        window.jQuery.fn.balanceTextUpdate = applyBalanceText;
+    function publicInterface(elements, options) {
+        if (!elements) {
+            // empty call means polyfill (watch for changes)
+            polyfill();
+            return;
+        }
+
+        if (options && options.watch) {
+            balanceTextAndWatch(elements);
+            return;
+        }
+
+        balanceText(elements);
+    }
+
+    publicInterface.updateWatched = function () {
+        applyBalanceText();
+    };
+
+    var typeofWindow = typeof window;
+    // Initialize as a jQuery plugin if jQuery exists.
+    if (typeofWindow !== 'undefined' && window.jQuery) {
+        window.jQuery.fn.balanceTextUpdate = publicInterface.updateWatched;
 
         // Watch elements or a selector for the next updates
         window.jQuery.balanceText = function (elements) {
             if (!elements) {
-                initHandlers();
+                publicInterface();
                 return;
             }
 
-            balanceTextAndWatch(elements);
+            publicInterface(elements, {watch: true});
         };
 
         window.jQuery.fn.balanceText = function () {
@@ -607,11 +651,5 @@
         };
     }
 
-    return {
-        ready: ready,
-        applyBalanceText: applyBalanceText,
-        balanceText: balanceText,
-        balanceTextAndWatch: balanceTextAndWatch,
-        initHandlers: initHandlers
-    };
+    return publicInterface;
 }));
