@@ -23,13 +23,13 @@ Here is a simple Balance Text setup:
 
   <script src="balancetext.min.js"></script>
   <script>
-    balanceText.initHandlers();
+    balanceText();
   </script>
 ```
 
 See the demo provided or [this online version for a working sample](http://adobe-webplatform.github.io/balance-text/demo/index.html).
 
-If you call `initHandlers()`, Balance Text will *automatically* run on any elements with <code>balance-text</code> class:
+If you call `balanceText()`, Balance Text will *automatically* run on any elements with <code>balance-text</code> class:
 
 - when the page loads (DOM Ready event)
 - when it is resized
@@ -37,23 +37,21 @@ If you call `initHandlers()`, Balance Text will *automatically* run on any eleme
 You may also *manually* trigger it, e.g. if you're dynamically adding text to the DOM:
 
 ```
-    balanceText.balanceText(elements);    // Balance an array of DOM elements
-    balanceText.balanceText(element);     // Balance a single DOM element
-    balanceText.balanceText('.my-class'); // Balance based on a query selector
+    balanceText(el);       // Balance a single element
+    balanceText([el, el]); // Balance a list of elements
+    balanceText('.el');    // Balance a list of elements based on query selector
 ```
 
-This will apply the balance-text formatting once.  If you'd like to re-apply automatically during window resize, you can use `balanceTextAndWatch` instead:
+This will apply the balance-text formatting once.  If you'd like to re-apply automatically during window resize, you can use pass an options parameter instead:
 
 ```
-    balanceText.balanceTextAndWatch(elements);    // Balance/watch an array of DOM elements
-    balanceText.balanceTextAndWatch(element);     // Balance/watch a single DOM element
-    balanceText.balanceTextAndWatch('.my-class'); // Balance/watch based on a query selector
+    balanceText(el, {watch: true});
 ```
 
 If you need to manually re-balance all triggered elements, use:
 
 ```
-    balanceText.applyBalanceText();
+    balanceText.updateWatched();
 ```
 
 ## jQuery Functionality
