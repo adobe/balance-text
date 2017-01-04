@@ -619,6 +619,10 @@
             return;
         }
 
+        if (typeof elements !== 'string' && elements.length !== undefined) {
+            elements = nodeListAsArray(elements);
+        }
+
         if (options && options.watch) {
             balanceTextAndWatch(elements);
             return;
@@ -630,26 +634,6 @@
     publicInterface.updateWatched = function () {
         applyBalanceText();
     };
-
-    var typeofWindow = typeof window;
-    // Initialize as a jQuery plugin if jQuery exists.
-    if (typeofWindow !== 'undefined' && window.jQuery) {
-        window.jQuery.fn.balanceTextUpdate = publicInterface.updateWatched;
-
-        // Watch elements or a selector for the next updates
-        window.jQuery.balanceText = function (elements) {
-            if (!elements) {
-                publicInterface();
-                return;
-            }
-
-            publicInterface(elements, {watch: true});
-        };
-
-        window.jQuery.fn.balanceText = function () {
-            balanceText(this.toArray());
-        };
-    }
 
     return publicInterface;
 }));
