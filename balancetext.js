@@ -377,11 +377,20 @@
     };
 
     /**
-     * Get a list of elements from a Array, Array-like, or single element
+     * Get a list of elements regardless of input
      *
-     * @param elements   - the list of elements
+     * @param  {string|Node|Array-like}  elements  The selector to query, one or more elements
      */
     function getElementsList(elements) {
+        if (!elements) {
+            return [];
+        }
+
+        // is selector
+        if (typeof elements === 'string') {
+            return document.querySelectorAll(elements);
+        }
+
         // is single element
         if (elements.tagName && elements.querySelectorAll) {
             return [elements];
@@ -403,14 +412,7 @@
             return this;
         }
 
-        if (typeof elements === 'string') {
-            elements = document.querySelectorAll(elements);
-        } else {
-            elements = getElementsList(elements);
-        }
-
-
-        forEach(elements, function (el) {
+        forEach(getElementsList(elements), function (el) {
             // In a lower level language, this algorithm takes time
             // comparable to normal text layout other than the fact
             // that we do two passes instead of one, so we should
@@ -534,8 +536,7 @@
     // Call the balanceText plugin on elements that it's watching.
     function applyBalanceText() {
         var selectors = watching.sel.join(',');
-        var selectedElements = selectors ? document.querySelectorAll(selectors) : [];
-        var elements = watching.el.concat(selectedElements);
+        var elements = watching.el.concat(getElementsList(selectors));
         balanceText(elements);
     }
 
