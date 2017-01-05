@@ -139,7 +139,7 @@
      */
     function hasTextWrap() {
         var style = document.documentElement.style;
-        return (style.textWrap || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap || style.OTextWrap);
+        return style.textWrap || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap;
     }
 
     var wsMatches;
