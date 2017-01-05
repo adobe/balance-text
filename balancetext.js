@@ -74,6 +74,11 @@
 }(this, function () {
 
     /**
+     * Do nothing
+     */
+    function noop() { return; } // "return" pleases jslint
+
+    /**
      * Loop that works with array-likes
      * @param  {Array-like}   elements    A list of elements to run a function on
      * @param  {Function}     callback    The function to call on each supplied element
@@ -375,11 +380,6 @@
      * @param elements   - the list of elements to balance
      */
     function balanceText(elements) {
-        if (hasTextWrap()) {
-            // browser supports text-wrap, so do nothing
-            return this;
-        }
-
         forEach(getElementsList(elements), function (el) {
             // In a lower level language, this algorithm takes time
             // comparable to normal text layout other than the fact
@@ -578,5 +578,9 @@
 
     publicInterface.updateWatched = updateWatched;
 
+    if (hasTextWrap()) {
+        noop.updateWatched = noop;
+        return noop;
+    }
     return publicInterface;
 }));
