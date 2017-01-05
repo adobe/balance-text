@@ -565,15 +565,11 @@
         if (!elements) {
             // empty call means polyfill (watch for changes)
             polyfill();
-            return;
-        }
-
-        if (options && options.watch) {
+        } else if (options && options.watch) {
             balanceTextAndWatch(elements);
-            return;
+        } else {
+            balanceText(elements);
         }
-
-        balanceText(elements);
     }
 
     publicInterface.updateWatched = updateWatched;
