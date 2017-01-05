@@ -511,6 +511,7 @@
     /**
      * Initialize the events for which to re-apply BalanceText.  They are:
      * - Document ready
+     * - Document full load
      * - Window resize
      */
     var handlersInitialized = false;
@@ -521,6 +522,9 @@
 
         // Apply on DOM ready
         ready(updateWatched);
+
+        // Reapply on full load
+        window.addEventListener('load', updateWatched);
 
         // Reapply on resize
         window.addEventListener('resize', debounce(updateWatched));
