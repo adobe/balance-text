@@ -84,7 +84,7 @@
      * @param  {Function}     callback    The function to call on each supplied element
      */
     function forEach(elements, callback) {
-        Array.ptototype.forEach.call(elements, callback);
+        Array.prototype.forEach.call(elements, callback);
     }
 
     /**
@@ -504,7 +504,8 @@
     // Call the balanceText plugin on elements that it's watching.
     function updateWatched() {
         var selectors = watching.sel.join(',');
-        var elements = watching.el.concat(getElementsList(selectors));
+        var selectedElements = getElementsList(selectors);
+        var elements = Array.prototype.concat.apply(watching.el, selectedElements);
         balanceText(elements);
     }
 
@@ -542,7 +543,7 @@
         if (typeof elements === 'string') {
             watching.sel.push(elements);
         } else {
-            forEach(elements, function (el) {
+            forEach(getElementsList(elements), function (el) {
                 watching.el.push(el);
             });
         }
