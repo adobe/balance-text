@@ -22,7 +22,7 @@
 
 /*jslint vars: true, plusplus: true, devel: true, browser: true, nomen: true, indent: 4, maxerr: 50, regexp: true */
 /*jshint laxbreak: true */
-/*global define, module, CustomEvent, NodeList */
+/*global define, module */
 
 /*
  * Copyright (c) 2007-2009 unscriptable.com and John M. Hann
@@ -102,25 +102,6 @@
     }
 
     /**
-     * Polyfill for $(el).trigger('my-event', {some: 'data'});
-     *
-     * @param el        - the element to trigger an event on
-     * @param eventName - the event to trigger
-     * @param data      - the data to send in the event
-     */
-    function trigger(el, eventName, data) {
-        var event;
-        if (window.CustomEvent) {
-            event = new CustomEvent(eventName, {detail: data});
-        } else {
-            event = document.createEvent('CustomEvent');
-            event.initCustomEvent(eventName, true, true, data);
-        }
-
-        el.dispatchEvent(event);
-    }
-
-    /**
      * Debounces a function over a threshold
      *
      * @param func      - The function to debounce
@@ -146,19 +127,6 @@
             }
             timeout = setTimeout(delayed, threshold || 100);
         };
-    }
-
-    /**
-     * Handle resize events and execute a debounced function
-     *
-     * @param fn   - the function to execute on window resize
-     */
-    function smartresize(fn) {
-        if (fn) {
-            window.addEventListener('resize', debounce(fn));
-        } else {
-            trigger(window, "smartresize");
-        }
     }
 
     /**
@@ -555,7 +523,7 @@
         ready(applyBalanceText);
 
         // Reapply on resize
-        smartresize(applyBalanceText);
+        window.addEventListener('resize', debounce(applyBalanceText));
 
         handlersInitialized = true;
     }
