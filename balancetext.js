@@ -74,16 +74,12 @@
 }(this, function () {
 
     /**
-     * Polyfill for Array.isArray
-     *
-     * @param arg   - The thing to check if it is an array or not
+     * Loop that works with array-likes
+     * @param  {Array-like}   elements    A list of elements to run a function on
+     * @param  {Function}     callback    The function to call on each supplied element
      */
-    function isArray(arg) {
-        if (Array.isArray) {
-            return Array.isArray(arg);
-        }
-
-        return Object.prototype.toString.call(arg) === '[object Array]';
+    function forEach(elements, callback) {
+        Array.ptototype.forEach.call(elements, callback);
     }
 
     /**
@@ -166,16 +162,6 @@
     }
 
     /**
-     * Convert a NodeList to an Array.  NodeLists look like Arrays
-     * but they don't behave like Arrays.  Convert the NodeList to an Array.
-     *
-     * @param nodeList   - the NodeList to convert to a Array
-     */
-    function nodeListAsArray(nodeList) {
-        return nodeList ? Array.prototype.slice.call(nodeList) : [];
-    }
-
-    /**
      * Determine whether the document supports TextWrap
      */
     function hasTextWrap() {
@@ -223,13 +209,13 @@
      * @param el   - the element to act on
      */
     var removeTags = function (el) {
-        var brs = nodeListAsArray(el.querySelectorAll('br[data-owner="balance-text"]'));
-        brs.forEach(function (br) { br.outerHTML = " "; });
+        var brs = el.querySelectorAll('br[data-owner="balance-text"]');
+        forEach(brs, function (br) { br.outerHTML = " "; });
 
-        var spans = nodeListAsArray(el.querySelectorAll('span[data-owner="balance-text"]'));
+        var spans = el.querySelectorAll('span[data-owner="balance-text"]');
         if (spans.length > 0) {
             var txt = "";
-            spans.forEach(function (span) {
+            forEach(spans, function (span) {
                 txt += span.textContent;
                 span.parentNode.removeChild(span);
             });
@@ -391,19 +377,14 @@
     };
 
     /**
-     * Ensure that a list of elements is an array of elements.
-     * NodeLists aren't really arrays, and single items need to
-     * be formed into an array
+     * Get a list of elements from a Array, Array-like, or single element
      *
      * @param elements   - the list of elements
      */
-    function ensureElementArray(elements) {
-        if (NodeList.prototype.isPrototypeOf(elements)) {
-            elements = nodeListAsArray(elements);
-        }
-
-        if (!isArray(elements)) {
-            elements = [elements];
+    function getElementsList(elements) {
+        // is single element
+        if (elements.tagName && elements.querySelectorAll) {
+            return [elements];
         }
 
         return elements;
@@ -424,11 +405,12 @@
 
         if (typeof elements === 'string') {
             elements = document.querySelectorAll(elements);
+        } else {
+            elements = getElementsList(elements);
         }
 
-        elements = ensureElementArray(elements);
 
-        return elements.forEach(function (el) {
+        forEach(elements, function (el) {
             // In a lower level language, this algorithm takes time
             // comparable to normal text layout other than the fact
             // that we do two passes instead of one, so we should
@@ -553,7 +535,7 @@
     function applyBalanceText() {
         var selectors = watching.sel.join(',');
         var selectedElements = selectors ? document.querySelectorAll(selectors) : [];
-        var elements = watching.el.concat(nodeListAsArray(selectedElements));
+        var elements = watching.el.concat(selectedElements);
         balanceText(elements);
     }
 
@@ -587,9 +569,7 @@
         if (typeof elements === 'string') {
             watching.sel.push(elements);
         } else {
-            elements = ensureElementArray(elements);
-
-            elements.forEach(function (el) {
+            forEach(elements, function (el) {
                 watching.el.push(el);
             });
         }
@@ -617,10 +597,6 @@
             // empty call means polyfill (watch for changes)
             polyfill();
             return;
-        }
-
-        if (typeof elements !== 'string' && elements.length !== undefined) {
-            elements = nodeListAsArray(elements);
         }
 
         if (options && options.watch) {
