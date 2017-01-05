@@ -502,7 +502,7 @@
     }
 
     // Call the balanceText plugin on elements that it's watching.
-    function applyBalanceText() {
+    function updateWatched() {
         var selectors = watching.sel.join(',');
         var elements = watching.el.concat(getElementsList(selectors));
         balanceText(elements);
@@ -520,10 +520,10 @@
         }
 
         // Apply on DOM ready
-        ready(applyBalanceText);
+        ready(updateWatched);
 
         // Reapply on resize
-        window.addEventListener('resize', debounce(applyBalanceText));
+        window.addEventListener('resize', debounce(updateWatched));
 
         handlersInitialized = true;
     }
@@ -544,7 +544,7 @@
         }
 
         initHandlers();
-        applyBalanceText();
+        updateWatched();
     }
 
     /**
@@ -576,9 +576,7 @@
         balanceText(elements);
     }
 
-    publicInterface.updateWatched = function () {
-        applyBalanceText();
-    };
+    publicInterface.updateWatched = updateWatched;
 
     return publicInterface;
 }));
