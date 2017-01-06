@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright (c) 2012 Adobe Systems Incorporated. All rights reserved.
  *
@@ -14,14 +15,14 @@
  * limitations under the License. *
  */
 /**
- * jquery.balancetext.js
+ * balancetext.js
  *
  * Author: Randy Edmunds
  */
 
 /*jslint vars: true, plusplus: true, devel: true, browser: true, nomen: true, indent: 4, maxerr: 50, regexp: true */
 /*jshint laxbreak: true */
-/*global jQuery, $ */
+/*global define, module */
 
 /*
  * Copyright (c) 2007-2009 unscriptable.com and John M. Hann
@@ -54,11 +55,65 @@
  *
  * http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
  *
+ * Tested to work on (lowest browser):
+ * - Sarari 4
+ * - Chrome 16
+ * - Firefox 10
+ * - IE 9
+ * - Edge 13
  */
-(function ($, sr) {
-    "use strict";
 
-    var debounce = function (func, threshold, execAsap) {
+(function (root, factory) {
+    if (typeof define === "function" && define.amd) {
+        define([], factory);
+    } else if (typeof module === "object" && module.exports) {
+        module.exports = factory();
+    } else {
+        root.balanceText = factory();
+    }
+}(this, function () {
+
+    /**
+     * Do nothing
+     */
+    function noop() { return; } // "return" pleases jslint
+
+    /**
+     * Loop that works with array-likes
+     * @param  {Array-like}   elements    A list of elements to run a function on
+     * @param  {Function}     callback    The function to call on each supplied element
+     */
+    function forEach(elements, callback) {
+        Array.prototype.forEach.call(elements, callback);
+    }
+
+    /**
+     * Polyfill for $(document).ready()
+     *
+     * @param fn   - The function to execute when the document is ready
+     */
+    function ready(fn) {
+        if (document.readyState !== 'loading') {
+            fn();
+        } else if (document.addEventListener) {
+            document.addEventListener('DOMContentLoaded', fn);
+        } else {
+            document.attachEvent('onreadystatechange', function () {
+                if (document.readyState !== 'loading') {
+                    fn();
+                }
+            });
+        }
+    }
+
+    /**
+     * Debounces a function over a threshold
+     *
+     * @param func      - The function to debounce
+     * @param threshold - time in ms
+     * @param execAsap  - when true, execute immediately
+     */
+    function debounce(func, threshold, execAsap) {
         var timeout;
 
         return function debounced() {
@@ -77,24 +132,22 @@
             }
             timeout = setTimeout(delayed, threshold || 100);
         };
-    };
+    }
 
-    // smartresize
-    jQuery.fn[sr] = function (fn) {  return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr); };
+    /**
+     * Determine whether the document supports TextWrap
+     */
+    function hasTextWrap() {
+        var style = document.documentElement.style;
+        return style.textWrap || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap;
+    }
 
-}(jQuery, 'smartresize'));
-
-
-(function ($) {
-    "use strict";
-
-    var style = document.documentElement.style,
-        hasTextWrap = (style.textWrap || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap || style.OTextWrap),
-        wsMatches;
+    var wsMatches;
 
     function NextWS_params() {
         this.reset();
     }
+
     NextWS_params.prototype.reset = function () {
         this.index = 0;
         this.width = 0;
@@ -102,6 +155,9 @@
 
     /**
      * Returns true iff char at index is a space character outside of HTML < > tags.
+     *
+     * @param txt   - the text to check
+     * @param index - the index of the character to check
      */
     var isWS = function (txt, index) {
         var re = /\s(?![^<]*>)/g,
@@ -110,24 +166,33 @@
         if (!wsMatches) {
             // Only calc ws matches once per line
             wsMatches = [];
-            while ((match = re.exec(txt)) !== null) {
+            match = re.exec(txt);
+            while (match !== null) {
                 wsMatches.push(match.index);
+                match = re.exec(txt);
             }
         }
 
         return wsMatches.indexOf(index) !== -1;
     };
 
-    var removeTags = function ($el) {
-        $el.find('br[data-owner="balance-text"]').replaceWith(" ");
-        var $span = $el.find('span[data-owner="balance-text"]');
-        if ($span.length > 0) {
+    /**
+     * Strip the tags from an element
+     *
+     * @param el   - the element to act on
+     */
+    var removeTags = function (el) {
+        var brs = el.querySelectorAll('br[data-owner="balance-text"]');
+        forEach(brs, function (br) { br.outerHTML = " "; });
+
+        var spans = el.querySelectorAll('span[data-owner="balance-text"]');
+        if (spans.length > 0) {
             var txt = "";
-            $span.each(function () {
-                txt += $(this).text();
-                $(this).remove();
+            forEach(spans, function (span) {
+                txt += span.textContent;
+                span.parentNode.removeChild(span);
             });
-            $el.html(txt);
+            el.innerHTML = txt;
         }
     };
 
@@ -135,22 +200,22 @@
      * Checks to see if we should justify the balanced text with the
      * element based on the textAlign property in the computed CSS
      *
-     * @param $el        - $(element)
+     * @param el        - element to check
      */
-    var isJustified = function ($el) {
-        style = $el.get(0).currentStyle || window.getComputedStyle($el.get(0), null);
+    var isJustified = function (el) {
+        var style = el.currentStyle || window.getComputedStyle(el, null);
         return (style.textAlign === 'justify');
     };
 
     /**
      * Add whitespace after words in text to justify the string to
      * the specified size.
-     *
+     * @param el       - the element to justify
      * @param txt      - text string
      * @param conWidth - container width
      */
-    var justify = function ($el, txt, conWidth) {
-        txt = $.trim(txt);
+    var justify = function (el, txt, conWidth) {
+        txt = txt.trim();
         var words = txt.split(' ').length;
         txt = txt + ' ';
 
@@ -160,17 +225,20 @@
         }
 
         // Find width of text in the DOM
-        var tmp = $('<span></span>').html(txt);
-        $el.append(tmp);
-        var size = tmp.width();
-        tmp.remove();
+        var tmp = document.createElement('span');
+        tmp.innerHTML = txt;
+        el.appendChild(tmp);
+        var size = tmp.offsetWidth;
+        tmp.parentNode.removeChild(tmp);
 
         // Figure out our word spacing and return the element
         var wordSpacing = Math.floor((conWidth - size) / (words - 1));
-        tmp.css('word-spacing', wordSpacing + 'px')
-            .attr('data-owner', 'balance-text');
+        tmp.style.wordSpacing = wordSpacing + 'px';
+        tmp.setAttribute('data-owner', 'balance-text');
 
-        return $('<div></div>').append(tmp).html();
+        var div = document.createElement('div');
+        div.appendChild(tmp);
+        return div.innerHTML;
     };
 
     /**
@@ -181,6 +249,9 @@
      * any Unicode line-breaking classes.)
      *
      * @precondition 0 <= index && index <= txt.length
+     *
+     * @param txt   - the text to check
+     * @param index - the index to check
      */
     var isBreakOpportunity = function (txt, index) {
         return ((index === 0) || (index === txt.length) ||
@@ -195,7 +266,7 @@
      * to the corresponding index and line width (from the start of
      * txt to ret.index).
      *
-     * @param $el      - $(element)
+     * @param el       - element
      * @param txt      - text string
      * @param conWidth - container width
      * @param desWidth - desired width
@@ -204,7 +275,7 @@
      * @param ret      - return object; index and width of previous/next break
      *
      */
-    var findBreakOpportunity = function ($el, txt, conWidth, desWidth, dir, c, ret) {
+    var findBreakOpportunity = function (el, txt, conWidth, desWidth, dir, c, ret) {
         var w;
         if (txt && typeof txt === 'string') {
             for(;;) {
@@ -212,14 +283,19 @@
                     c += dir;
                 }
 
-                $el.html(txt.substr(0, c));
-                w = $el.width();
+                el.innerHTML = txt.substr(0, c);
+                w = el.offsetWidth;
 
-                if ((dir < 0)
-                        ? ((w <= desWidth) || (w <= 0) || (c === 0))
-                        : ((desWidth <= w) || (conWidth <= w) || (c === txt.length))) {
-                    break;
+                if (dir < 0) {
+                    if ((w <= desWidth) || (w <= 0) || (c === 0)) {
+                        break;
+                    }
+                } else {
+                    if ((desWidth <= w) || (conWidth <= w) || (c === txt.length)) {
+                        break;
+                    }
                 }
+
                 c += dir;
             }
         }
@@ -231,11 +307,11 @@
      * Detects the width of a non-breaking space character, given the height of
      * the element with no-wrap applied.
      *
-     * @param $el      - $(element)
+     * @param el        - element
      * @param h         - height
      *
      */
-    var getSpaceWidth = function ($el, h) {
+    var getSpaceWidth = function (el, h) {
         var container = document.createElement('div');
 
         container.style.display = "block";
@@ -256,7 +332,7 @@
 
         container.appendChild(space);
 
-        $el.append(container);
+        el.appendChild(container);
 
         var dims = space.getBoundingClientRect();
         container.parentNode.removeChild(container);
@@ -269,89 +345,91 @@
     // Selectors and elements to watch;
     // calling $.balanceText(elements) adds "elements" to this list.
     var watching = {
-        sel: ['.balance-text'], // default class to watch
-        $el: $()
+        sel: [], // default class to watch
+        el: []
     };
 
-    // Call the balanceText plugin on elements that it's watching.
-    var applyBalanceText = function () {
-        watching.$el
-            .add(watching.sel.join(','))
-            .balanceText();
-    };
+    /**
+     * Get a list of elements regardless of input
+     *
+     * @param  {string|Node|Array-like}  elements  The selector to query, one or more elements
+     */
+    function getElementsList(elements) {
+        if (!elements) {
+            return [];
+        }
 
-    $.fn.balanceTextUpdate = applyBalanceText;
-
-    // Watch elements or a selector for the next updates
-    $.balanceText = function (elements) {
+        // is selector
         if (typeof elements === 'string') {
-            watching.sel.push(elements);
-        } else {
-            watching.$el = watching.$el.add(elements);
-        }
-        $(elements).balanceText();
-    };
-
-    // When a browser has native support for the text-wrap property,
-    // the text balanceText plugin will let the browser handle it natively,
-    // otherwise it will apply its own text balancing code.
-    $.fn.balanceText = function () {
-        if (hasTextWrap) {
-            // browser supports text-wrap, so do nothing
-            return this;
+            return document.querySelectorAll(elements);
         }
 
-        return this.each(function () {
-            var $this = $(this);
+        // is single element
+        if (elements.tagName && elements.querySelectorAll) {
+            return [elements];
+        }
 
+        return elements;
+    }
+
+    /**
+     *  When a browser has native support for the text-wrap property,
+     * the text balanceText plugin will let the browser handle it natively,
+     * otherwise it will apply its own text balancing code.
+     *
+     * @param elements   - the list of elements to balance
+     */
+    function balanceText(elements) {
+        forEach(getElementsList(elements), function (el) {
             // In a lower level language, this algorithm takes time
             // comparable to normal text layout other than the fact
             // that we do two passes instead of one, so we should
             // be able to do without this limit.
             var maxTextWidth = 5000;
 
-            removeTags($this);                        // strip balance-text tags
+            removeTags(el);                        // strip balance-text tags
 
             // save settings
-            var oldWS = this.style.whiteSpace;
-            var oldFloat = this.style.float;
-            var oldDisplay = this.style.display;
-            var oldPosition = this.style.position;
-            var oldLH = this.style.lineHeight;
+            var oldWS = el.style.whiteSpace;
+            var oldFloat = el.style.float;
+            var oldDisplay = el.style.display;
+            var oldPosition = el.style.position;
+            var oldLH = el.style.lineHeight;
 
             // remove line height before measuring container size
-            $this.css('line-height', 'normal');
+            el.style.lineHeight = 'normal';
 
-            var containerWidth = $this.width();
-            var containerHeight = $this.height();
+            var containerWidth = el.offsetWidth;
+            var containerHeight = el.offsetHeight;
 
             // temporary settings
-            $this.css({
-                'white-space': 'nowrap',
-                'float': 'none',
-                'display': 'inline',
-                'position': 'static'
-            });
+            el.style.whiteSpace = 'nowrap';
+            el.style.float = 'none';
+            el.style.display = 'inline';
+            el.style.position = 'static';
 
-            var nowrapWidth = $this.width();
-            var nowrapHeight = $this.height();
+            var nowrapWidth = el.offsetWidth;
+            var nowrapHeight = el.offsetHeight;
 
             // An estimate of the average line width reduction due
             // to trimming trailing space that we expect over all
             // lines other than the last.
 
-            var spaceWidth = ((oldWS === 'pre-wrap') ? 0 : getSpaceWidth($this, nowrapHeight));
+            var spaceWidth = ((oldWS === 'pre-wrap') ? 0 : getSpaceWidth(el, nowrapHeight));
 
             if (containerWidth > 0 &&                  // prevent divide by zero
                     nowrapWidth > containerWidth &&    // text is more than 1 line
                     nowrapWidth < maxTextWidth) {      // text is less than arbitrary limit (make this a param?)
 
-                var remainingText = $this.html();
+                var remainingText = el.innerHTML;
                 var newText = "";
                 var lineText = "";
-                var shouldJustify = isJustified($this);
+                var shouldJustify = isJustified(el);
                 var totLines = Math.round(containerHeight / nowrapHeight);
                 var remLines = totLines;
+
+                // loop vars
+                var desiredWidth, guessIndex, le, ge, splitIndex;
 
                 // Determine where to break:
                 while (remLines > 1) {
@@ -359,43 +437,42 @@
                     // clear whitespace match cache for each line
                     wsMatches = null;
 
-                    var desiredWidth = Math.round((nowrapWidth + spaceWidth) / remLines - spaceWidth);
+                    desiredWidth = Math.round((nowrapWidth + spaceWidth) / remLines - spaceWidth);
 
                     // Guessed char index
-                    var guessIndex = Math.round((remainingText.length + 1) / remLines) - 1;
+                    guessIndex = Math.round((remainingText.length + 1) / remLines) - 1;
 
-                    var le = new NextWS_params();
+                    le = new NextWS_params();
 
                     // Find a breaking space somewhere before (or equal to) desired width,
                     // not necessarily the closest to the desired width.
-                    findBreakOpportunity($this, remainingText, containerWidth, desiredWidth, -1, guessIndex, le);
+                    findBreakOpportunity(el, remainingText, containerWidth, desiredWidth, -1, guessIndex, le);
 
                     // Find first breaking char after (or equal to) desired width.
-                    var ge = new NextWS_params();
+                    ge = new NextWS_params();
                     guessIndex = le.index;
-                    findBreakOpportunity($this, remainingText, containerWidth, desiredWidth, +1, guessIndex, ge);
+                    findBreakOpportunity(el, remainingText, containerWidth, desiredWidth, +1, guessIndex, ge);
 
                     // Find first breaking char before (or equal to) desired width.
                     le.reset();
                     guessIndex = ge.index;
-                    findBreakOpportunity($this, remainingText, containerWidth, desiredWidth, -1, guessIndex, le);
+                    findBreakOpportunity(el, remainingText, containerWidth, desiredWidth, -1, guessIndex, le);
 
                     // Find closest string to desired length
-                    var splitIndex;
                     if (le.index === 0) {
                         splitIndex = ge.index;
                     } else if ((containerWidth < ge.width) || (le.index === ge.index)) {
                         splitIndex = le.index;
                     } else {
                         splitIndex = ((Math.abs(desiredWidth - le.width) < Math.abs(ge.width - desiredWidth))
-                                           ? le.index
-                                           : ge.index);
+                                            ? le.index
+                                            : ge.index);
                     }
 
                     // Break string
                     lineText = remainingText.substr(0, splitIndex);
                     if (shouldJustify) {
-                        newText += justify($this, lineText, containerWidth);
+                        newText += justify(el, lineText, containerWidth);
                     } else {
                         newText += lineText.replace(/\s$/, "");
                         newText += '<br data-owner="balance-text" />';
@@ -404,32 +481,107 @@
 
                     // update counters
                     remLines--;
-                    $this.html(remainingText);
-                    nowrapWidth = $this.width();
+                    el.innerHTML = remainingText;
+                    nowrapWidth = el.offsetWidth;
                 }
 
                 if (shouldJustify) {
-                    $this.html(newText + justify($this, remainingText, containerWidth));
+                    el.innerHTML = newText + justify(el, remainingText, containerWidth);
                 } else {
-                    $this.html(newText + remainingText);
+                    el.innerHTML = newText + remainingText;
                 }
             }
 
             // restore settings
-            this.style.whiteSpace = oldWS;
-            this.style.float = oldFloat;
-            this.style.display = oldDisplay;
-            this.style.position = oldPosition;
-            this.style.lineHeight = oldLH;
+            el.style.whiteSpace = oldWS;
+            el.style.float = oldFloat;
+            el.style.display = oldDisplay;
+            el.style.position = oldPosition;
+            el.style.lineHeight = oldLH;
         });
-    };
+    }
 
+    // Call the balanceText plugin on elements that it's watching.
+    function updateWatched() {
+        var selectors = watching.sel.join(',');
+        var selectedElements = getElementsList(selectors);
+        var elements = Array.prototype.concat.apply(watching.el, selectedElements);
+        balanceText(elements);
+    }
 
+    /**
+     * Initialize the events for which to re-apply BalanceText.  They are:
+     * - Document ready
+     * - Document full load
+     * - Window resize
+     */
+    var handlersInitialized = false;
+    function initHandlers() {
+        if (handlersInitialized) {
+            return;
+        }
 
-    // Apply on DOM ready
-    $(window).ready(applyBalanceText);
+        // Apply on DOM ready
+        ready(updateWatched);
 
-    // Reapply on resize
-    $(window).smartresize(applyBalanceText);
+        // Reapply on full load
+        window.addEventListener('load', updateWatched);
 
-}(jQuery));
+        // Reapply on resize
+        window.addEventListener('resize', debounce(updateWatched));
+
+        handlersInitialized = true;
+    }
+
+    /**
+     * Apply the BalanceText routine on the document and watch the list
+     * of elements.  On window resize, re-apply BalanceText to the given elements
+     *
+     * @param elements - the elements to watch after applying BalanceText
+     */
+    function balanceTextAndWatch(elements) {
+        if (typeof elements === 'string') {
+            watching.sel.push(elements);
+        } else {
+            forEach(getElementsList(elements), function (el) {
+                watching.el.push(el);
+            });
+        }
+
+        initHandlers();
+        updateWatched();
+    }
+
+    /**
+     * Treat this app as a polyfill.  Watch for changes to the .balance-text selector
+     */
+    var polyfilled = false;
+    function polyfill() {
+        if (polyfilled) {
+            return;
+        }
+
+        watching.sel.push('.balance-text');
+        initHandlers();
+        polyfilled = true;
+    }
+
+    function publicInterface(elements, options) {
+        if (!elements) {
+            // empty call means polyfill (watch for changes)
+            polyfill();
+        } else if (options && options.watch) {
+            balanceTextAndWatch(elements);
+        } else {
+            balanceText(elements);
+        }
+    }
+
+    publicInterface.updateWatched = updateWatched;
+
+    if (hasTextWrap()) {
+        noop.updateWatched = noop;
+        return noop;
+    }
+    return publicInterface;
+}));

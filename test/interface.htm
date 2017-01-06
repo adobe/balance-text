@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>Balance Text - Test 2 - interface test</title>
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+<script src="http://use.edgefonts.net/source-sans-pro:n3,n4,i3,i4,n6.js"></script>
+<script src="../balancetext.js"></script>
+<link rel="stylesheet" type="text/css" href="test1.css">
+<!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<style type="text/css">
+/* Apply (proposed) CSS style. Plugin looks for elements with class named "balance-text" */
+.balance-text {
+	text-wrap: balanced;
+}
+</style>
+
+</head>
+
+<body>
+<div id="content">
+  <section id="balanced">
+    <header><h1>Watching</h1></header>
+    <header><h2>Explicit Element Text</h2></header>
+    <div class="demo-body">
+      <p id="bt-1">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <script>balanceText(document.getElementById("bt-1"), {watch: true});</script>
+    </div>
+
+    <header><h2>Explicit Element List Text</h2></header>
+    <div class="demo-body">
+      <p class="bt-2">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <p class="bt-2">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <script>balanceText(document.querySelectorAll(".bt-2"), {watch: true});</script>
+    </div>
+
+    <header><h2>Explicit Selector Text</h2></header>
+    <div class="demo-body">
+      <p id="bt-3">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <script>balanceText("#bt-3", {watch: true});</script>
+    </div>
+
+    <header><h2>Explicit Selector List Text</h2></header>
+    <div class="demo-body">
+      <p class="bt-4">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <p class="bt-4">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <script>balanceText(".bt-4", {watch: true});</script>
+    </div>
+
+    <header><h2>Explicit jQuery Instance Text</h2></header>
+    <div class="demo-body">
+      <p class="bt-5">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <p class="bt-5">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <script>balanceText(jQuery(".bt-5"), {watch: true});</script>
+    </div>
+
+
+
+    <header><h1>NOT Watching</h1></header>
+    <header><h2>Explicit Element Text</h2></header>
+    <div class="demo-body">
+      <p id="bt-5" class="balance-text">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <script>balanceText(document.getElementById("bt-5"));</script>
+    </div>
+
+    <header><h2>Explicit Element List Text</h2></header>
+    <div class="demo-body">
+      <p class="bt-6 balance-text">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <p class="bt-6 balance-text">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <script>balanceText(document.querySelectorAll(".bt-6"));</script>
+    </div>
+
+    <header><h2>Explicit Selector Text</h2></header>
+    <div class="demo-body">
+      <p id="bt-7" class="balance-text">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <script>balanceText("#bt-7");</script>
+    </div>
+
+    <header><h2>Explicit Selector List Text</h2></header>
+    <div class="demo-body">
+      <p class="bt-8 balance-text">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <p class="bt-8 balance-text">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <script>balanceText(".bt-8");</script>
+    </div>
+
+    <header><h2>Explicit jQuery Instance Text</h2></header>
+    <div class="demo-body">
+      <p class="bt-9 balance-text">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <p class="bt-9 balance-text">
+          Elen sila lumenn omentilmo, Nae saian luume'. Cormamin lindua ele lle. Saesa omentien lle, vanya sulie Namaarie. Aa' lasser en lle coia orn n' omenta gurtha. Aa' i'sul nora lanne'lle. Aa' menle nauva calen ar' ta hwesta e' ale'quenle. Cormamin niuve tenna' ta elea lle au'. Lissenen ar' maska'lalaith tenna' lye omentuva.
+      </p>
+
+      <script>balanceText(jQuery(".bt-9"));</script>
+    </div>
+
+
+    <header><h2>Explicit Update</h2></header>
+    <div class="demo-body">
+        <button onclick="balanceText('#bt-5, .bt-6, #bt-7, .bt-8, .bt-9')">UPDATE!</button>
+    </div>
+  </section>
+</div>
+</body>
+</html>
