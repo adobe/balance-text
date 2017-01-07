@@ -118,4 +118,4 @@ npm run build
 * v 1.6.x - Add balanceTextUpdate() method (rileyjshaw), bug fixes (bfred-it)
 * v 1.7.0 - Hack for partially working with jQuery 3, remove deprecation warning
 * v 2.0.0 - Fix automatic updating of custom selectors for jQuery 3 (bfred-it)
-* v 3.0.0 - Remove the jQuery dependency
+* v 3.0.0 - Remove the jQuery dependency (BrianGenisio, bfred-it)
