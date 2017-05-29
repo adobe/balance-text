@@ -142,7 +142,7 @@
         return style.textWrap || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap;
     }
 
-    var wsMatches;
+    var breakMatches;
 
     function NextWS_params() {
         this.reset();
@@ -154,26 +154,27 @@
     };
 
     /**
-     * Returns true iff char at index is a space character outside of HTML < > tags.
+     * Returns true iff char at index is a break char outside of HTML < > tags.
+     * Break char can be: whitespace, hypen, emdash (u2014), endash (u2013), or soft-hyphen (u00ad).
      *
      * @param txt   - the text to check
      * @param index - the index of the character to check
      */
-    var isWS = function (txt, index) {
-        var re = /\s(?![^<]*>)/g,
+    var isBreakChar = function (txt, index) {
+        var re = /(\s|-|\u2014|\u2013|\u00ad)(?![^<]*>)/g,
             match;
 
-        if (!wsMatches) {
-            // Only calc ws matches once per line
-            wsMatches = [];
+        if (!breakMatches) {
+            // Only calc break matches once per line
+            breakMatches = [];
             match = re.exec(txt);
             while (match !== null) {
-                wsMatches.push(match.index);
+                breakMatches.push(match.index);
                 match = re.exec(txt);
             }
         }
 
-        return wsMatches.indexOf(index) !== -1;
+        return breakMatches.indexOf(index) !== -1;
     };
 
     /**
@@ -255,7 +256,7 @@
      */
     var isBreakOpportunity = function (txt, index) {
         return ((index === 0) || (index === txt.length) ||
-                (isWS(txt, index - 1) && !isWS(txt, index)));
+                (isBreakChar(txt, index - 1) && !isBreakChar(txt, index)));
     };
 
     /**
@@ -435,7 +436,7 @@
                 while (remLines > 1) {
 
                     // clear whitespace match cache for each line
-                    wsMatches = null;
+                    breakMatches = null;
 
                     desiredWidth = Math.round((nowrapWidth + spaceWidth) / remLines - spaceWidth);
 
