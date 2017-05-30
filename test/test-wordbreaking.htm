@@ -30,12 +30,14 @@
   <section id="balanced">
     <header><h2>Balanced text</h2></header>
     <div class="demo-body">
-      <p class="balance-text"><strong>&amp;NBSP; TEST:</strong> Lorem ipsum dolor sit <span style="color: red">DO&nbsp;NOT&nbsp;WRAP&nbsp;RED&nbsp;TEXT</span> et dolore magna aliqua. Yada yada yada</p>
+      <p class="balance-text"><strong>&amp;NBSP; TEST:</strong> Lorem ipsum dolor sit <span class="red">DO&nbsp;NOT&nbsp;WRAP&nbsp;RED&nbsp;TEXT</span> et dolore magna aliqua. Yada yada yada</p>
       <p class="balance-text"><strong>HYPHEN TEST:</strong> Lorem ipsum <span style="color: blue">SHOULD-BREAK-HYPHEN-ATED-TEXT</span> et dolore magna.</p>
-      <p class="balance-text"><strong>EM DASH TEST:</strong> Lorem ipsum <span style="color: blue">SHOULD&mdash;BREAK&mdash;HYPHEN&mdash;ATED&mdash;TEXT</span> et dolore magna.</p>
-      <p class="balance-text"><strong>&amp;#8212; DASH TEST:</strong> Lorem ipsum <span style="color: blue">SHOULD&#8212;BREAK&#8212;HYPHEN&#8212;ATED&#8212;TEXT</span> et dolore magna.</p>
-      <p class="balance-text"><strong>EN DASH TEST:</strong> Lorem ipsum <span style="color: blue">SHOULD&ndash;BREAK&ndash;HYPHEN&ndash;ATED&ndash;TEXT</span> et dolore magna.</p>
-      <p class="balance-text"><strong>SOFT HYPHEN TEST:</strong> Lorem ipsum <span style="color: blue">SHOULD&shy;BREAK&shy;HYPHEN&shy;ATED&shy;TEXT</span> et dolore magna.</p>
+      <p class="balance-text"><strong>EM DASH TEST:</strong> Lorem ipsum <span class="blue">SHOULD&mdash;BREAK&mdash;EM&mdash;DASH&mdash;TEXT</span> et dolore magna.</p>
+      <p class="balance-text"><strong>&amp;#8212; DASH TEST:</strong> Lorem ipsum <span class="blue">SHOULD&#8212;BREAK&#8212;EM&#8212;DASH&#8212;TEXT</span> et dolore magna.</p>
+      <p class="balance-text"><strong>EN DASH TEST:</strong> Lorem ipsum <span style="color: blue">SHOULD&ndash;BREAK&ndash;EN&ndash;DASH&ndash;TEXT</span> et dolore magna.</p>
+      <p class="balance-text"><strong>SOFT HYPHEN TEST:</strong> Lorem ipsum <span style="color: blue">SHOULD&shy;BREAK&shy;SOFT&shy;HYPHEN&shy;ATED&shy;TEXT</span> et dolore magna.</p>
+      <!-- Justify code wraps each line with <span>, so can't highlight soft-hyphenated string in blue -->
+      <p class="balance-text test-align-justify"><strong>SOFT HYPHEN JUSTIFY TEST:</strong> Lorem ipsum SHOULD&shy;BREAK&shy;SOFT&shy;HYPHEN&shy;ATED&shy;TEXT et dolore magna.</p>
       <p>&nbsp;</p>
 <!--
       <p class="balance-text"><strong>WHITE-SPACE: NOWRAP TEST:</strong> Lorem ipsum <span class="nowrap-red">DO NOT WRAP RED TEXT</span> et dolore magna. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>

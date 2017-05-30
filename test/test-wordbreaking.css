@@ -60,3 +60,12 @@ body > footer {
     white-space: nowrap;
     color: red;
 }
+.red {
+    color: red;
+}
+.blue {
+    color: blue;
+}
+.test-align-justify {
+    text-align: justify !important;
+}
