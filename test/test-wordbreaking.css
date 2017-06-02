@@ -1,0 +1,71 @@
+/* test-breaking.css */
+a {
+    color: #007edf;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+body {
+    font-size: 16px;
+    font-family: source-sans-pro, sans-serif;
+    background: #F2F2F2;
+}
+h1 {
+    font-weight: 600;
+}
+h2 {
+    font-size: 54px;
+    display: block;
+    font-weight: 600;
+}
+#content h2, #content p {
+    text-align: center;
+}
+#content > section {
+    display: block;
+    width: 80%;
+    min-width: 200px;
+    margin: 10px auto;
+    background: #FFF;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+}
+#content > section header {
+    background: #212121;
+    background: -moz-linear-gradient(top, #373737, #212121);
+    background: -webkit-linear-gradient(top, #373737, #212121);
+    background: -ms-linear-gradient(top, #373737, #212121);
+    background: -o-linear-gradient(top, #373737, #212121);
+    background: linear-gradient(top, #373737, #212121);
+    padding: 20px 0;
+}
+#content > section header h2 {
+    color: #FFF;
+    font-size: 21px;
+    margin: 0 0 0 20px;
+    text-align: left;
+}
+#content .demo-body {
+    padding: 20px;
+}
+body > footer {
+    padding: 20px;
+    text-align: center;
+    clear: both;
+    display: block
+}
+
+/* tests */
+.nowrap-red {
+    white-space: nowrap;
+    color: red;
+}
+.red {
+    color: red;
+}
+.blue {
+    color: blue;
+}
+.test-align-justify {
+    text-align: justify !important;
+}

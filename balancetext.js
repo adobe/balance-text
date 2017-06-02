@@ -142,7 +142,7 @@
         return style.textWrap || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap;
     }
 
-    var wsMatches;
+    var breakMatches;
 
     function NextWS_params() {
         this.reset();
@@ -154,38 +154,59 @@
     };
 
     /**
-     * Returns true iff char at index is a space character outside of HTML < > tags.
+     * Returns true iff char at index is a break char outside of HTML < > tags.
+     * Break char can be: whitespace, hypen, emdash (u2014), endash (u2013), or soft-hyphen (u00ad).
      *
      * @param txt   - the text to check
      * @param index - the index of the character to check
      */
-    var isWS = function (txt, index) {
-        var re = /\s(?![^<]*>)/g,
+    var isBreakChar = function (txt, index) {
+        var re = /(\s|-|\u2014|\u2013|\u00ad)(?![^<]*>)/g,
             match;
 
-        if (!wsMatches) {
-            // Only calc ws matches once per line
-            wsMatches = [];
+        if (!breakMatches) {
+            // Only calc break matches once per line
+            breakMatches = [];
             match = re.exec(txt);
             while (match !== null) {
-                wsMatches.push(match.index);
+                breakMatches.push(match.index);
                 match = re.exec(txt);
             }
         }
 
-        return wsMatches.indexOf(index) !== -1;
+        return breakMatches.indexOf(index) !== -1;
     };
 
     /**
-     * Strip the tags from an element
+     * Strip balance-text tags from an element inserted in previous run
      *
      * @param el   - the element to act on
      */
     var removeTags = function (el) {
-        var brs = el.querySelectorAll('br[data-owner="balance-text"]');
-        forEach(brs, function (br) { br.outerHTML = " "; });
+        // Remove soft-hyphen breaks
+        var brs = el.querySelectorAll('br[data-owner="balance-text-soft"]');
+        forEach(brs, function (br) {
+            br.outerHTML = "";
+        });
 
-        var spans = el.querySelectorAll('span[data-owner="balance-text"]');
+        // Replace other breaks with whitespace
+        brs = el.querySelectorAll('br[data-owner="balance-text"]');
+        forEach(brs, function (br) {
+            br.outerHTML = " ";
+        });
+
+        // Restore hyphens inserted for soft-hyphens
+        var spans = el.querySelectorAll('span[data-owner="balance-text-soft"]');
+        if (spans.length > 0) {
+            forEach(spans, function (span) {
+                var textNode = document.createTextNode("\u00ad");
+                span.parentNode.insertBefore(textNode, span);
+                span.parentNode.removeChild(span);
+            });
+        }
+
+        // Remove spans inserted for justified text
+        spans = el.querySelectorAll('span[data-owner="balance-text-justify"]');
         if (spans.length > 0) {
             var txt = "";
             forEach(spans, function (span) {
@@ -234,7 +255,7 @@
         // Figure out our word spacing and return the element
         var wordSpacing = Math.floor((conWidth - size) / (words - 1));
         tmp.style.wordSpacing = wordSpacing + 'px';
-        tmp.setAttribute('data-owner', 'balance-text');
+        tmp.setAttribute('data-owner', 'balance-text-justify');
 
         var div = document.createElement('div');
         div.appendChild(tmp);
@@ -255,7 +276,7 @@
      */
     var isBreakOpportunity = function (txt, index) {
         return ((index === 0) || (index === txt.length) ||
-                (isWS(txt, index - 1) && !isWS(txt, index)));
+                (isBreakChar(txt, index - 1) && !isBreakChar(txt, index)));
     };
 
     /**
@@ -429,13 +450,13 @@
                 var remLines = totLines;
 
                 // loop vars
-                var desiredWidth, guessIndex, le, ge, splitIndex;
+                var desiredWidth, guessIndex, le, ge, splitIndex, isSoftHyphen;
 
                 // Determine where to break:
                 while (remLines > 1) {
 
                     // clear whitespace match cache for each line
-                    wsMatches = null;
+                    breakMatches = null;
 
                     desiredWidth = Math.round((nowrapWidth + spaceWidth) / remLines - spaceWidth);
 
@@ -470,12 +491,20 @@
                     }
 
                     // Break string
-                    lineText = remainingText.substr(0, splitIndex);
+                    lineText = remainingText.substr(0, splitIndex).replace(/\s$/, "");
+
+                    isSoftHyphen = Boolean(lineText.match(/\u00ad$/));
+                    if (isSoftHyphen) {
+                        // Replace soft-hyphen causing break with explicit hyphen
+                        lineText = lineText.replace(/\u00ad$/, '<span data-owner="balance-text-soft">-</span>');
+                    }
+
                     if (shouldJustify) {
                         newText += justify(el, lineText, containerWidth);
                     } else {
-                        newText += lineText.replace(/\s$/, "");
-                        newText += '<br data-owner="balance-text" />';
+                        newText += lineText;
+                        newText += isSoftHyphen ? '<br data-owner="balance-text-soft" />'
+                                                : '<br data-owner="balance-text" />';
                     }
                     remainingText = remainingText.substr(splitIndex);
 
