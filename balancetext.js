@@ -263,11 +263,16 @@
     };
 
     /**
-     * In the current simple implementation, an index i is a break
-     * opportunity in txt iff it is 0, txt.length, or the
-     * index of a non-whitespace char immediately preceded by a
-     * whitespace char.  (Thus, it doesn't honour 'white-space' or
-     * any Unicode line-breaking classes.)
+     * In the current implementation, an index is a break
+     * opportunity in txt iff it is:
+     * - 0 or txt.length
+     * - index of a non-whitespace char immediately preceded by a
+     *   whitespace char.
+     * - index of a non-whitespace char immediately preceded by a
+     *   hyphen, soft-hyphen, em-dash, or en-dash char.
+     *
+     * Thus, it doesn't honour 'white-space' or any other Unicode
+     * line-breaking classes.)
      *
      * @precondition 0 <= index && index <= txt.length
      *
