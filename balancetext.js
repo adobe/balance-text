@@ -142,7 +142,7 @@
         return style.textWrap || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap;
     }
 
-    var breakMatches;
+    var breakMatches, wsnwMatches, wsnwOffset;
 
     function NextWS_params() {
         this.reset();
@@ -151,6 +151,19 @@
     NextWS_params.prototype.reset = function () {
         this.index = 0;
         this.width = 0;
+    };
+
+    /**
+     * Check if index is contained in previously calculated list of white-space:nowrap ranges
+     *
+     * @param index - the index of the character to check
+     */
+    var isWhiteSpaceNoWrap = function (index) {
+        // Is index inside 1 of the ranges?
+        return wsnwMatches.some(function (range) {
+            // start and end are breakable, but not inside range
+            return (range.start < index && index < range.end);
+        });
     };
 
     /**
@@ -169,12 +182,89 @@
             breakMatches = [];
             match = re.exec(txt);
             while (match !== null) {
-                breakMatches.push(match.index);
+                if (!isWhiteSpaceNoWrap(match.index)) {
+                    breakMatches.push(match.index);
+                }
                 match = re.exec(txt);
             }
         }
 
         return breakMatches.indexOf(index) !== -1;
+    };
+
+    /**
+     * Recursively calculate white-space:nowrap offsets for line.
+     *
+     * @param el         - the element to act on
+     * @param includeTag - include length of tag itself
+     */
+    var recursiveCalcNoWrapOffsetsForLine = function (el, includeTag) {
+
+        if (el.nodeType === el.ELEMENT_NODE) {
+            // Found an embedded tag
+            var style = window.getComputedStyle(el);
+            if (style.whiteSpace === "nowrap") {
+                // Tag with white-space:nowrap - add match, skip children
+                var len = el.outerHTML.length;
+                wsnwMatches.push({start: wsnwOffset, end: wsnwOffset + len});
+                wsnwOffset += len;
+            } else {
+                // Tag without white-space:nowrap - recursively check children of tag
+                el.childNodes.forEach(function (child) {
+                    recursiveCalcNoWrapOffsetsForLine(child, true);
+                });
+                if (includeTag) {
+                    // Length of opening tag, attributes, and closing tag
+                    wsnwOffset += (el.outerHTML.length - el.innerHTML.length);
+                }
+            }
+
+        } else if (el.nodeType === el.COMMENT_NODE) {
+            wsnwOffset += el.length + 7; // delimiter: <!-- -->
+
+        } else if (el.nodeType === el.PROCESSING_INSTRUCTION_NODE) {
+            wsnwOffset += el.length + 2; // delimiter: < >
+
+        } else {
+            // Text node: add length
+            wsnwOffset += el.length;
+        }
+    };
+
+    /**
+     * Calculate white-space:nowrap offsets for line.
+     *
+     * @param el             - the element to act on
+     * @param oldWS          - "old" whitespace setting for temporarily resetting
+     * @param lineCharOffset - char offset of current line from start of text
+     */
+    var calcNoWrapOffsetsForLine = function (el, oldWS, lineCharOffset) {
+        // For first line (lineCharOffset === 0), calculate start and end offsets for each
+        // white-space:nowrap element in the line.
+        if (lineCharOffset === 0) {
+            // Reset whiteSpace setting when breakMatches is being calculated
+            // so white-space:nowrap can be detected in text
+            el.style.whiteSpace = oldWS;
+
+            wsnwOffset = 0;
+            wsnwMatches = [];
+            recursiveCalcNoWrapOffsetsForLine(el, false);
+
+            // Restore temporary whitespace setting to recalc width
+            el.style.whiteSpace = 'nowrap';
+
+        } else {
+            // For all other lines, update the offsets for current line
+            // 1. Ignore matches less than offset
+            // 2. Subtract offset from remaining matches
+            var newMatches = [];
+            wsnwMatches.forEach(function (match) {
+                if (match.start > lineCharOffset) {
+                    newMatches.push({start: match.start - lineCharOffset, end: match.end - lineCharOffset});
+                }
+            });
+            wsnwMatches = newMatches;
+        }
     };
 
     /**
@@ -303,6 +393,7 @@
      */
     var findBreakOpportunity = function (el, txt, conWidth, desWidth, dir, c, ret) {
         var w;
+
         if (txt && typeof txt === 'string') {
             for(;;) {
                 while (!isBreakOpportunity(txt, c)) {
@@ -453,6 +544,7 @@
                 var shouldJustify = isJustified(el);
                 var totLines = Math.round(containerHeight / nowrapHeight);
                 var remLines = totLines;
+                var lineCharOffset = 0;
 
                 // loop vars
                 var desiredWidth, guessIndex, le, ge, splitIndex, isSoftHyphen;
@@ -462,6 +554,9 @@
 
                     // clear whitespace match cache for each line
                     breakMatches = null;
+
+                    // Must calc white-space:nowrap offsets before first call to findBreakOpportunity()
+                    calcNoWrapOffsetsForLine(el, oldWS, lineCharOffset);
 
                     desiredWidth = Math.round((nowrapWidth + spaceWidth) / remLines - spaceWidth);
 
@@ -512,6 +607,7 @@
                                                 : '<br data-owner="balance-text" />';
                     }
                     remainingText = remainingText.substr(splitIndex);
+                    lineCharOffset = splitIndex;
 
                     // update counters
                     remLines--;

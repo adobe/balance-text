@@ -56,9 +56,8 @@ body > footer {
 }
 
 /* tests */
-.nowrap-red {
+.nowrap {
     white-space: nowrap;
-    color: red;
 }
 .red {
     color: red;
