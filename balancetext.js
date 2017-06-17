@@ -74,14 +74,39 @@
 }(this, function () {
 
     /**
+     * Line breaking global vars
+     */
+    var breakMatches, wsnwMatches, wsnwOffset;
+
+    /**
+     * Selectors and elements to watch;
+     * calling $.balanceText(elements) adds "elements" to this list.
+     */
+    var watching = {
+        sel: [], // default class to watch
+        el: []
+    };
+
+    /**
+     * Have handlers been initialized?
+     */
+    var handlersInitialized = false;
+
+    /**
+     * Is this s polyfill?
+     */
+    var polyfilled = false;
+
+
+    /**
      * Do nothing
      */
     function noop() { return; } // "return" pleases jslint
 
     /**
      * Loop that works with array-likes
-     * @param  {Array-like}   elements    A list of elements to run a function on
-     * @param  {Function}     callback    The function to call on each supplied element
+     * @param {Array-like} elements - List of elements to run a function on
+     * @param {Function}   callback - The function to call on each supplied element
      */
     function forEach(elements, callback) {
         Array.prototype.forEach.call(elements, callback);
@@ -90,7 +115,7 @@
     /**
      * Polyfill for $(document).ready()
      *
-     * @param fn   - The function to execute when the document is ready
+     * @param {Function} fn - The function to execute when the document is ready
      */
     function ready(fn) {
         if (document.readyState !== 'loading') {
@@ -109,15 +134,18 @@
     /**
      * Debounces a function over a threshold
      *
-     * @param func      - The function to debounce
-     * @param threshold - time in ms
-     * @param execAsap  - when true, execute immediately
+     * @param {Function} func      - The function to debounce
+     * @param {number}   threshold - time in ms
+     * @param {boolean}  execAsap  - when true, execute immediately
+     * @return {Function} Debounced function
      */
     function debounce(func, threshold, execAsap) {
         var timeout;
 
         return function debounced() {
-            var obj = this, args = arguments;
+            var obj = this,
+                args = arguments;
+
             function delayed() {
                 if (!execAsap) {
                     func.apply(obj, args);
@@ -136,14 +164,16 @@
 
     /**
      * Determine whether the document supports TextWrap
+     * @return {boolean}
      */
     function hasTextWrap() {
         var style = document.documentElement.style;
         return style.textWrap || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap;
     }
 
-    var breakMatches, wsnwMatches, wsnwOffset;
-
+    /**
+     * Object for tracking next whitespace params
+     */
     function NextWS_params() {
         this.reset();
     }
@@ -156,7 +186,8 @@
     /**
      * Check if index is contained in previously calculated list of white-space:nowrap ranges
      *
-     * @param index - the index of the character to check
+     * @param {number} index - the index of the character to check
+     * @return {boolean}
      */
     var isWhiteSpaceNoWrap = function (index) {
         // Is index inside 1 of the ranges?
@@ -167,36 +198,10 @@
     };
 
     /**
-     * Returns true iff char at index is a break char outside of HTML < > tags.
-     * Break char can be: whitespace, hypen, emdash (u2014), endash (u2013), or soft-hyphen (u00ad).
-     *
-     * @param txt   - the text to check
-     * @param index - the index of the character to check
-     */
-    var isBreakChar = function (txt, index) {
-        var re = /(\s|-|\u2014|\u2013|\u00ad)(?![^<]*>)/g,
-            match;
-
-        if (!breakMatches) {
-            // Only calc break matches once per line
-            breakMatches = [];
-            match = re.exec(txt);
-            while (match !== null) {
-                if (!isWhiteSpaceNoWrap(match.index)) {
-                    breakMatches.push(match.index);
-                }
-                match = re.exec(txt);
-            }
-        }
-
-        return breakMatches.indexOf(index) !== -1;
-    };
-
-    /**
      * Recursively calculate white-space:nowrap offsets for line.
      *
-     * @param el         - the element to act on
-     * @param includeTag - include length of tag itself
+     * @param {Node}    el         - the element to act on
+     * @param {boolean} includeTag - include length of tag itself
      */
     var recursiveCalcNoWrapOffsetsForLine = function (el, includeTag) {
 
@@ -234,9 +239,9 @@
     /**
      * Calculate white-space:nowrap offsets for line.
      *
-     * @param el             - the element to act on
-     * @param oldWS          - "old" whitespace setting for temporarily resetting
-     * @param lineCharOffset - char offset of current line from start of text
+     * @param {Node}    el             - the element to act on
+     * @param {string}  oldWS          - "old" whitespace setting for temporarily resetting
+     * @param {number}  lineCharOffset - char offset of current line from start of text
      */
     var calcNoWrapOffsetsForLine = function (el, oldWS, lineCharOffset) {
         // For first line (lineCharOffset === 0), calculate start and end offsets for each
@@ -270,7 +275,7 @@
     /**
      * Strip balance-text tags from an element inserted in previous run
      *
-     * @param el   - the element to act on
+     * @param {Node} el - the element to act on
      */
     var removeTags = function (el) {
         // Remove soft-hyphen breaks
@@ -311,7 +316,8 @@
      * Checks to see if we should justify the balanced text with the
      * element based on the textAlign property in the computed CSS
      *
-     * @param el        - element to check
+     * @param {Node} el - element to check
+     * @return {boolean}
      */
     var isJustified = function (el) {
         var style = el.currentStyle || window.getComputedStyle(el, null);
@@ -321,13 +327,16 @@
     /**
      * Add whitespace after words in text to justify the string to
      * the specified size.
-     * @param el       - the element to justify
-     * @param txt      - text string
-     * @param conWidth - container width
+     * @param {Node}    el       - the element to justify
+     * @param {string}  txt      - text string
+     * @param {number}  conWidth - container width
+     * @return {string} Justified text
      */
     var justify = function (el, txt, conWidth) {
+        var div, size, tmp, words, wordSpacing;
+
         txt = txt.trim();
-        var words = txt.split(' ').length;
+        words = txt.split(' ').length;
         txt = txt + ' ';
 
         // if we don't have at least 2 words, no need to justify.
@@ -336,20 +345,47 @@
         }
 
         // Find width of text in the DOM
-        var tmp = document.createElement('span');
+        tmp = document.createElement('span');
         tmp.innerHTML = txt;
         el.appendChild(tmp);
-        var size = tmp.offsetWidth;
+        size = tmp.offsetWidth;
         tmp.parentNode.removeChild(tmp);
 
         // Figure out our word spacing and return the element
-        var wordSpacing = Math.floor((conWidth - size) / (words - 1));
+        wordSpacing = Math.floor((conWidth - size) / (words - 1));
         tmp.style.wordSpacing = wordSpacing + 'px';
         tmp.setAttribute('data-owner', 'balance-text-justify');
 
-        var div = document.createElement('div');
+        div = document.createElement('div');
         div.appendChild(tmp);
         return div.innerHTML;
+    };
+
+    /**
+     * Returns true iff char at index is a break char outside of HTML < > tags.
+     * Break char can be: whitespace, hypen, emdash (u2014), endash (u2013), or soft-hyphen (u00ad).
+     *
+     * @param {string} txt   - the text to check
+     * @param {number} index - the index of the character to check
+     * @return {boolean}
+     */
+    var isBreakChar = function (txt, index) {
+        var re = /(\s|-|\u2014|\u2013|\u00ad)(?![^<]*>)/g,
+            match;
+
+        if (!breakMatches) {
+            // Only calc break matches once per line
+            breakMatches = [];
+            match = re.exec(txt);
+            while (match !== null) {
+                if (!isWhiteSpaceNoWrap(match.index)) {
+                    breakMatches.push(match.index);
+                }
+                match = re.exec(txt);
+            }
+        }
+
+        return breakMatches.indexOf(index) !== -1;
     };
 
     /**
@@ -366,8 +402,9 @@
      *
      * @precondition 0 <= index && index <= txt.length
      *
-     * @param txt   - the text to check
-     * @param index - the index to check
+     * @param {string} txt   - the text to check
+     * @param {number} index - the index to check
+     * @return {boolean}
      */
     var isBreakOpportunity = function (txt, index) {
         return ((index === 0) || (index === txt.length) ||
@@ -382,14 +419,13 @@
      * to the corresponding index and line width (from the start of
      * txt to ret.index).
      *
-     * @param el       - element
-     * @param txt      - text string
-     * @param conWidth - container width
-     * @param desWidth - desired width
-     * @param dir      - direction (-1 or +1)
-     * @param c        - char index (0 <= c && c <= txt.length)
-     * @param ret      - return object; index and width of previous/next break
-     *
+     * @param {Node}    el       - element
+     * @param {string}  txt      - text string
+     * @param {number}  conWidth - container width
+     * @param {number}  desWidth - desired width
+     * @param {number}  dir      - direction (-1 or +1)
+     * @param {number}  c        - char index (0 <= c && c <= txt.length)
+     * @param {Object}  ret      - return {index: {number}, width: {number}} of previous/next break
      */
     var findBreakOpportunity = function (el, txt, conWidth, desWidth, dir, c, ret) {
         var w;
@@ -424,12 +460,13 @@
      * Detects the width of a non-breaking space character, given the height of
      * the element with no-wrap applied.
      *
-     * @param el        - element
-     * @param h         - height
-     *
+     * @param {Node}   el - element
+     * @param {number} h  - height
+     * @return {number}
      */
     var getSpaceWidth = function (el, h) {
-        var container = document.createElement('div');
+        var dims, space, spaceRatio,
+            container = document.createElement('div');
 
         container.style.display = "block";
         container.style.position = "absolute";
@@ -442,7 +479,7 @@
         container.style.visibility = "hidden";
         container.style.overflow = "hidden";
 
-        var space = document.createElement('span');
+        space = document.createElement('span');
 
         space.style.fontSize = "2000px";
         space.innerHTML = "&nbsp;";
@@ -451,25 +488,19 @@
 
         el.appendChild(container);
 
-        var dims = space.getBoundingClientRect();
+        dims = space.getBoundingClientRect();
         container.parentNode.removeChild(container);
 
-        var spaceRatio = dims.height / dims.width;
+        spaceRatio = dims.height / dims.width;
 
         return (h / spaceRatio);
-    };
-
-    // Selectors and elements to watch;
-    // calling $.balanceText(elements) adds "elements" to this list.
-    var watching = {
-        sel: [], // default class to watch
-        el: []
     };
 
     /**
      * Get a list of elements regardless of input
      *
-     * @param  {string|Node|Array-like}  elements  The selector to query, one or more elements
+     * @param {string|Node|Array-like} elements - The selector to query, one or more elements
+     * @return {Array<{Node}>}
      */
     function getElementsList(elements) {
         if (!elements) {
@@ -494,9 +525,10 @@
      * the text balanceText plugin will let the browser handle it natively,
      * otherwise it will apply its own text balancing code.
      *
-     * @param elements   - the list of elements to balance
+     * @param {string|Node|Array-like} elements - the list of elements to balance
      */
     function balanceText(elements) {
+
         forEach(getElementsList(elements), function (el) {
             // In a lower level language, this algorithm takes time
             // comparable to normal text layout other than the fact
@@ -504,20 +536,21 @@
             // be able to do without this limit.
             var maxTextWidth = 5000;
 
-            removeTags(el);                        // strip balance-text tags
+            // strip balance-text generated tags
+            removeTags(el);
 
             // save settings
-            var oldWS = el.style.whiteSpace;
-            var oldFloat = el.style.float;
-            var oldDisplay = el.style.display;
-            var oldPosition = el.style.position;
-            var oldLH = el.style.lineHeight;
+            var oldWS = el.style.whiteSpace,
+                oldFloat = el.style.float,
+                oldDisplay = el.style.display,
+                oldPosition = el.style.position,
+                oldLH = el.style.lineHeight;
 
             // remove line height before measuring container size
             el.style.lineHeight = 'normal';
 
-            var containerWidth = el.offsetWidth;
-            var containerHeight = el.offsetHeight;
+            var containerWidth = el.offsetWidth,
+                containerHeight = el.offsetHeight;
 
             // temporary settings
             el.style.whiteSpace = 'nowrap';
@@ -525,26 +558,25 @@
             el.style.display = 'inline';
             el.style.position = 'static';
 
-            var nowrapWidth = el.offsetWidth;
-            var nowrapHeight = el.offsetHeight;
+            var nowrapWidth = el.offsetWidth,
+                nowrapHeight = el.offsetHeight,
 
-            // An estimate of the average line width reduction due
-            // to trimming trailing space that we expect over all
-            // lines other than the last.
-
-            var spaceWidth = ((oldWS === 'pre-wrap') ? 0 : getSpaceWidth(el, nowrapHeight));
+                // An estimate of the average line width reduction due
+                // to trimming trailing space that we expect over all
+                // lines other than the last.
+                spaceWidth = ((oldWS === 'pre-wrap') ? 0 : getSpaceWidth(el, nowrapHeight));
 
             if (containerWidth > 0 &&                  // prevent divide by zero
                     nowrapWidth > containerWidth &&    // text is more than 1 line
                     nowrapWidth < maxTextWidth) {      // text is less than arbitrary limit (make this a param?)
 
-                var remainingText = el.innerHTML;
-                var newText = "";
-                var lineText = "";
-                var shouldJustify = isJustified(el);
-                var totLines = Math.round(containerHeight / nowrapHeight);
-                var remLines = totLines;
-                var lineCharOffset = 0;
+                var remainingText = el.innerHTML,
+                    newText = "",
+                    lineText = "",
+                    shouldJustify = isJustified(el),
+                    totLines = Math.round(containerHeight / nowrapHeight),
+                    remLines = totLines,
+                    lineCharOffset = 0;
 
                 // loop vars
                 var desiredWidth, guessIndex, le, ge, splitIndex, isSoftHyphen;
@@ -631,11 +663,13 @@
         });
     }
 
-    // Call the balanceText plugin on elements that it's watching.
+    /**
+     * Call the balanceText plugin on elements that it's watching.
+     */
     function updateWatched() {
-        var selectors = watching.sel.join(',');
-        var selectedElements = getElementsList(selectors);
-        var elements = Array.prototype.concat.apply(watching.el, selectedElements);
+        var selectors = watching.sel.join(','),
+            selectedElements = getElementsList(selectors),
+            elements = Array.prototype.concat.apply(watching.el, selectedElements);
         balanceText(elements);
     }
 
@@ -645,7 +679,6 @@
      * - Document full load
      * - Window resize
      */
-    var handlersInitialized = false;
     function initHandlers() {
         if (handlersInitialized) {
             return;
@@ -667,7 +700,7 @@
      * Apply the BalanceText routine on the document and watch the list
      * of elements.  On window resize, re-apply BalanceText to the given elements
      *
-     * @param elements - the elements to watch after applying BalanceText
+     * @param {string|Node|Array-like} elements - the elements to watch after applying BalanceText
      */
     function balanceTextAndWatch(elements) {
         if (typeof elements === 'string') {
@@ -685,7 +718,6 @@
     /**
      * Treat this app as a polyfill.  Watch for changes to the .balance-text selector
      */
-    var polyfilled = false;
     function polyfill() {
         if (polyfilled) {
             return;
@@ -696,6 +728,13 @@
         polyfilled = true;
     }
 
+    /**
+     * Public interface
+     *
+     * @param {string|Node|Array-like} elements - elements to balance
+     * @param {Object}                 options  - processing options
+     *  - {boolean} watch - watch elements for resize
+     */
     function publicInterface(elements, options) {
         if (!elements) {
             // empty call means polyfill (watch for changes)
