@@ -274,7 +274,7 @@
      */
     var removeTags = function (el) {
         // Remove soft-hyphen breaks
-        var brs = el.querySelectorAll('br[data-owner="balance-text-soft"]');
+        var brs = el.querySelectorAll('br[data-owner="balance-text-hyphen"]');
         forEach(brs, function (br) {
             br.outerHTML = "";
         });
@@ -286,7 +286,7 @@
         });
 
         // Restore hyphens inserted for soft-hyphens
-        var spans = el.querySelectorAll('span[data-owner="balance-text-soft"]');
+        var spans = el.querySelectorAll('span[data-owner="balance-text-softhyphen"]');
         if (spans.length > 0) {
             forEach(spans, function (span) {
                 var textNode = document.createTextNode("\u00ad");
@@ -547,7 +547,7 @@
                 var lineCharOffset = 0;
 
                 // loop vars
-                var desiredWidth, guessIndex, le, ge, splitIndex, isSoftHyphen;
+                var desiredWidth, guessIndex, le, ge, splitIndex, isHyphen, isSoftHyphen;
 
                 // Determine where to break:
                 while (remLines > 1) {
@@ -596,15 +596,16 @@
                     isSoftHyphen = Boolean(lineText.match(/\u00ad$/));
                     if (isSoftHyphen) {
                         // Replace soft-hyphen causing break with explicit hyphen
-                        lineText = lineText.replace(/\u00ad$/, '<span data-owner="balance-text-soft">-</span>');
+                        lineText = lineText.replace(/\u00ad$/, '<span data-owner="balance-text-softhyphen">-</span>');
                     }
 
                     if (shouldJustify) {
                         newText += justify(el, lineText, containerWidth);
                     } else {
                         newText += lineText;
-                        newText += isSoftHyphen ? '<br data-owner="balance-text-soft" />'
-                                                : '<br data-owner="balance-text" />';
+                        isHyphen = isSoftHyphen || Boolean(lineText.match(/-|\u2014|\u2013$/));
+                        newText += isHyphen ? '<br data-owner="balance-text-hyphen" />'
+                                            : '<br data-owner="balance-text" />';
                     }
                     remainingText = remainingText.substr(splitIndex);
                     lineCharOffset = splitIndex;
