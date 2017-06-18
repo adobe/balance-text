@@ -93,7 +93,7 @@
     var handlersInitialized = false;
 
     /**
-     * Is this s polyfill?
+     * Is this a polyfill?
      */
     var polyfilled = false;
 
@@ -189,13 +189,13 @@
      * @param {number} index - the index of the character to check
      * @return {boolean}
      */
-    var isWhiteSpaceNoWrap = function (index) {
+    function isWhiteSpaceNoWrap(index) {
         // Is index inside 1 of the ranges?
         return wsnwMatches.some(function (range) {
             // start and end are breakable, but not inside range
             return (range.start < index && index < range.end);
         });
-    };
+    }
 
     /**
      * Recursively calculate white-space:nowrap offsets for line.
@@ -203,7 +203,7 @@
      * @param {Node}    el         - the element to act on
      * @param {boolean} includeTag - include length of tag itself
      */
-    var recursiveCalcNoWrapOffsetsForLine = function (el, includeTag) {
+    function recursiveCalcNoWrapOffsetsForLine(el, includeTag) {
 
         if (el.nodeType === el.ELEMENT_NODE) {
             // Found an embedded tag
@@ -234,7 +234,7 @@
             // Text node: add length
             wsnwOffset += el.length;
         }
-    };
+    }
 
     /**
      * Calculate white-space:nowrap offsets for line.
@@ -243,7 +243,7 @@
      * @param {string}  oldWS          - "old" whitespace setting for temporarily resetting
      * @param {number}  lineCharOffset - char offset of current line from start of text
      */
-    var calcNoWrapOffsetsForLine = function (el, oldWS, lineCharOffset) {
+    function calcNoWrapOffsetsForLine(el, oldWS, lineCharOffset) {
         // For first line (lineCharOffset === 0), calculate start and end offsets for each
         // white-space:nowrap element in the line.
         if (lineCharOffset === 0) {
@@ -270,14 +270,14 @@
             });
             wsnwMatches = newMatches;
         }
-    };
+    }
 
     /**
      * Strip balance-text tags from an element inserted in previous run
      *
      * @param {Node} el - the element to act on
      */
-    var removeTags = function (el) {
+    function removeTags(el) {
         // Remove soft-hyphen breaks
         var brs = el.querySelectorAll('br[data-owner="balance-text-hyphen"]');
         forEach(brs, function (br) {
@@ -310,7 +310,7 @@
             });
             el.innerHTML = txt;
         }
-    };
+    }
 
     /**
      * Checks to see if we should justify the balanced text with the
@@ -332,7 +332,7 @@
      * @param {number}  conWidth - container width
      * @return {string} Justified text
      */
-    var justify = function (el, txt, conWidth) {
+    function justify(el, txt, conWidth) {
         var div, size, tmp, words, wordSpacing;
 
         txt = txt.trim();
@@ -359,7 +359,7 @@
         div = document.createElement('div');
         div.appendChild(tmp);
         return div.innerHTML;
-    };
+    }
 
     /**
      * Returns true iff char at index is a break char outside of HTML < > tags.
@@ -369,7 +369,7 @@
      * @param {number} index - the index of the character to check
      * @return {boolean}
      */
-    var isBreakChar = function (txt, index) {
+    function isBreakChar(txt, index) {
         var re = /(\s|-|\u2014|\u2013|\u00ad)(?![^<]*>)/g,
             match;
 
@@ -386,16 +386,14 @@
         }
 
         return breakMatches.indexOf(index) !== -1;
-    };
+    }
 
     /**
      * In the current implementation, an index is a break
      * opportunity in txt iff it is:
      * - 0 or txt.length
      * - index of a non-whitespace char immediately preceded by a
-     *   whitespace char.
-     * - index of a non-whitespace char immediately preceded by a
-     *   hyphen, soft-hyphen, em-dash, or en-dash char.
+     *   whitespace, hyphen, soft-hyphen, em-dash, or en-dash char.
      *
      * Thus, it doesn't honour 'white-space' or any other Unicode
      * line-breaking classes.)
@@ -406,10 +404,10 @@
      * @param {number} index - the index to check
      * @return {boolean}
      */
-    var isBreakOpportunity = function (txt, index) {
+    function isBreakOpportunity(txt, index) {
         return ((index === 0) || (index === txt.length) ||
                 (isBreakChar(txt, index - 1) && !isBreakChar(txt, index)));
-    };
+    }
 
     /**
      * Finds the first break opportunity (@see isBreakOpportunity)
@@ -427,7 +425,7 @@
      * @param {number}  c        - char index (0 <= c && c <= txt.length)
      * @param {Object}  ret      - return {index: {number}, width: {number}} of previous/next break
      */
-    var findBreakOpportunity = function (el, txt, conWidth, desWidth, dir, c, ret) {
+    function findBreakOpportunity(el, txt, conWidth, desWidth, dir, c, ret) {
         var w;
 
         if (txt && typeof txt === 'string') {
@@ -454,7 +452,7 @@
         }
         ret.index = c;
         ret.width = w;
-    };
+    }
 
     /**
      * Detects the width of a non-breaking space character, given the height of
@@ -464,7 +462,7 @@
      * @param {number} h  - height
      * @return {number}
      */
-    var getSpaceWidth = function (el, h) {
+    function getSpaceWidth(el, h) {
         var dims, space, spaceRatio,
             container = document.createElement('div');
 
@@ -494,7 +492,7 @@
         spaceRatio = dims.height / dims.width;
 
         return (h / spaceRatio);
-    };
+    }
 
     /**
      * Get a list of elements regardless of input
