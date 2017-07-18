@@ -215,7 +215,7 @@
                 wsnwOffset += len;
             } else {
                 // Tag without white-space:nowrap - recursively check children of tag
-                el.childNodes.forEach(function (child) {
+                forEach(el.childNodes, function (child) {
                     recursiveCalcNoWrapOffsetsForLine(child, true);
                 });
                 if (includeTag) {
