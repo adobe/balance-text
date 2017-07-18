@@ -122,7 +122,7 @@ npm run build
 
 1. Update npm (bfred-it)
 
-    * jseliver CDN is automatically created
+    * jsdeliver CDN is automatically created
 
 1. Update vanity page: gh-pages branch
 
