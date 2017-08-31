@@ -715,6 +715,24 @@
     }
 
     /**
+     * Stop watching elements
+     *
+     * @param {string|Node|Array-like} elements
+     */
+    function unwatch(elements) {
+        if (typeof elements === 'string') {
+            watching.sel = watching.sel.filter(function (el) {
+                return el !== elements;
+            });
+        } else {
+            elements = getElementsList(elements);
+            watching.el = watching.el.filter(function (el) {
+                return elements.indexOf(el) === -1;
+            });
+        }
+    }
+
+    /**
      * Treat this app as a polyfill.  Watch for changes to the .balance-text selector
      */
     function polyfill() {
@@ -738,8 +756,10 @@
         if (!elements) {
             // empty call means polyfill (watch for changes)
             polyfill();
-        } else if (options && options.watch) {
+        } else if (options && options.watch === true) {
             balanceTextAndWatch(elements);
+        } else if (options && options.watch === false) {
+            unwatch(elements);
         } else {
             balanceText(elements);
         }
