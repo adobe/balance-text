@@ -139,3 +139,4 @@ npm run build
 * v 2.0.0 - Fix automatic updating of custom selectors for jQuery 3 (bfred-it)
 * v 3.0.0 - Remove the jQuery dependency (BrianGenisio, bfred-it)
 * v 3.1.x - Support for hyphens, white-space:nowrap
+* v 3.2.0 - Support for unwatch (weotch)
