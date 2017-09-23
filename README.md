@@ -17,7 +17,7 @@ Here is a simple Balance Text setup:
   <style type="text/css">
   /* Plugin looks for elements with class named "balance-text" */
   .balance-text {
-      text-wrap: balanced;  /* Apply (proposed) CSS style */
+      text-wrap: balance;  /* Apply (proposed) CSS style */
   }
   </style>
 
