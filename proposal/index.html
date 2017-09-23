@@ -8,14 +8,14 @@
 
 <body>
 <h1>Balance Text Proposal</h1>
-<p>Last updated on <!-- #BeginDate format:Am1 -->February 1, 2013<!-- #EndDate --></p>
+<p>Last updated on <!-- #BeginDate format:Am1 -->September 23, 2017<!-- #EndDate --></p>
 <h2>Purpose</h2>
 <p>The basic algorithm for rendering text is simple: put as much text as will fit on  each line, with the remainder on the last line. This results in the fewest possible lines of text being used, but when the text spans more than 1 line, the result can sometimes be visually undesirable.</p>
 <p>When rendering text that spans multiple lines, this feature provides the option to automatically balance text across the necessary number of lines.</p>
 <p>The intended usage for balance text is for short text  elements such as headings, blockquotes, labels, and captions. When balance text is applied to large paragraphs of text, the effort increases and  the benefit diminishes, so there probably should be a way to specify a maximum length of text.</p>
 <h2>Proposed Implementation</h2>
 <h3>CSS</h3>
-<p>A new value of <code>balanced</code> is proposed for  the CSS4 Text module  <code><a href="http://dev.w3.org/csswg/css4-text/#wrapping">text-wrap</a></code> property. For example:</p>
+<p>A new value of <code>balance</code> is proposed for  the CSS4 Text module  <code><a href="http://dev.w3.org/csswg/css4-text/#wrapping">text-wrap</a></code> property. For example:</p>
 <pre>
   text-wrap: balance;</pre>
 <h3>Text Alignment</h3>
@@ -84,6 +84,11 @@
     <td class="cell-date">Feb. 1, 2013</td>
     <td class="cell-name">Randy Edmunds</td>
     <td>Made updates based on feedback from www-style list (L. David Baron, Peter Moulder).</td>
+  </tr>
+  <tr>
+    <td class="cell-date">Sep. 23, 2017</td>
+    <td class="cell-name">Randy Edmunds</td>
+    <td>Change 'balanced' to 'balance'.</td>
   </tr>
 </table>
 <p>&nbsp;</p>

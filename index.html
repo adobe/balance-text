@@ -47,7 +47,7 @@
         <pre>    &lt;style type="text/css"&gt;
     /* Plugin looks for elements with class named "balance-text" */
     .balance-text {
-        text-wrap: balanced;   /* Apply (proposed) CSS style */
+        text-wrap: balance;   /* Apply (proposed) CSS style */
     }
     &lt;/style&gt;
 
@@ -64,9 +64,9 @@
         </ul>
         <p>You may also <em>manually</em> trigger it, e.g. if you're dynamically adding text to the DOM:</p>
 
-        <pre>    balanceText(el);       // Balance a single element
-    balanceText([el, el]); // Balance a list of elements
-    balanceText('.el');    // Balance a list of elements based on query selector</pre>
+        <pre>    balanceText(el);       // Balance single element
+    balanceText([el, el]); // Balance list of elements
+    balanceText('.el');    // Balance list based on query selector</pre>
 
         <p>This will apply the balance-text formatting once.  If you'd like to re-apply automatically during window resize, you can use pass an options parameter instead:</p>
 
@@ -132,6 +132,7 @@
           <li>v 2.0.0 - Fix automatic updating of custom selectors for jQuery 3 (bfred-it)</li>
           <li>v 3.0.0 - Remove the jQuery dependency (BrianGenisio, bfred-it)</li>
           <li>v 3.1.x - Support for hyphens, white-space:nowrap</li>
+          <li>v 3.2.0 - Support for unwatch (weotch)</li>
         </ul>
       </section>
     </div>
