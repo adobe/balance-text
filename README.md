@@ -120,8 +120,9 @@ npm run build
 
     * cloudflare CDN is automatically created
 
-1. Update npm (bfred-it)
+1. Update npm
 
+    * `npm publish`
     * jsdeliver CDN is automatically created
 
 1. Update vanity page: gh-pages branch
