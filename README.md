@@ -76,7 +76,7 @@ You can also migrate to `balanceText()` from jQuery using this guide (shown comp
 
 ```
 
-## Use from a CDN
+## Use from a CDN [![jsDelivr Hits](https://data.jsdelivr.com/v1/package/npm/balance-text/badge)](https://www.jsdelivr.com/package/npm/balance-text)
 [//cdnjs.cloudflare.com/ajax/libs/balance-text/3.2.0/balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/3.2.0/balancetext.min.js)
 
 [//cdn.jsdelivr.net/npm/balance-text@3.2.0/balancetext.min.js](//cdn.jsdelivr.net/npm/balance-text@3.2.0/balancetext.min.js)
