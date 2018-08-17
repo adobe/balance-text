@@ -123,7 +123,7 @@ npm run build
 
 1. Update npm
 
-    * `npm publish`
+    * `npm publish` (may need to `npm adduser`)
     * jsdeliver CDN is automatically created
 
 1. Update vanity page: gh-pages branch
