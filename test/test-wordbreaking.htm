@@ -30,12 +30,19 @@
   <section id="balance">
     <header><h2>Balance Text</h2></header>
     <div class="demo-body">
-      <p class="balance-text"><strong>&amp;NBSP; TEST:</strong> Lorem ipsum dolor sit <span class="red">DO&nbsp;NOT&nbsp;WRAP&nbsp;RED&nbsp;TEXT</span> et dolore magna aliqua. Yada yada yada</p>
+      <p class="balance-text"><strong>NON-BREAKING_SPACE (&amp;nbsp;) TEST:</strong> Lorem ipsum dolor sit <span class="red">DO&nbsp;NOT&nbsp;WRAP&nbsp;RED&nbsp;TEXT</span> et dolore magna aliqua. Yada yada yada</p>
+      <p class="balance-text"><strong>NON-BREAKING_SPACE (&amp;#160;) TEST:</strong> Lorem ipsum dolor sit <span class="red">DO&#160;NOT&#160;WRAP&#160;RED&#160;TEXT</span> et dolore magna aliqua. Yada yada yada</p>
+      <p class="balance-text"><strong>NON-BREAKING_SPACE (&amp;#xa0;) TEST:</strong> Lorem ipsum dolor sit <span class="red">DO&#xa0;NOT&#xa0;WRAP&#xa0;RED&#xa0;TEXT</span> et dolore magna aliqua. Yada yada yada</p>
       <p class="balance-text"><strong>HYPHEN TEST:</strong> Lorem ipsum <span style="color:blue">SHOULD-BREAK-HYPHEN-ATED-TEXT</span> et dolore magna.</p>
-      <p class="balance-text"><strong>EM DASH TEST:</strong> Lorem ipsum <span class="blue">SHOULD&mdash;BREAK&mdash;EM&mdash;DASH&mdash;TEXT</span> et dolore magna.</p>
-      <p class="balance-text"><strong>&amp;#8212; DASH TEST:</strong> Lorem ipsum <span class="blue">SHOULD&#8212;BREAK&#8212;EM&#8212;DASH&#8212;TEXT</span> et dolore magna.</p>
-      <p class="balance-text"><strong>EN DASH TEST:</strong> Lorem ipsum <span style="color:blue">SHOULD&ndash;BREAK&ndash;EN&ndash;DASH&ndash;TEXT</span> et dolore magna.</p>
-      <p class="balance-text"><strong>SOFT HYPHEN TEST:</strong> Lorem ipsum <span style="color:blue">SHOULD&shy;BREAK&shy;SOFT&shy;HYPHEN&shy;ATED&shy;TEXT</span> et dolore magna.</p>
+      <p class="balance-text"><strong>EM DASH (&amp;mdash;) TEST:</strong> Lorem ipsum <span class="blue">SHOULD&mdash;BREAK&mdash;EM&mdash;DASH&mdash;TEXT</span> et dolore magna.</p>
+      <p class="balance-text"><strong>EM DASH (&amp;#8212;) TEST:</strong> Lorem ipsum <span class="blue">SHOULD&#8212;BREAK&#8212;EM&#8212;DASH&#8212;TEXT</span> et dolore magna.</p>
+      <p class="balance-text"><strong>EM DASH (&amp;#x2014;) TEST:</strong> Lorem ipsum <span class="blue">SHOULD&#x2014;BREAK&#x2014;EM&#x2014;DASH&#x2014;TEXT</span> et dolore magna.</p>
+      <p class="balance-text"><strong>EN DASH (&amp;ndash;) TEST:</strong> Lorem ipsum <span style="color:blue">SHOULD&ndash;BREAK&ndash;EN&ndash;DASH&ndash;TEXT</span> et dolore magna.</p>
+      <p class="balance-text"><strong>EN DASH (&amp;#8211;) TEST:</strong> Lorem ipsum <span style="color:blue">SHOULD&#8211;BREAK&#8211;EN&#8211;DASH&#8211;TEXT</span> et dolore magna.</p>
+      <p class="balance-text"><strong>EN DASH (&amp;#x2013;) TEST:</strong> Lorem ipsum <span style="color:blue">SHOULD&#x2013;BREAK&#x2013;EN&#x2013;DASH&#x2013;TEXT</span> et dolore magna.</p>
+      <p class="balance-text"><strong>SOFT HYPHEN (&amp;shy;) TEST:</strong> Lorem ipsum <span style="color:blue">SHOULD&shy;BREAK&shy;SOFT&shy;HYPHEN&shy;ATED&shy;TEXT</span> et dolore magna.</p>
+      <p class="balance-text"><strong>SOFT HYPHEN (&amp;#173;) TEST:</strong> Lorem ipsum <span style="color:blue">SHOULD&#173;BREAK&#173;SOFT&#173;HYPHEN&#173;ATED&#173;TEXT</span> et dolore magna.</p>
+      <p class="balance-text"><strong>SOFT HYPHEN (&amp;#xad;) TEST:</strong> Lorem ipsum <span style="color:blue">SHOULD&#xad;BREAK&#xad;SOFT&#xad;HYPHEN&#xad;ATED&#xad;TEXT</span> et dolore magna.</p>
       <!-- Justify code wraps each line with <span>, so can't highlight soft-hyphenated string in blue -->
       <p class="balance-text test-align-justify"><strong>SOFT HYPHEN JUSTIFY TEST:</strong> Lorem ipsum SHOULD&shy;BREAK&shy;SOFT&shy;HYPHEN&shy;ATED&shy;TEXT et dolore magna.</p>
       <p class="balance-text"><strong>WHITE-SPACE: NOWRAP TEST 1:</strong> Lorem <!-- comment --> ipsum <span class="nowrap red">DO NOT WRAP RED TEXT</span> et dolore magna. Ut <?xml-stylesheet random directive ?> enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
