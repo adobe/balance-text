@@ -77,9 +77,9 @@ You can also migrate to `balanceText()` from jQuery using this guide (shown comp
 ```
 
 ## Use from a CDN
-[//cdnjs.cloudflare.com/ajax/libs/balance-text/3.2.0/balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/3.2.0/balancetext.min.js)
+[//cdnjs.cloudflare.com/ajax/libs/balance-text/3.2.1/balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/3.2.1/balancetext.min.js)
 
-[//cdn.jsdelivr.net/npm/balance-text@3.2.0/balancetext.min.js](//cdn.jsdelivr.net/npm/balance-text@3.2.0/balancetext.min.js)
+[//cdn.jsdelivr.net/npm/balance-text@3.2.1/balancetext.min.js](//cdn.jsdelivr.net/npm/balance-text@3.2.1/balancetext.min.js)
 
 
 ### Legacy (2.0.0)
@@ -112,6 +112,7 @@ npm run build
 
 1. Pull Request:
 
+    * Add a test
     * Update version numbers: package.json, bower.json
     * Update minifed version, if necessary: balancetext.min.js
     * Update README.md, including links to new not-yet-created CDNs
@@ -140,4 +141,4 @@ npm run build
 * v 2.0.0 - Fix automatic updating of custom selectors for jQuery 3 (bfred-it)
 * v 3.0.0 - Remove the jQuery dependency (BrianGenisio, bfred-it)
 * v 3.1.x - Support for hyphens, white-space:nowrap
-* v 3.2.0 - Support for unwatch (weotch)
+* v 3.2.x - Support for unwatch (weotch), non-breaking-space fix (bjnsn)
