@@ -142,3 +142,4 @@ npm run build
 * v 3.0.0 - Remove the jQuery dependency (BrianGenisio, bfred-it)
 * v 3.1.x - Support for hyphens, white-space:nowrap
 * v 3.2.x - Support for unwatch (weotch), non-breaking-space fix (bjnsn)
+
