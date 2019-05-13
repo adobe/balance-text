@@ -166,6 +166,9 @@
      * @return {boolean}
      */
   function hasTextWrap() {
+    if (typeof window === 'undefined') {
+      return false;
+    }
     const { style } = document.documentElement;
     return style.textWrap || style.WebkitTextWrap || style.MozTextWrap || style.MsTextWrap;
   }
