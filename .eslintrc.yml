@@ -9,4 +9,6 @@ globals:
   SharedArrayBuffer: readonly
 parserOptions:
   ecmaVersion: 2018
-rules: {}
+rules:
+  no-param-reassign: 0
+  no-plusplus: 0
