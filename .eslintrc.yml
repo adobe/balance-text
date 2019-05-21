@@ -12,3 +12,5 @@ parserOptions:
 rules:
   no-param-reassign: 0
   no-plusplus: 0
+  indent: ["error", 4]
+  max-len: ["error", { "ignoreComments": true, "code": 120 }]
