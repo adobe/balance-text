@@ -19,3 +19,4 @@ rules:
   one-var-declaration-per-line: ["off"]
   one-var: ["off"]
   operator-linebreak: ["error", "after", { "overrides": { "?": "before", ":": "before" } }]
+  quotes: ["error", "double", { "avoidEscape": true }]
