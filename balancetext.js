@@ -142,7 +142,7 @@
     function debounce(func, threshold, execAsap, ...args) {
         let timeout;
 
-        return function debounced() {
+        return function () {
             const obj = this;
 
             function delayed() {
