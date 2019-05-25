@@ -1,5 +1,3 @@
-
-
 /*
  * Copyright (c) 2012 Adobe Systems Incorporated. All rights reserved.
  *
@@ -63,9 +61,9 @@
  */
 
 (function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
+    if (typeof define === "function" && define.amd) {
         define([], factory);
-    } else if (typeof module === 'object' && module.exports) {
+    } else if (typeof module === "object" && module.exports) {
         module.exports = factory();
     } else {
         root.balanceText = factory();
@@ -74,8 +72,7 @@
     /**
      * Line breaking global vars
      */
-    let breakMatches; let wsnwMatches; let
-        wsnwOffset;
+    let breakMatches, wsnwMatches, wsnwOffset;
 
     /**
      * Selectors and elements to watch;
@@ -100,7 +97,7 @@
     /**
      * Do nothing
      */
-    function noop() { } // "return" pleases jslint
+    function noop() { }
 
     /**
      * Loop that works with array-likes
@@ -117,13 +114,13 @@
      * @param {Function} fn - The function to execute when the document is ready
      */
     function ready(fn) {
-        if (document.readyState !== 'loading') {
+        if (document.readyState !== "loading") {
             fn();
         } else if (document.addEventListener) {
-            document.addEventListener('DOMContentLoaded', fn);
+            document.addEventListener("DOMContentLoaded", fn);
         } else {
-            document.attachEvent('onreadystatechange', () => {
-                if (document.readyState !== 'loading') {
+            document.attachEvent("onreadystatechange", () => {
+                if (document.readyState !== "loading") {
                     fn();
                 }
             });
@@ -142,7 +139,7 @@
     function debounce(func, threshold, execAsap, ...args) {
         let timeout;
 
-        return function debounced() {
+        return function () {
             const obj = this;
 
             function delayed() {
@@ -166,7 +163,7 @@
      * @return {boolean}
      */
     function hasTextWrap() {
-        if (typeof window === 'undefined') {
+        if (typeof window === "undefined") {
             return false;
         }
         const { style } = document.documentElement;
@@ -193,8 +190,8 @@
      * @return {boolean}
      */
     function isWhiteSpaceNoWrap(index) {
-    // Is index inside 1 of the ranges?
-    // start and end are breakable, but not inside range
+        // Is index inside 1 of the ranges?
+        // start and end are breakable, but not inside range
         return wsnwMatches.some(range => (range.start < index && index < range.end));
     }
 
@@ -208,7 +205,7 @@
         if (el.nodeType === el.ELEMENT_NODE) {
             // Found an embedded tag
             const style = window.getComputedStyle(el);
-            if (style.whiteSpace === 'nowrap') {
+            if (style.whiteSpace === "nowrap") {
                 // Tag with white-space:nowrap - add match, skip children
                 const len = el.outerHTML.length;
                 wsnwMatches.push({ start: wsnwOffset, end: wsnwOffset + len });
@@ -241,8 +238,8 @@
      * @param {number}  lineCharOffset - char offset of current line from start of text
      */
     function calcNoWrapOffsetsForLine(el, oldWS, lineCharOffset) {
-    // For first line (lineCharOffset === 0), calculate start and end offsets for each
-    // white-space:nowrap element in the line.
+        // For first line (lineCharOffset === 0), calculate start and end offsets for each
+        // white-space:nowrap element in the line.
         if (lineCharOffset === 0) {
             // Reset whiteSpace setting when breakMatches is being calculated
             // so white-space:nowrap can be detected in text
@@ -253,7 +250,7 @@
             recursiveCalcNoWrapOffsetsForLine(el, false);
 
             // Restore temporary whitespace setting to recalc width
-            el.style.whiteSpace = 'nowrap';
+            el.style.whiteSpace = "nowrap";
         } else {
             // For all other lines, update the offsets for current line
             // 1. Ignore matches less than offset
@@ -274,23 +271,23 @@
      * @param {Node} el - the element to act on
      */
     function removeTags(el) {
-    // Remove soft-hyphen breaks
+        // Remove soft-hyphen breaks
         let brs = el.querySelectorAll('br[data-owner="balance-text-hyphen"]');
         forEach(brs, (br) => {
-            br.outerHTML = '';
+            br.outerHTML = "";
         });
 
         // Replace other breaks with whitespace
         brs = el.querySelectorAll('br[data-owner="balance-text"]');
         forEach(brs, (br) => {
-            br.outerHTML = ' ';
+            br.outerHTML = " ";
         });
 
         // Restore hyphens inserted for soft-hyphens
         let spans = el.querySelectorAll('span[data-owner="balance-text-softhyphen"]');
         if (spans.length > 0) {
             forEach(spans, (span) => {
-                const textNode = document.createTextNode('\u00ad');
+                const textNode = document.createTextNode("\u00ad");
                 span.parentNode.insertBefore(textNode, span);
                 span.parentNode.removeChild(span);
             });
@@ -299,7 +296,7 @@
         // Remove spans inserted for justified text
         spans = el.querySelectorAll('span[data-owner="balance-text-justify"]');
         if (spans.length > 0) {
-            let txt = '';
+            let txt = "";
             forEach(spans, (span) => {
                 txt += span.textContent;
                 span.parentNode.removeChild(span);
@@ -317,7 +314,7 @@
      */
     const isJustified = function (el) {
         const style = el.currentStyle || window.getComputedStyle(el, null);
-        return (style.textAlign === 'justify');
+        return (style.textAlign === "justify");
     };
 
     /**
@@ -330,7 +327,7 @@
      */
     function justify(el, txt, conWidth) {
         txt = txt.trim();
-        const words = txt.split(' ').length;
+        const words = txt.split(" ").length;
         txt = `${txt} `;
 
         // if we don't have at least 2 words, no need to justify.
@@ -339,7 +336,7 @@
         }
 
         // Find width of text in the DOM
-        const tmp = document.createElement('span');
+        const tmp = document.createElement("span");
         tmp.innerHTML = txt;
         el.appendChild(tmp);
         const size = tmp.offsetWidth;
@@ -348,9 +345,9 @@
         // Figure out our word spacing and return the element
         const wordSpacing = Math.floor((conWidth - size) / (words - 1));
         tmp.style.wordSpacing = `${wordSpacing}px`;
-        tmp.setAttribute('data-owner', 'balance-text-justify');
+        tmp.setAttribute("data-owner", "balance-text-justify");
 
-        const div = document.createElement('div');
+        const div = document.createElement("div");
         div.appendChild(tmp);
         return div.innerHTML;
     }
@@ -390,7 +387,7 @@
      * - index of a non-whitespace char immediately preceded by a
      *   whitespace, hyphen, soft-hyphen, em-dash, or en-dash char.
      *
-     * Thus, it doesn't honour 'white-space' or any other Unicode
+     * Thus, it doesn't honour "white-space" or any other Unicode
      * line-breaking classes.)
      *
      * @precondition 0 <= index && index <= txt.length
@@ -400,8 +397,8 @@
      * @return {boolean}
      */
     function isBreakOpportunity(txt, index) {
-        return ((index === 0) || (index === txt.length)
-                || (isBreakChar(txt, index - 1) && !isBreakChar(txt, index)));
+        return ((index === 0) || (index === txt.length) ||
+                (isBreakChar(txt, index - 1) && !isBreakChar(txt, index)));
     }
 
     /**
@@ -423,7 +420,7 @@
     function findBreakOpportunity(el, txt, conWidth, desWidth, dir, c, ret) {
         let w;
 
-        if (txt && typeof txt === 'string') {
+        if (txt && typeof txt === "string") {
             for (;;) {
                 while (!isBreakOpportunity(txt, c)) {
                     c += dir;
@@ -456,23 +453,23 @@
      * @return {number}
      */
     function getSpaceWidth(el, h) {
-        const container = document.createElement('div');
+        const container = document.createElement("div");
 
-        container.style.display = 'block';
-        container.style.position = 'absolute';
+        container.style.display = "block";
+        container.style.position = "absolute";
         container.style.bottom = 0;
         container.style.right = 0;
         container.style.width = 0;
         container.style.height = 0;
         container.style.margin = 0;
         container.style.padding = 0;
-        container.style.visibility = 'hidden';
-        container.style.overflow = 'hidden';
+        container.style.visibility = "hidden";
+        container.style.overflow = "hidden";
 
-        const space = document.createElement('span');
+        const space = document.createElement("span");
 
-        space.style.fontSize = '2000px';
-        space.innerHTML = '&nbsp;';
+        space.style.fontSize = "2000px";
+        space.innerHTML = "&nbsp;";
 
         container.appendChild(space);
 
@@ -498,7 +495,7 @@
         }
 
         // is selector
-        if (typeof elements === 'string') {
+        if (typeof elements === "string") {
             return document.querySelectorAll(elements);
         }
 
@@ -536,16 +533,16 @@
             const oldLH = el.style.lineHeight;
 
             // remove line height before measuring container size
-            el.style.lineHeight = 'normal';
+            el.style.lineHeight = "normal";
 
             const containerWidth = el.offsetWidth;
             const containerHeight = el.offsetHeight;
 
             // temporary settings
-            el.style.whiteSpace = 'nowrap';
-            el.style.float = 'none';
-            el.style.display = 'inline';
-            el.style.position = 'static';
+            el.style.whiteSpace = "nowrap";
+            el.style.float = "none";
+            el.style.display = "inline";
+            el.style.position = "static";
 
             let nowrapWidth = el.offsetWidth;
             const nowrapHeight = el.offsetHeight;
@@ -553,23 +550,21 @@
             // An estimate of the average line width reduction due
             // to trimming trailing space that we expect over all
             // lines other than the last.
-            const spaceWidth = ((oldWS === 'pre-wrap') ? 0 : getSpaceWidth(el, nowrapHeight));
+            const spaceWidth = ((oldWS === "pre-wrap") ? 0 : getSpaceWidth(el, nowrapHeight));
 
-            if (containerWidth > 0 // prevent divide by zero
-                    && nowrapWidth > containerWidth // text is more than 1 line
-                    // text is less than arbitrary limit (make this a param?)
-                    && nowrapWidth < maxTextWidth) {
+            if (containerWidth > 0 &&               // prevent divide by zero
+                    nowrapWidth > containerWidth && // text is more than 1 line
+                    nowrapWidth < maxTextWidth) {   // text is less than arbitrary limit (make this a param?)
                 let remainingText = el.innerHTML;
-                let newText = '';
-                let lineText = '';
+                let newText = "";
+                let lineText = "";
                 const shouldJustify = isJustified(el);
                 const totLines = Math.round(containerHeight / nowrapHeight);
                 let remLines = totLines;
                 let lineCharOffset = 0;
 
                 // loop vars
-                let desiredWidth; let guessIndex; let le; let ge; let splitIndex; let isHyphen; let
-                    isSoftHyphen;
+                let desiredWidth, guessIndex, le, ge, splitIndex, isHyphen, isSoftHyphen;
 
                 // Determine where to break:
                 while (remLines > 1) {
@@ -612,7 +607,7 @@
                     }
 
                     // Break string
-                    lineText = remainingText.substr(0, splitIndex).replace(/\s$/, '');
+                    lineText = remainingText.substr(0, splitIndex).replace(/\s$/, "");
 
                     isSoftHyphen = Boolean(lineText.match(/\u00ad$/));
                     if (isSoftHyphen) {
@@ -657,7 +652,7 @@
      * Call the balanceText plugin on elements that it's watching.
      */
     function updateWatched() {
-        const selectors = watching.sel.join(',');
+        const selectors = watching.sel.join(",");
         const selectedElements = getElementsList(selectors);
         const elements = Array.prototype.concat.apply(watching.el, selectedElements);
         balanceText(elements);
@@ -678,10 +673,10 @@
         ready(updateWatched);
 
         // Reapply on full load
-        window.addEventListener('load', updateWatched);
+        window.addEventListener("load", updateWatched);
 
         // Reapply on resize
-        window.addEventListener('resize', debounce(updateWatched));
+        window.addEventListener("resize", debounce(updateWatched));
 
         handlersInitialized = true;
     }
@@ -693,7 +688,7 @@
      * @param {string|Node|Array-like} elements - the elements to watch after applying BalanceText
      */
     function balanceTextAndWatch(elements) {
-        if (typeof elements === 'string') {
+        if (typeof elements === "string") {
             watching.sel.push(elements);
         } else {
             forEach(getElementsList(elements), (el) => {
@@ -711,7 +706,7 @@
      * @param {string|Node|Array-like} elements
      */
     function unwatch(elements) {
-        if (typeof elements === 'string') {
+        if (typeof elements === "string") {
             watching.sel = watching.sel.filter(el => el !== elements);
         } else {
             elements = getElementsList(elements);
@@ -727,7 +722,7 @@
             return;
         }
 
-        watching.sel.push('.balance-text');
+        watching.sel.push(".balance-text");
         initHandlers();
         polyfilled = true;
     }
