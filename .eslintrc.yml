@@ -16,4 +16,6 @@ rules:
   func-names: ["error", "never"]
   indent: ["error", 4]
   max-len: ["error", { "ignoreComments": true, "code": 120 }]
+  one-var-declaration-per-line: ["off"]
+  one-var: ["off"]
   operator-linebreak: ["error", "after", { "overrides": { "?": "before", ":": "before" } }]

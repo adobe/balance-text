@@ -72,8 +72,7 @@
     /**
      * Line breaking global vars
      */
-    let breakMatches; let wsnwMatches; let
-        wsnwOffset;
+    let breakMatches, wsnwMatches, wsnwOffset;
 
     /**
      * Selectors and elements to watch;
@@ -565,8 +564,7 @@
                 let lineCharOffset = 0;
 
                 // loop vars
-                let desiredWidth; let guessIndex; let le; let ge; let splitIndex; let isHyphen; let
-                    isSoftHyphen;
+                let desiredWidth, guessIndex, le, ge, splitIndex, isHyphen, isSoftHyphen;
 
                 // Determine where to break:
                 while (remLines > 1) {
