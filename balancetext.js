@@ -1,5 +1,3 @@
-
-
 /*
  * Copyright (c) 2012 Adobe Systems Incorporated. All rights reserved.
  *
@@ -100,7 +98,7 @@
     /**
      * Do nothing
      */
-    function noop() { } // "return" pleases jslint
+    function noop() { }
 
     /**
      * Loop that works with array-likes
@@ -193,8 +191,8 @@
      * @return {boolean}
      */
     function isWhiteSpaceNoWrap(index) {
-    // Is index inside 1 of the ranges?
-    // start and end are breakable, but not inside range
+        // Is index inside 1 of the ranges?
+        // start and end are breakable, but not inside range
         return wsnwMatches.some(range => (range.start < index && index < range.end));
     }
 
@@ -241,8 +239,8 @@
      * @param {number}  lineCharOffset - char offset of current line from start of text
      */
     function calcNoWrapOffsetsForLine(el, oldWS, lineCharOffset) {
-    // For first line (lineCharOffset === 0), calculate start and end offsets for each
-    // white-space:nowrap element in the line.
+        // For first line (lineCharOffset === 0), calculate start and end offsets for each
+        // white-space:nowrap element in the line.
         if (lineCharOffset === 0) {
             // Reset whiteSpace setting when breakMatches is being calculated
             // so white-space:nowrap can be detected in text
@@ -274,7 +272,7 @@
      * @param {Node} el - the element to act on
      */
     function removeTags(el) {
-    // Remove soft-hyphen breaks
+        // Remove soft-hyphen breaks
         let brs = el.querySelectorAll('br[data-owner="balance-text-hyphen"]');
         forEach(brs, (br) => {
             br.outerHTML = '';
@@ -400,8 +398,8 @@
      * @return {boolean}
      */
     function isBreakOpportunity(txt, index) {
-        return ((index === 0) || (index === txt.length)
-                || (isBreakChar(txt, index - 1) && !isBreakChar(txt, index)));
+        return ((index === 0) || (index === txt.length) ||
+                (isBreakChar(txt, index - 1) && !isBreakChar(txt, index)));
     }
 
     /**
@@ -555,10 +553,9 @@
             // lines other than the last.
             const spaceWidth = ((oldWS === 'pre-wrap') ? 0 : getSpaceWidth(el, nowrapHeight));
 
-            if (containerWidth > 0 // prevent divide by zero
-                    && nowrapWidth > containerWidth // text is more than 1 line
-                    // text is less than arbitrary limit (make this a param?)
-                    && nowrapWidth < maxTextWidth) {
+            if (containerWidth > 0 &&               // prevent divide by zero
+                    nowrapWidth > containerWidth && // text is more than 1 line
+                    nowrapWidth < maxTextWidth) {   // text is less than arbitrary limit (make this a param?)
                 let remainingText = el.innerHTML;
                 let newText = '';
                 let lineText = '';

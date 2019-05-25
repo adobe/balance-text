@@ -10,8 +10,10 @@ globals:
 parserOptions:
   ecmaVersion: 2018
 rules:
+  no-multi-spaces: ["off"]
   no-param-reassign: 0
   no-plusplus: 0
   func-names: ["error", "never"]
   indent: ["error", 4]
   max-len: ["error", { "ignoreComments": true, "code": 120 }]
+  operator-linebreak: ["error", "after", { "overrides": { "?": "before", ":": "before" } }]
