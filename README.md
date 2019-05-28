@@ -129,6 +129,10 @@ npm run build
 1. Update vanity page: gh-pages branch
 
 
+## Contributing
+
+Contributions are welcomed! Read the [Contributing Guide](./.github/CONTRIBUTING.md) for more information.
+
 ## Changelog
 * v 1.0.x - Initial Release, bug fix by chrisbank, better break point detection mmcgahan
 * v 1.1.0 - Fix bugs submitted by rodneyrehm, colmjude
