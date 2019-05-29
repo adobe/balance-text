@@ -82,6 +82,7 @@ You can also migrate to `balanceText()` from jQuery using this guide (shown comp
 [//cdn.jsdelivr.net/npm/balance-text@3.3.0/balancetext.min.js](//cdn.jsdelivr.net/npm/balance-text@3.3.0/balancetext.min.js)
 
 
+
 ### Legacy (2.0.0)
 (Has a hard requirement on jQuery)
 
