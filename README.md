@@ -27,7 +27,7 @@ Here is a simple Balance Text setup:
   </script>
 ```
 
-See the demo provided or [this online version for a working sample](http://adobe-webplatform.github.io/balance-text/demo/index.html).
+See the demo provided or [this online version for a working sample](/demo/index.html).
 
 If you call `balanceText()`, Balance Text will *automatically* run on any elements with <code>balance-text</code> class:
 
