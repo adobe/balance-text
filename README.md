@@ -83,14 +83,14 @@ You can also migrate to `balanceText()` from jQuery using this guide (shown comp
 
 
 ### Legacy (3.2.1)
-SUpport for Internet Explorer was dropped in v3.3.0, so use v3.2.1 for IE support.
+Support for Internet Explorer was dropped in v3.3.0, so use v3.2.1 for IE support.
 
 [//cdnjs.cloudflare.com/ajax/libs/balance-text/3.2.1/jquery.balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/3.2.1/jquery.balancetext.min.js)
 
 [//cdn.jsdelivr.net/jquery.balancetext/3.2.1/jquery.balancetext.min.js](//cdn.jsdelivr.net/jquery.balancetext/3.2.1/jquery.balancetext.min.js)
 
 ### Legacy (2.0.0)
-(Has a hard requirement on jQuery)
+Has a hard requirement on jQuery.
 
 [//cdnjs.cloudflare.com/ajax/libs/balance-text/2.0.0/jquery.balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/2.0.0/jquery.balancetext.min.js)
 
