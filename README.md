@@ -82,6 +82,13 @@ You can also migrate to `balanceText()` from jQuery using this guide (shown comp
 [//cdn.jsdelivr.net/npm/balance-text@3.3.0/balancetext.min.js](//cdn.jsdelivr.net/npm/balance-text@3.3.0/balancetext.min.js)
 
 
+### Legacy (3.2.1)
+SUpport for Internet Explorer was dropped in v3.3.0, so use v3.2.1 for IE support.
+
+[//cdnjs.cloudflare.com/ajax/libs/balance-text/3.2.1/jquery.balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/3.2.1/jquery.balancetext.min.js)
+
+[//cdn.jsdelivr.net/jquery.balancetext/3.2.1/jquery.balancetext.min.js](//cdn.jsdelivr.net/jquery.balancetext/3.2.1/jquery.balancetext.min.js)
+
 ### Legacy (2.0.0)
 (Has a hard requirement on jQuery)
 
@@ -91,11 +98,11 @@ You can also migrate to `balanceText()` from jQuery using this guide (shown comp
 
 ## Requirements
 BalanceText does not have any dependencies.
-BalanceText is designed to run in most common browsers.
+BalanceText is designed to run in most modern browsers.
 
 ## Development
 ### Linting
-Make sure the code passes JSLint
+Make sure the code passes ESLint
 
 ```
 npm run lint
