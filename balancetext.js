@@ -534,6 +534,7 @@
 
             // remove line height before measuring container size
             el.style.lineHeight = "normal";
+            el.style.display = "inline";
 
             const containerWidth = el.offsetWidth;
             const containerHeight = el.offsetHeight;
@@ -541,7 +542,6 @@
             // temporary settings
             el.style.whiteSpace = "nowrap";
             el.style.float = "none";
-            el.style.display = "inline";
             el.style.position = "static";
 
             let nowrapWidth = el.offsetWidth;
