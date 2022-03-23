@@ -621,7 +621,7 @@
                         newText += lineText;
                         isHyphen = isSoftHyphen || Boolean(lineText.match(/(-|\u2014|\u2013)$/));
                         newText += isHyphen ? '<br data-owner="balance-text-hyphen" />'
-                            : '<br data-owner="balance-text" />';
+                            : '<br data-owner="balance-text" aria-hidden="true" />';
                     }
                     remainingText = remainingText.substr(splitIndex);
                     lineCharOffset = splitIndex;
