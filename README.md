@@ -77,9 +77,9 @@ You can also migrate to `balanceText()` from jQuery using this guide (shown comp
 ```
 
 ## Use from a CDN
-[//cdnjs.cloudflare.com/ajax/libs/balance-text/3.3.0/balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/3.3.0/balancetext.min.js)
+[//cdnjs.cloudflare.com/ajax/libs/balance-text/3.3.1/balancetext.min.js](//cdnjs.cloudflare.com/ajax/libs/balance-text/3.3.1/balancetext.min.js)
 
-[//cdn.jsdelivr.net/npm/balance-text@3.3.0/balancetext.min.js](//cdn.jsdelivr.net/npm/balance-text@3.3.0/balancetext.min.js)
+[//cdn.jsdelivr.net/npm/balance-text@3.3.1/balancetext.min.js](//cdn.jsdelivr.net/npm/balance-text@3.3.1/balancetext.min.js)
 
 
 ### Legacy (3.2.1)
@@ -153,4 +153,4 @@ Contributions are welcomed! Read the [Contributing Guide](./.github/CONTRIBUTING
 * v 3.0.0 - Remove the jQuery dependency (BrianGenisio, bfred-it)
 * v 3.1.x - Support for hyphens, white-space:nowrap
 * v 3.2.x - Support for unwatch (weotch), non-breaking-space fix (bjnsn)
-* v 3.3.0 - Support Server Side rendering (jakimarks)
+* v 3.3.x - Support Server Side rendering (jakimarks), accessibility fix (jonjahr)
